@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prest/src/prestApp.dart';
 
 void main() {
-  runApp(const PrestApp());
+  runApp(const ProviderScope(child: PrestApp()));
 }
