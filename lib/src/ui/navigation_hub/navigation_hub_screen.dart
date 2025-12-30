@@ -59,7 +59,7 @@ class _NavigationHubWebScreen extends ConsumerWidget
             boxShadow: isScrolled
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black,
                       blurRadius: 10,
                     ),
                   ]
