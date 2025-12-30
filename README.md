@@ -1,16 +1,42 @@
-# prest
+# prEST — Real Estate Platform (Web & Mobile)
 
-A new Flutter project.
+prEST is a cross-platform real estate platform built with **Flutter**.  
+It is designed to work as both a **modern website** and a **mobile application** (Android & iOS) from a single codebase.
 
-## Getting Started
+The project focuses on premium real estate presentation, lead generation, and CRM integration.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter 3.38.1 (stable)
+- Dart 3.10.0
+- Flutter Web
+- Android & iOS
+- REST API (CRM integration)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## Supported Platforms
+
+- Web (modern browsers)
+- Android
+- iOS
+
+One codebase, multiple platforms.
+
+### Install dependencies
+- flutter pub get
+
+### Run
+- Web: flutter run -d chrome
+- Android: flutter run -d android
+- iOS(macOS only): flutter run -d ios
+
+## Production Builds
+### Web
+- flutter build web
+### Android
+- flutter build apk
+### iOS
+- flutter build ios
