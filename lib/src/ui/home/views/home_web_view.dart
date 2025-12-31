@@ -45,15 +45,15 @@ class HomeWebView extends ConsumerWidget implements HomeScreen {
         ),
         // ВИКОРИСТОВУЄМО .withValues ЗАМІСТЬ .withOpacity
         Container(color: Colors.black.withValues(alpha: 0.3)),
-        Center(
-          child: Text(
-            'PRESTIGIOUS ESTATE',
-            style: theme.whiteTextTheme.font0.copyWith(
-              letterSpacing: 15,
-              fontSize: 80,
-            ),
-          ),
-        ),
+        // Center(
+        //   child: Text(
+        //     'PRESTIGIOUS ESTATE',
+        //     style: theme.whiteTextTheme.font0.copyWith(
+        //       letterSpacing: 15,
+        //       fontSize: 80,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
