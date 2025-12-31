@@ -9,12 +9,12 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: Routes.home,
     routes: [
       ShellRoute(
-        builder: (context, state, child) => NavigationHubScreen(child: child),
+        builder: (context, state, child) => NavigationHubScreen.create(child: child),
         routes: [
           // Головна
           GoRoute(
             path: Routes.home,
-            builder: (context, state) => const HomeScreen(),
+            builder: (context, state) => HomeScreen.create(),
           ),
           //
           // // Група: Про нас
