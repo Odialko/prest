@@ -1,3 +1,5 @@
+// lib/src/ui/home/views/home_web_view.dart
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +18,6 @@ class HomeWebView extends ConsumerWidget implements HomeScreen {
 
     return Column(
       children: [
-        // Кожна секція займає 100% висоти екрана
         _buildSection(screenHeight, _buildHero(context, theme)),
         _buildSection(screenHeight, _buildAbout(context, theme)),
         _buildSection(screenHeight, _buildProperties(context, ref, theme)),
@@ -42,11 +43,15 @@ class HomeWebView extends ConsumerWidget implements HomeScreen {
             return Image.asset(path, width: double.infinity, fit: BoxFit.cover);
           }).toList(),
         ),
-        Container(color: Colors.black.withOpacity(0.3)),
+        // ВИКОРИСТОВУЄМО .withValues ЗАМІСТЬ .withOpacity
+        Container(color: Colors.black.withValues(alpha: 0.3)),
         Center(
           child: Text(
             'PRESTIGIOUS ESTATE',
-            style: theme.whiteTextTheme.font0.copyWith(letterSpacing: 15, fontSize: 80),
+            style: theme.whiteTextTheme.font0.copyWith(
+              letterSpacing: 15,
+              fontSize: 80,
+            ),
           ),
         ),
       ],

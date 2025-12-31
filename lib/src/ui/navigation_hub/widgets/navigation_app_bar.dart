@@ -20,7 +20,7 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.prestTheme;
+    // final theme = context.prestTheme;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
@@ -29,7 +29,12 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
       decoration: BoxDecoration(
         color: Colors.white, // Повертаємо фіксований білий, як ти хотів
         boxShadow: isScrolled
-            ? [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)]
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                ),
+              ]
             : [],
       ),
       child: Center(

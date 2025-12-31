@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:prest/src/models/property.dart';
@@ -36,10 +35,12 @@ abstract class HomeStoreState with _$HomeStoreState {
 
 class HomeNotifier extends StateNotifier<HomeStoreState> {
   HomeNotifier()
-      : super(HomeStoreState(
-    propertiesState: const PropertiesState.init(),
-    pageController: PageController(),
-  )) {
+    : super(
+        HomeStoreState(
+          propertiesState: const PropertiesState.init(),
+          pageController: PageController(),
+        ),
+      ) {
     // Слухаємо потік скролу постійно
     state.pageController.addListener(() {
       final offset = state.pageController.offset;
@@ -87,6 +88,7 @@ class HomeNotifier extends StateNotifier<HomeStoreState> {
       );
     }
   }
+
   void setScrolled(bool scrolled) {
     if (state.isScrolled != scrolled) {
       state = state.copyWith(isScrolled: scrolled);
