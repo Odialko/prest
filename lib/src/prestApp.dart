@@ -17,18 +17,20 @@ class PrestApp extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
 
     /// determining whether light/dark mode depends on system settings
-    final systemBrightness = View.of(
-      context,
-    ).platformDispatcher.platformBrightness;
-    final isDarkMode = themeMode == ThemeMode.system
-        ? systemBrightness == Brightness.dark
-        : themeMode == ThemeMode.dark;
+    /// TODO(VIK): for different mode uncomment
+    // final systemBrightness = View.of(
+    //   context,
+    // ).platformDispatcher.platformBrightness;
+    // final isDarkMode = themeMode == ThemeMode.system
+    //     ? systemBrightness == Brightness.dark
+    //     : themeMode == ThemeMode.dark;
 
     /// Choose data for custom theme
-    final prestThemeData = isDarkMode ? PrestTheme.dark : PrestTheme.light;
+    // final prestThemeData = isDarkMode ? PrestTheme.dark : PrestTheme.light;
 
     return PrestTheme(
-      data: prestThemeData,
+      data: PrestTheme.light,
+      // data: prestThemeData,
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'prEST',
