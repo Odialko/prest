@@ -140,7 +140,7 @@ class NavigationHubWebView extends NavigationHubScreen {
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Contact',
-      barrierColor: Colors.black.withOpacity(0.8),
+      barrierColor: Colors.black.withValues(alpha: 0.8),
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, anim1, anim2) {
         return Center(
@@ -184,7 +184,7 @@ class NavigationHubWebView extends NavigationHubScreen {
   Widget _buildMobileDrawer(BuildContext context, PrestThemeData theme) {
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: Colors.white.withValues(alpha: 0.9),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: SafeArea(
