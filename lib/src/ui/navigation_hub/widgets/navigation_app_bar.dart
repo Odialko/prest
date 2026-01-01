@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prest/src/constants/constants.dart';
+import 'package:prest/src/routing/routes.dart';
 
 // lib/src/ui/navigation_hub/widgets/navigation_app_bar.dart
 
@@ -13,20 +15,21 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.actions,
   });
 
-  // Фіксуємо висоту, щоб Flutter не "смикав" інтерфейс при завантаженні
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize =>
+      const Size.fromHeight(LayoutsConstants.headerHeight);
 
   @override
   Widget build(BuildContext context) {
-    // final theme = context.prestTheme;
+    final double width = MediaQuery.of(context).size.width;
+    final bool isMobile = width < LayoutsConstants.brakePointToMobile;
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOutCubic,
-      height: isScrolled ? 70 : 100, // Явно задаємо висоту
+      duration: LayoutsConstants.animationHeaderDuration,
+      curve: Curves.easeInOut,
+      height: isScrolled ? 70 : (isMobile ? 80 : 120),
       decoration: BoxDecoration(
-        color: Colors.white, // Повертаємо фіксований білий, як ти хотів
+        color: Colors.white,
         boxShadow: isScrolled
             ? [
                 BoxShadow(
@@ -38,20 +41,42 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1400),
+          constraints: const BoxConstraints(
+            maxWidth: LayoutsConstants.maxContentWidth,
+          ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile
+                  ? LayoutsConstants.horizontalPaddingMobile
+                  : LayoutsConstants.horizontalPaddingDesktop,
+            ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Логотип
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 400),
-                  height: isScrolled ? 35 : 55, // Плавна зміна розміру лого
-                  child: Image.asset(ImagesConstants.mainLogo),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () => context.go(Routes.home),
+                    child: AnimatedContainer(
+                      duration: LayoutsConstants.animationHeaderDuration,
+                      height: isScrolled ? 40 : (isMobile ? 50 : 75),
+                      child: Image.asset(
+                        ImagesConstants.mainLogo,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
                 ),
-                // Меню
-                Row(children: actions),
+                const Spacer(),
+                if (!isMobile)
+                  ...actions
+                else
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    visualDensity: VisualDensity.compact,
+                    icon: const Icon(Icons.menu, color: Colors.black, size: 28),
+                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  ),
               ],
             ),
           ),
