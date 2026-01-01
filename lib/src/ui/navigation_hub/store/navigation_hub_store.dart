@@ -1,21 +1,18 @@
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'navigation_hub_store.freezed.dart';
-part 'navigation_hub_store.g.dart';
 
 @freezed
-abstract class NavigationHubStore with _$NavigationHubStore {
-  const factory NavigationHubStore({
+abstract class NavigationHubState with _$NavigationHubState {
+  const factory NavigationHubState({
     @Default(false) bool isScrolled,
     String? activeRoute,
-  }) = _NavigationHubStore;
+  }) = _NavigationHubState;
 }
 
-@riverpod
-class NavigationNotifier extends _$NavigationNotifier {
-  @override
-  NavigationHubStore build() => const NavigationHubStore();
+class NavigationNotifier extends StateNotifier<NavigationHubState> {
+  NavigationNotifier() : super(const NavigationHubState());
 
   void setScrolled(bool value) {
     if (state.isScrolled != value) {
@@ -29,3 +26,8 @@ class NavigationNotifier extends _$NavigationNotifier {
     }
   }
 }
+
+final navigationProvider =
+    StateNotifierProvider<NavigationNotifier, NavigationHubState>((ref) {
+      return NavigationNotifier();
+    });

@@ -15,8 +15,15 @@ class Routes {
   // Usługi
   static const servicesDesign = '/services/design';
   static const servicesCredit = '/services/credit';
+  static const servicesDoradztwo = '/services/doradztwo';
+  static const servicesZaGranica = '/services/za_granica';
   static const servicesInvestment = '/services/investment';
   static const servicesGlobal = '/services/global-purchases';
 
   static const contact = '/contact';
+
+  static const politykaPrywatnosci = '/polityka_prywatnosci';
+  static const regulamin = '/regulamin';
+  static const cookies = '/cookies';
+
 }
