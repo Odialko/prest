@@ -15,78 +15,71 @@ class HomeHeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          // 1. CAROUSEL WITH GENTLE ZOOM
-          Positioned.fill(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                height: height,
-                viewportFraction: 1.0,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 8),
-                autoPlayAnimationDuration: const Duration(milliseconds: 2500),
-                scrollPhysics: const NeverScrollableScrollPhysics(),
-              ),
-              items: ImagesConstants.heroImages
-                  .map((path) => _ZoomingImage(path: path))
-                  .toList(),
-            ),
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool isMobile = constraints.maxWidth < 800;
 
-          // 2. GRADIENT OVERLAY (For readability)
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.3),
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.7),
-                  ],
+        return SizedBox(
+          height: height,
+          width: double.infinity,
+          child: Stack(
+            children: [
+              // 1. CAROUSEL (Нижній шар, тепер жести пройдуть до нього)
+              Positioned.fill(
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: height,
+                    viewportFraction: 1.0,
+                    autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 8),
+                    autoPlayAnimationDuration: const Duration(milliseconds: 1500),
+                    enableInfiniteScroll: true,
+                    // Дозволяємо ручне керування
+                    scrollPhysics: const BouncingScrollPhysics(),
+                  ),
+                  items: ImagesConstants.heroImages
+                      .map((path) => _ZoomingImage(path: path))
+                      .toList(),
                 ),
               ),
-            ),
-          ),
 
-          // 3. MAIN TEXT (CENTERED)
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'DEFINIUJEMY STANDARDY',
-                  style: theme.whiteTextTheme.font8.copyWith(
-                    letterSpacing: 12,
-                    fontWeight: FontWeight.w300,
+              // 2. GRADIENT OVERLAY
+              // IgnorePointer дозволяє пропускати натискання крізь градієнт до каруселі
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.2),
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.6),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                Text(
-                  'LUKSUSOWE NIERUCHOMOŚCI',
-                  textAlign: TextAlign.center,
-                  style: theme.whiteTextTheme.font0.copyWith(
-                    height: 1.1,
-                    fontWeight: FontWeight.w200,
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ),
 
-          // 4. BUTTON (BOTTOM RIGHT)
-          Positioned(
-            right: 80,
-            bottom: 80,
-            child: _AnimatedHeroButton(theme: theme),
+              // 3. ТЕКСТ ПОВНІСТЮ ВИДАЛЕНО (Блок Center видалено)
+
+              // 4. BUTTON (Кнопка залишається, вона має бути клікабельною)
+              Positioned(
+                right: isMobile ? null : 80,
+                left: isMobile ? 0 : null,
+                bottom: isMobile ? 60 : 80,
+                child: Container(
+                  width: isMobile ? constraints.maxWidth : null,
+                  alignment: isMobile ? Alignment.center : Alignment.centerRight,
+                  child: _AnimatedHeroButton(theme: theme),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -111,7 +104,7 @@ class _ZoomingImageState extends State<_ZoomingImage>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 12),
+      duration: const Duration(seconds: 15),
     )..repeat(reverse: true);
   }
 
@@ -127,7 +120,7 @@ class _ZoomingImageState extends State<_ZoomingImage>
       animation: _controller,
       builder: (_, __) {
         return Transform.scale(
-          scale: 1.0 + (_controller.value * 0.05), // 5% scale
+          scale: 1.0 + (_controller.value * 0.08),
           child: Image.asset(
             widget.path,
             width: double.infinity,
@@ -141,7 +134,7 @@ class _ZoomingImageState extends State<_ZoomingImage>
 }
 
 // ------------------------------------------------------------
-// ANIMATED FILL BUTTON (LEFT TO RIGHT)
+// ANIMATED FILL BUTTON
 // ------------------------------------------------------------
 class _AnimatedHeroButton extends StatefulWidget {
   final PrestThemeData theme;
@@ -153,8 +146,6 @@ class _AnimatedHeroButton extends StatefulWidget {
 
 class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
   bool _isHovered = false;
-
-  // Нові зменшені розміри
   final double _btnWidth = 220.0;
   final double _btnHeight = 55.0;
 
@@ -166,14 +157,13 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          // Твій скрол або перехід
+          // Дія при натисканні
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 400),
           width: _btnWidth,
           height: _btnHeight,
           decoration: BoxDecoration(
-            // Бордер міняє колір разом із заливкою
             border: Border.all(
               color: _isHovered ? widget.theme.colors.chineseBlack : Colors.white,
               width: 0.8,
@@ -181,7 +171,6 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
           ),
           child: Stack(
             children: [
-              // Анімована заливка
               AnimatedContainer(
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeInOutCubic,
@@ -189,14 +178,12 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
                 height: _btnHeight,
                 color: widget.theme.colors.chineseBlack,
               ),
-
-              // Текст
               Center(
                 child: Text(
                   'ZOBACZ OFERTY',
                   style: widget.theme.whiteTextTheme.font7.copyWith(
                     letterSpacing: 2.5,
-                    fontSize: 12, // Трохи менший шрифт для меншої кнопки
+                    fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
                   ),
