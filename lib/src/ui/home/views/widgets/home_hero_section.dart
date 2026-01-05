@@ -17,6 +17,7 @@ class HomeHeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        // Threshold for mobile view layout changes
         final bool isMobile = constraints.maxWidth < 800;
 
         return SizedBox(
@@ -24,7 +25,7 @@ class HomeHeroSection extends StatelessWidget {
           width: double.infinity,
           child: Stack(
             children: [
-              // 1. CAROUSEL (Нижній шар, тепер жести пройдуть до нього)
+              // 1. MAIN CAROUSEL (Interactive and zooming)
               Positioned.fill(
                 child: CarouselSlider(
                   options: CarouselOptions(
@@ -34,8 +35,6 @@ class HomeHeroSection extends StatelessWidget {
                     autoPlayInterval: const Duration(seconds: 8),
                     autoPlayAnimationDuration: const Duration(milliseconds: 1500),
                     enableInfiniteScroll: true,
-                    // Дозволяємо ручне керування
-                    scrollPhysics: const BouncingScrollPhysics(),
                   ),
                   items: ImagesConstants.heroImages
                       .map((path) => _ZoomingImage(path: path))
@@ -43,8 +42,7 @@ class HomeHeroSection extends StatelessWidget {
                 ),
               ),
 
-              // 2. GRADIENT OVERLAY
-              // IgnorePointer дозволяє пропускати натискання крізь градієнт до каруселі
+              // 2. GRADIENT OVERLAY (Wrapped in IgnorePointer to allow scrolling through it)
               Positioned.fill(
                 child: IgnorePointer(
                   child: Container(
@@ -63,9 +61,7 @@ class HomeHeroSection extends StatelessWidget {
                 ),
               ),
 
-              // 3. ТЕКСТ ПОВНІСТЮ ВИДАЛЕНО (Блок Center видалено)
-
-              // 4. BUTTON (Кнопка залишається, вона має бути клікабельною)
+              // 3. ACTION BUTTON (Responsive positioning)
               Positioned(
                 right: isMobile ? null : 80,
                 left: isMobile ? 0 : null,
@@ -85,7 +81,7 @@ class HomeHeroSection extends StatelessWidget {
 }
 
 // ------------------------------------------------------------
-// ZOOMING IMAGE (KEN BURNS EFFECT)
+// ZOOMING IMAGE COMPONENT (Ken Burns Effect)
 // ------------------------------------------------------------
 class _ZoomingImage extends StatefulWidget {
   final String path;
@@ -102,9 +98,10 @@ class _ZoomingImageState extends State<_ZoomingImage>
   @override
   void initState() {
     super.initState();
+    // 12-second cycle for a very smooth, slow zoom
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 15),
+      duration: const Duration(seconds: 12),
     )..repeat(reverse: true);
   }
 
@@ -120,7 +117,8 @@ class _ZoomingImageState extends State<_ZoomingImage>
       animation: _controller,
       builder: (_, __) {
         return Transform.scale(
-          scale: 1.0 + (_controller.value * 0.08),
+          // Scales up by 10% during the animation cycle
+          scale: 1.0 + (_controller.value * 0.1),
           child: Image.asset(
             widget.path,
             width: double.infinity,
@@ -134,7 +132,7 @@ class _ZoomingImageState extends State<_ZoomingImage>
 }
 
 // ------------------------------------------------------------
-// ANIMATED FILL BUTTON
+// ANIMATED HOVER BUTTON
 // ------------------------------------------------------------
 class _AnimatedHeroButton extends StatefulWidget {
   final PrestThemeData theme;
@@ -146,8 +144,6 @@ class _AnimatedHeroButton extends StatefulWidget {
 
 class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
   bool _isHovered = false;
-  final double _btnWidth = 220.0;
-  final double _btnHeight = 55.0;
 
   @override
   Widget build(BuildContext context) {
@@ -157,12 +153,12 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          // Дія при натисканні
+          // Add your navigation or scroll logic here
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 400),
-          width: _btnWidth,
-          height: _btnHeight,
+          width: 220,
+          height: 55,
           decoration: BoxDecoration(
             border: Border.all(
               color: _isHovered ? widget.theme.colors.chineseBlack : Colors.white,
@@ -171,13 +167,15 @@ class _AnimatedHeroButtonState extends State<_AnimatedHeroButton> {
           ),
           child: Stack(
             children: [
+              // Background fill animation
               AnimatedContainer(
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeInOutCubic,
-                width: _isHovered ? _btnWidth : 0,
-                height: _btnHeight,
+                width: _isHovered ? 220 : 0,
+                height: 55,
                 color: widget.theme.colors.chineseBlack,
               ),
+              // Button Text
               Center(
                 child: Text(
                   'ZOBACZ OFERTY',
