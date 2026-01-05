@@ -1,70 +1,80 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/legacy.dart'; // Using legacy as requested
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/models/property.dart';
 
 part 'home_store.freezed.dart';
 
-// --- СТАНИ ДЛЯ CRM ДАНИХ ---
+// ---------------------------------------------------------------------------
+// CRM DATA STATES
+// ---------------------------------------------------------------------------
 @freezed
 sealed class PropertiesState with _$PropertiesState {
   const factory PropertiesState.init() = PropertiesStateInit;
   const factory PropertiesState.loading() = PropertiesStateLoading;
   const factory PropertiesState.error({String? message}) = PropertiesStateError;
   const factory PropertiesState.loaded({@Default([]) List<Property> items}) =
-      PropertiesStateLoaded;
+  PropertiesStateLoaded;
 }
 
-// --- ЗАГАЛЬНИЙ СТАН HOME SCREEN ---
+// ---------------------------------------------------------------------------
+// HOME SCREEN GLOBAL STATE
+// ---------------------------------------------------------------------------
 @freezed
 abstract class HomeStoreState with _$HomeStoreState {
+  /// propertiesState: CRM data loading status
+  /// pageController: Viewport scroll controller
+  /// isScrolled: Header animation trigger
+  /// currentPage: Active section index
   const factory HomeStoreState({
-    // Стан завантаження з CRM
     required PropertiesState propertiesState,
-    // Навігація
     required PageController pageController,
     @Default(false) bool isScrolled,
     @Default(0) int currentPage,
   }) = _HomeStoreState;
 }
 
-// --- НОТИФІКАТОР ---
-// lib/src/ui/home/store/home_store.dart
-
-// ... твої імпорти та стани PropertiesState ...
-
+// ---------------------------------------------------------------------------
+// HOME NOTIFIER
+// ---------------------------------------------------------------------------
 class HomeNotifier extends StateNotifier<HomeStoreState> {
   HomeNotifier()
-    : super(
-        HomeStoreState(
-          propertiesState: const PropertiesState.init(),
-          pageController: PageController(),
-        ),
-      ) {
-    // Слухаємо потік скролу постійно
-    state.pageController.addListener(() {
-      final offset = state.pageController.offset;
-      // Якщо відійшли від самого верху хоча б на 10 пікселів — зменшуємо хедер
-      setScrolled(offset > 10);
-    });
+      : super(
+    HomeStoreState(
+      propertiesState: const PropertiesState.init(),
+      pageController: PageController(),
+    ),
+  ) {
+    _initializeListeners();
     fetchProperties();
   }
 
+  /// Sets up scroll monitoring for UI state changes
+  void _initializeListeners() {
+    state.pageController.addListener(() {
+      if (state.pageController.hasClients) {
+        final offset = state.pageController.offset;
+        setScrolled(offset > 10);
+      }
+    });
+  }
+
+  /// Fetches property data with a simulated network delay
   Future<void> fetchProperties() async {
     state = state.copyWith(propertiesState: const PropertiesState.loading());
 
     try {
-      // Імітуємо затримку мережі
       await Future.delayed(const Duration(seconds: 2));
 
-      // Тестові дані, які ми потім замінимо на реальний CRM API
       final mockItems = [
         const Property(
           id: '1',
           title: 'VILLA MODERN LUX',
           location: 'Warszawa, Wilanów',
           price: '8 500 000 PLN',
-          imageUrl: 'assets/images/house1.webp',
+          imageUrl: ImagesConstants.house1,
           area: 350.5,
           rooms: 6,
         ),
@@ -73,7 +83,7 @@ class HomeNotifier extends StateNotifier<HomeStoreState> {
           title: 'PENTHOUSE PANORAMA',
           location: 'Warszawa, Śródmieście',
           price: '12 000 000 PLN',
-          imageUrl: 'assets/images/house2.webp',
+          imageUrl: ImagesConstants.house2,
           area: 180.0,
           rooms: 4,
         ),
@@ -89,23 +99,28 @@ class HomeNotifier extends StateNotifier<HomeStoreState> {
     }
   }
 
+  /// Updates the scrolled flag based on scroll offset
   void setScrolled(bool scrolled) {
     if (state.isScrolled != scrolled) {
       state = state.copyWith(isScrolled: scrolled);
     }
   }
 
-  // --- ДОДАЙ ТАКОЖ ЦЕЙ МЕТОД ДЛЯ ЯКОРІВ ---
+  /// Handles smooth navigation to a specific section
   void scrollToPage(int index) {
-    state.pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeInOutCubic,
-    );
+    if (state.pageController.hasClients) {
+      state.pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOutCubic,
+      );
+    }
   }
 }
 
-// ПРОВАЙДЕР
+// ---------------------------------------------------------------------------
+// PROVIDER
+// ---------------------------------------------------------------------------
 final homeProvider = StateNotifierProvider<HomeNotifier, HomeStoreState>((ref) {
   return HomeNotifier();
 });

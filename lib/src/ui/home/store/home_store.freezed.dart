@@ -388,9 +388,11 @@ as List<Property>,
 /// @nodoc
 mixin _$HomeStoreState {
 
-// Стан завантаження з CRM
- PropertiesState get propertiesState;// Навігація
- PageController get pageController; bool get isScrolled; int get currentPage;
+// State of property listings fetched from CRM
+ PropertiesState get propertiesState;// Controls scrolling behavior and anchors
+ PageController get pageController;// Tracks if the user has scrolled down (for header animations)
+ bool get isScrolled;// Tracks the active section index
+ int get currentPage;
 /// Create a copy of HomeStoreState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -597,11 +599,13 @@ class _HomeStoreState implements HomeStoreState {
   const _HomeStoreState({required this.propertiesState, required this.pageController, this.isScrolled = false, this.currentPage = 0});
   
 
-// Стан завантаження з CRM
+// State of property listings fetched from CRM
 @override final  PropertiesState propertiesState;
-// Навігація
+// Controls scrolling behavior and anchors
 @override final  PageController pageController;
+// Tracks if the user has scrolled down (for header animations)
 @override@JsonKey() final  bool isScrolled;
+// Tracks the active section index
 @override@JsonKey() final  int currentPage;
 
 /// Create a copy of HomeStoreState

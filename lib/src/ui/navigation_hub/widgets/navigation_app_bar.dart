@@ -3,8 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/routing/routes.dart';
 
-// lib/src/ui/navigation_hub/widgets/navigation_app_bar.dart
-
 class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isScrolled;
   final List<Widget> actions;
@@ -16,65 +14,60 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(LayoutsConstants.headerHeight);
+  Size get preferredSize => const Size.fromHeight(LayoutsConstants.headerHeight);
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final bool isMobile = width < LayoutsConstants.brakePointToMobile;
+
+    // Switch to mobile earlier to prevent crowding
+    final bool isMobile = width < 1150;
 
     return AnimatedContainer(
       duration: LayoutsConstants.animationHeaderDuration,
       curve: Curves.easeInOut,
-      height: isScrolled ? 70 : (isMobile ? 80 : 120),
+      height: isScrolled ? 70 : (isMobile ? 80 : 110),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: isScrolled
-            ? [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                ),
-              ]
-            : [],
+        boxShadow: isScrolled ? [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ] : [],
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: LayoutsConstants.maxContentWidth,
-          ),
+          constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: isMobile
-                  ? LayoutsConstants.horizontalPaddingMobile
-                  : LayoutsConstants.horizontalPaddingDesktop,
+              horizontal: isMobile ? 24 : 40,
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () => context.go(Routes.home),
-                    child: AnimatedContainer(
-                      duration: LayoutsConstants.animationHeaderDuration,
-                      height: isScrolled ? 40 : (isMobile ? 50 : 75),
-                      child: Image.asset(
-                        ImagesConstants.mainLogo,
-                        fit: BoxFit.contain,
+                // 1. LOGO
+                _buildLogo(context, isMobile, width),
+
+                // 2. NAVIGATION & CTA BUTTONS
+                if (!isMobile)
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ...actions, // Contains nav links and 'UMÓW ROZMOWĘ'
+                        ],
                       ),
                     ),
-                  ),
-                ),
-                const Spacer(),
-                if (!isMobile)
-                  ...actions
+                  )
                 else
+                // Mobile Burger
                   IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    visualDensity: VisualDensity.compact,
-                    icon: const Icon(Icons.menu, color: Colors.black, size: 28),
+                    icon: const Icon(Icons.menu_rounded, color: Colors.black, size: 30),
                     onPressed: () => Scaffold.of(context).openEndDrawer(),
                   ),
               ],
@@ -84,8 +77,25 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-}
 
+  Widget _buildLogo(BuildContext context, bool isMobile, double width) {
+    // Dynamic logo sizing for different screen widths
+    double logoHeight = isScrolled ? 35 : (isMobile ? 45 : 65);
+    if (width < 1300 && !isMobile) logoHeight = isScrolled ? 32 : 48;
+
+    return GestureDetector(
+      onTap: () => context.go(Routes.home),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: AnimatedContainer(
+          duration: LayoutsConstants.animationHeaderDuration,
+          height: logoHeight,
+          child: Image.asset(ImagesConstants.mainLogo, fit: BoxFit.contain),
+        ),
+      ),
+    );
+  }
+}
 /// in case if we need to keep glass
 // import 'dart:ui';
 // import 'package:flutter/material.dart';

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:prest/src/prest_theme.dart';
+import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 
 class PlaceholderScreen extends StatelessWidget {
-  final String title;
-  const PlaceholderScreen({super.key, required this.title});
+  final NavItem item;
+
+  const PlaceholderScreen({
+    super.key,
+    required this.item,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,45 +16,67 @@ class PlaceholderScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      // Контейнер на весь екран мінус висота хедера (приблизно 120)
-      constraints: BoxConstraints(minHeight: screenHeight - 200),
+      // Ensure content takes at least the full screen height minus footer/header
+      constraints: BoxConstraints(minHeight: screenHeight - 250),
       width: double.infinity,
       color: theme.colors.white,
-      // Додаємо відступ зверху, щоб хедер не наповзав на текст
-      padding: const EdgeInsets.only(top: 150, bottom: 100),
+      // Large top padding to prevent AppBar overlap
+      padding: const EdgeInsets.only(top: 200, bottom: 100, left: 40, right: 40),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Декоративна лінія зверху
-          Container(width: 40, height: 1, color: theme.colors.gold),
-          const SizedBox(height: 40),
+          // Elegant gold accent line
+          Container(
+            width: 50,
+            height: 1,
+            color: theme.colors.gold,
+          ),
+          const SizedBox(height: 50),
 
-          // ВЕЛИКИЙ ЗАГОЛОВОК
+          // MAIN TITLE (Uppercase with wide tracking)
           Text(
-            title,
+            item.title.toUpperCase(),
             textAlign: TextAlign.center,
-            style: theme.blackTextTheme.font1.copyWith( // Змінено на font1 для масштабу
-              letterSpacing: 12,
+            style: theme.blackTextTheme.font1.copyWith(
+              letterSpacing: 16,
               fontWeight: FontWeight.w300,
-              fontSize: 48, // Примусовий великий розмір, якщо font1 малий
+              fontSize: 56, // Bold premium scale
+              height: 1.2,
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
 
-          // ПІДЗАГОЛОВОК
+          // STATUS MESSAGE
           Text(
-            "STAY TUNED • prEST",
+            item.description, // "Strona w budowie – już wkrótce!"
+            textAlign: TextAlign.center,
             style: theme.blackTextTheme.font7.copyWith(
-              color: theme.colors.gold,
-              letterSpacing: 4,
-              fontWeight: FontWeight.w600,
+              color: theme.colors.chineseBlack.withValues(alpha: 0.6),
+              letterSpacing: 3,
+              fontWeight: FontWeight.w400,
             ),
           ),
 
           const SizedBox(height: 60),
-          // Декоративна лінія знизу
-          Container(width: 40, height: 1, color: theme.colors.gold),
+
+          // BRAND SIGNATURE
+          Text(
+            "prEST • LUXURY REAL ESTATE",
+            style: theme.blackTextTheme.font7.copyWith(
+              color: theme.colors.gold,
+              letterSpacing: 6,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+
+          const SizedBox(height: 50),
+          // Closing decorative line
+          Container(
+            width: 50,
+            height: 1,
+            color: theme.colors.gold,
+          ),
         ],
       ),
     );
