@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// LUXURY COLOR PALETTE
+/// Defined as constants to ensure consistency across light and dark modes
 class PrestColors {
   PrestColors._();
 
@@ -19,19 +20,31 @@ class PrestColors {
   static const sonicSilver = Color(0xFF767676);
   static const silverChalice = Color(0xFFA9A9A9);
 
-  // Semantic
+  // Semantic Colors
   static const redSolid = Color(0xFFAF2D2D);
   static const niagara = Color(0xFF05A898);
-  static const japaneseLaurel = Color(0xFF0D6E01);
 }
 
 /// BASE FONT SIZES
+/// Hierarchy from Hero headers to tiny legal text
 class _BaseFonts {
   _BaseFonts._();
-  static const fontSizes = [40.0, 34.0, 22.0, 18.0, 16.0, 14.0, 12.0, 10.0];
+  static const fontSizes = [
+    64.0, // font0: Hero Header
+    48.0, // font1: Section Title
+    34.0, // font2: Sub-title
+    22.0, // font3: Card Title
+    18.0, // font4: Navigation item
+    16.0, // font5: Main Body
+    14.0, // font6: Small body / Button
+    12.0, // font7: Footnote
+    10.0, // font8: Caption
+    9.0   // font9: Legal / Micro
+  ];
 }
 
 /// TEXT THEME HOLDER
+/// Manages font families and scaling for specific colors
 class PrestTextTheme {
   final List<TextStyle> styles;
   PrestTextTheme._(this.styles);
@@ -43,8 +56,10 @@ class PrestTextTheme {
             (index) => TextStyle(
           fontSize: _BaseFonts.fontSizes[index],
           color: color,
-          height: 1.2,
-          fontFamily: 'Inter', // Recommended for premium look
+          height: 1.4,
+          fontFamily: 'Inter',
+          fontWeight: index < 3 ? FontWeight.w300 : FontWeight.w400,
+          letterSpacing: index < 2 ? 8.0 : 0.5, // Wide tracking for headers
         ),
       ),
     );
@@ -58,11 +73,14 @@ class PrestTextTheme {
   TextStyle get font5 => styles[5];
   TextStyle get font6 => styles[6];
   TextStyle get font7 => styles[7];
+  TextStyle get font8 => styles[8];
+  TextStyle get font9 => styles[9];
 }
 
 /// COLOR THEME HOLDER
+/// Centralized access to the brand colors
 class PrestColorTheme {
-  final Color background; // Universal background getter
+  final Color background;
   final Color white;
   final Color milk;
   final Color chineseBlack;
@@ -92,9 +110,9 @@ class PrestColorTheme {
 }
 
 /// PREST THEME DATA
+/// The main object provided by the InheritedWidget
 class PrestThemeData {
   final PrestColorTheme colors;
-
   final PrestTextTheme defaultTextTheme;
   final PrestTextTheme whiteTextTheme;
   final PrestTextTheme neonBlueTextTheme;
@@ -120,6 +138,7 @@ class PrestThemeData {
 }
 
 /// INHERITED WIDGET
+/// Facilitates the propagation of theme data down the widget tree
 class PrestTheme extends InheritedWidget {
   final PrestThemeData data;
   const PrestTheme({required super.child, super.key, required this.data});
@@ -128,87 +147,47 @@ class PrestTheme extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<PrestTheme>()?.data ?? defaultLightTheme;
   }
 
-  static PrestThemeData get light => defaultLightTheme;
-  static PrestThemeData get dark => defaultDarkTheme;
-
   @override
   bool updateShouldNotify(covariant PrestTheme oldWidget) => data != oldWidget.data;
 }
 
-/// LIGHT THEME CONFIGURATION
-final PrestThemeData defaultLightTheme = PrestThemeData(
-  colors: const PrestColorTheme(
-    background: PrestColors.white,
+/// THEME CONFIGURATIONS
+final PrestThemeData defaultLightTheme = _buildTheme(Brightness.light);
+final PrestThemeData defaultDarkTheme = _buildTheme(Brightness.dark);
+
+PrestThemeData _buildTheme(Brightness brightness) {
+  final isLight = brightness == Brightness.light;
+
+  final colorTheme = PrestColorTheme(
+    background: isLight ? PrestColors.white : PrestColors.chineseBlack,
     white: PrestColors.white,
     milk: PrestColors.milk,
     chineseBlack: PrestColors.chineseBlack,
     neonBlue: PrestColors.neonBlue,
     gold: PrestColors.gold,
     gray: PrestColors.gray,
-    arsenic: PrestColors.arsenic,
+    arsenic: isLight ? PrestColors.arsenic : PrestColors.white,
     raisinBlack: PrestColors.raisinBlack,
-    black: PrestColors.chineseBlack,
+    black: isLight ? PrestColors.chineseBlack : PrestColors.white,
     redSolid: PrestColors.redSolid,
     niagara: PrestColors.niagara,
-  ),
-  defaultTextTheme: PrestTextTheme.fromColor(PrestColors.arsenic),
-  whiteTextTheme: PrestTextTheme.fromColor(PrestColors.white),
-  neonBlueTextTheme: PrestTextTheme.fromColor(PrestColors.neonBlue),
-  goldTextTheme: PrestTextTheme.fromColor(PrestColors.gold),
-  arsenicTextTheme: PrestTextTheme.fromColor(PrestColors.arsenic),
-  grayTextTheme: PrestTextTheme.fromColor(PrestColors.gray),
-  blackTextTheme: PrestTextTheme.fromColor(PrestColors.chineseBlack),
-  redSolidTextTheme: PrestTextTheme.fromColor(PrestColors.redSolid),
-  niagaraTextTheme: PrestTextTheme.fromColor(PrestColors.niagara),
-);
+  );
 
-/// DARK THEME CONFIGURATION
-final PrestThemeData defaultDarkTheme = PrestThemeData(
-  colors: const PrestColorTheme(
-    background: PrestColors.chineseBlack,
-    white: PrestColors.white,
-    milk: PrestColors.milk,
-    chineseBlack: PrestColors.chineseBlack,
-    neonBlue: PrestColors.neonBlue,
-    gold: PrestColors.gold,
-    gray: PrestColors.gray,
-    arsenic: PrestColors.white,
-    raisinBlack: PrestColors.raisinBlack,
-    black: PrestColors.white,
-    redSolid: PrestColors.redSolid,
-    niagara: PrestColors.niagara,
-  ),
-  defaultTextTheme: PrestTextTheme.fromColor(PrestColors.white),
-  whiteTextTheme: PrestTextTheme.fromColor(PrestColors.white),
-  neonBlueTextTheme: PrestTextTheme.fromColor(const Color(0xFFE0E0E0)),
-  goldTextTheme: PrestTextTheme.fromColor(PrestColors.gold),
-  arsenicTextTheme: PrestTextTheme.fromColor(PrestColors.white),
-  grayTextTheme: PrestTextTheme.fromColor(PrestColors.gray),
-  blackTextTheme: PrestTextTheme.fromColor(PrestColors.white),
-  redSolidTextTheme: PrestTextTheme.fromColor(PrestColors.redSolid),
-  niagaraTextTheme: PrestTextTheme.fromColor(PrestColors.niagara),
-);
-
-/// MATERIAL THEME FACTORY
-class PrestThemeFactory {
-  static ThemeData light() => _buildMaterial(Brightness.light, PrestColors.white);
-  static ThemeData dark() => _buildMaterial(Brightness.dark, PrestColors.chineseBlack);
-
-  static ThemeData _buildMaterial(Brightness brightness, Color bg) {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: brightness,
-      scaffoldBackgroundColor: bg,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-      ),
-    );
-  }
+  return PrestThemeData(
+    colors: colorTheme,
+    defaultTextTheme: PrestTextTheme.fromColor(colorTheme.arsenic),
+    whiteTextTheme: PrestTextTheme.fromColor(PrestColors.white),
+    neonBlueTextTheme: PrestTextTheme.fromColor(PrestColors.neonBlue),
+    goldTextTheme: PrestTextTheme.fromColor(PrestColors.gold),
+    arsenicTextTheme: PrestTextTheme.fromColor(PrestColors.arsenic),
+    grayTextTheme: PrestTextTheme.fromColor(PrestColors.gray),
+    blackTextTheme: PrestTextTheme.fromColor(isLight ? PrestColors.chineseBlack : PrestColors.white),
+    redSolidTextTheme: PrestTextTheme.fromColor(PrestColors.redSolid),
+    niagaraTextTheme: PrestTextTheme.fromColor(PrestColors.niagara),
+  );
 }
 
-/// CONTEXT EXTENSION FOR CLEANER CODE
+/// CONTEXT EXTENSION
 extension PrestThemeContext on BuildContext {
   PrestThemeData get prestTheme => PrestTheme.of(this);
 }

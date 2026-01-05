@@ -5,9 +5,11 @@ import 'package:prest/src/routing/routes.dart';
 import 'package:prest/src/ui/common_widgets/placeholder_screen.dart';
 import 'package:prest/src/ui/home/home_screen.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
+import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  // Функція для створення плавного переходу (Fade)
+
+  // Helper function for smooth Fade transition between screens
   CustomTransitionPage buildPageWithFade(Widget child) {
     return CustomTransitionPage(
       child: child,
@@ -25,91 +27,91 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state, child) =>
             NavigationHubScreen.create(child: child),
         routes: [
+          // --- HOME SCREEN ---
           GoRoute(
             path: Routes.home,
             pageBuilder: (context, state) =>
                 buildPageWithFade(HomeScreen.create()),
           ),
-          // --- ГРУПА: PROEST ---
+
+          // --- GROUP: ABOUT US (POZNAJ NAS) ---
           GoRoute(
             path: Routes.about,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'O prEST')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.about)),
           ),
           GoRoute(
             path: Routes.team,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'Zespół')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.team)),
           ),
           GoRoute(
             path: Routes.joinUs,
-            pageBuilder: (context, state) => buildPageWithFade(
-              const PlaceholderScreen(title: 'Dołącz do nas'),
-            ),
+            pageBuilder: (context, state) =>
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.joinUs)),
           ),
-          // --- ГРУПА: NIERUCHOMOŚCI ---
+
+          // --- GROUP: PROPERTIES (NIERUCHOMOŚCI) ---
           GoRoute(
             path: Routes.propertiesSale,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'Sprzedaż')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.sale)),
           ),
           GoRoute(
             path: Routes.propertiesRent,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'Wynajem')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.rent)),
           ),
           GoRoute(
             path: Routes.propertiesOffMarket,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'OffMarket')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.offMarket)),
           ),
-          // --- ГРУПА: USŁUGI ---
+
+          // --- GROUP: SERVICES (USŁUGI) ---
           GoRoute(
             path: Routes.servicesDesign,
-            pageBuilder: (context, state) => buildPageWithFade(
-              const PlaceholderScreen(title: 'prEST design'),
-            ),
+            pageBuilder: (context, state) =>
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.design)),
           ),
           GoRoute(
             path: Routes.servicesCredit,
-            pageBuilder: (context, state) => buildPageWithFade(
-              const PlaceholderScreen(title: 'Kredyt'),
-            ),
+            pageBuilder: (context, state) =>
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.credit)),
           ),
           GoRoute(
             path: Routes.servicesDoradztwo,
-            pageBuilder: (context, state) => buildPageWithFade(
-              const PlaceholderScreen(title: 'Doradztwo'),
-            ),
+            pageBuilder: (context, state) =>
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.advice)),
           ),
           GoRoute(
             path: Routes.servicesZaGranica,
-            pageBuilder: (context, state) => buildPageWithFade(
-              const PlaceholderScreen(title: 'Zakupy za granicą'),
-            ),
+            pageBuilder: (context, state) =>
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.abroad)),
           ),
-          // Contact
+
+          // --- CONTACT ---
           GoRoute(
             path: Routes.contact,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'Kontakt')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.contact)),
           ),
 
-
+          // --- LEGAL (Static Titles for now or add to NavItem if needed) ---
           GoRoute(
             path: Routes.politykaPrywatnosci,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'Polityka prywatności')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.about)), // Or specific NavItem
           ),
           GoRoute(
             path: Routes.regulamin,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'Regulamin')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.about)),
           ),
           GoRoute(
             path: Routes.cookies,
             pageBuilder: (context, state) =>
-                buildPageWithFade(const PlaceholderScreen(title: 'Cookies')),
+                buildPageWithFade(const PlaceholderScreen(item: NavItem.about)),
           ),
         ],
       ),

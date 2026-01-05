@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prest/src/prest_theme.dart';
-import 'package:prest/src/routing/routes.dart';
 import 'package:prest/src/ui/common_widgets/hover_menu.dart';
+import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
 import 'package:prest/src/ui/navigation_hub/store/navigation_hub_store.dart';
 import 'package:prest/src/ui/navigation_hub/widgets/footer_widget.dart';
@@ -19,151 +19,137 @@ class NavigationHubWebView extends NavigationHubScreen {
     final theme = context.prestTheme;
 
     return Scaffold(
-      key: const ValueKey('navigation_scaffold'),
       extendBodyBehindAppBar: true,
-      endDrawer: _buildMobileDrawer(context, theme),
+      endDrawer: _buildPremiumDrawer(context, theme),
       appBar: NavigationAppBar(
         isScrolled: isScrolled,
         actions: [
-          _buildDropdownMenu(context, theme, 'POZNAJ NAS', [
-            'O prEST',
-            'Zespół',
-            'Dołącz do nas',
-          ]),
-          _buildDropdownMenu(context, theme, 'NIERUCHOMOŚCI', [
-            'Sprzedaż',
-            'Wynajem',
-            'OFFmarket',
-          ]),
-          _buildDropdownMenu(context, theme, 'USŁUGI', [
-            'prEST design',
-            'Kredyt',
-            'Doradztwo',
-            'Zakupy za granicą',
-          ]),
-          _navLink(context, theme, 'KONTAKT', Routes.contact),
+          _buildDropdown(context, theme, 'POZNAJ NAS', [NavItem.about, NavItem.team, NavItem.joinUs]),
+          _buildDropdown(context, theme, 'NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket]),
+          _buildDropdown(context, theme, 'USŁUGI', [NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
+          _buildNavLink(context, theme, NavItem.contact),
           const SizedBox(width: 20),
-          _ctaButton(context, theme, 'ZGŁOŚ NIERUCHOMOŚĆ', route: Routes.contact, isOutlined: true),
+          _buildCtaButton(context, theme, NavItem.submitProperty, isOutlined: true),
           const SizedBox(width: 10),
-          _ctaButton(context, theme, 'UMÓW ROZMOWĘ', isDialog: true),
+          _buildCtaButton(context, theme, NavItem.bookCall, isDialog: true),
         ],
       ),
       body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification.depth == 0) {
-            ref.read(navigationProvider.notifier).setScrolled(notification.metrics.pixels > 50);
+        onNotification: (scroll) {
+          if (scroll.depth == 0) {
+            ref.read(navigationProvider.notifier).setScrolled(scroll.metrics.pixels > 50);
           }
           return false;
         },
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              child,
-              const FooterWidget(),
-            ],
-          ),
+          child: Column(children: [child, const FooterWidget()]),
         ),
       ),
     );
   }
 
-  // --- МЕНЮ (DROPDOWN) ---
-  Widget _buildDropdownMenu(BuildContext context, PrestThemeData theme, String title, List<String> items) {
+  Widget _buildDropdown(BuildContext context, PrestThemeData theme, String label, List<NavItem> items) {
     return HoverMenu(
-      title: title,
-      items: items,
+      title: label,
+      items: items.map((e) => e.title).toList(),
       theme: theme,
-      onSelected: (value) {
-        switch (value) {
-          case 'O prEST': context.go(Routes.about); break;
-          case 'Zespół': context.go(Routes.team); break;
-          case 'Dołącz do nas': context.go(Routes.joinUs); break;
-          case 'Sprzedaż': context.go(Routes.propertiesSale); break;
-          case 'Wynajem': context.go(Routes.propertiesRent); break;
-          case 'OFFmarket': context.go(Routes.propertiesOffMarket); break;
-          case 'prEST design': context.go(Routes.servicesDesign); break;
-          case 'Kredyt': context.go(Routes.servicesCredit); break;
-          case 'Doradztwo': context.go(Routes.servicesDoradztwo); break;
-          case 'Zakupy za granicą': context.go(Routes.servicesZaGranica); break;
-          default: debugPrint('No route for: $value');
-        }
+      onSelected: (title) {
+        final item = items.firstWhere((e) => e.title == title);
+        context.go(item.route);
       },
     );
   }
 
-  // --- КНОПКИ CTA ---
-  Widget _ctaButton(
-      BuildContext context,
-      PrestThemeData theme,
-      String title, {
-        String? route,
-        bool isOutlined = false,
-        bool isDialog = false,
-      }) {
+  Widget _buildNavLink(BuildContext context, PrestThemeData theme, NavItem item) {
+    // We use a ValueNotifier or simple State to track hover if this were a
+    // StatefulWidget, but since we are in a Hub, we can use a local hover state
+    // or a simple HoverMenu in 'isStaticLink' mode to guarantee 100% identity.
+
+    return HoverMenu(
+      title: item.title,
+      theme: theme,
+      isStaticLink: true, // This flag in your HoverMenu handles the "link-only" style
+      onSelected: (_) => context.go(item.route),
+    );
+  }
+
+  Widget _buildCtaButton(BuildContext context, PrestThemeData theme, NavItem item, {bool isOutlined = false, bool isDialog = false}) {
     return ElevatedButton(
-      onPressed: () {
-        if (isDialog) {
-          _showContactDialog(context, theme);
-        } else if (route != null) {
-          context.go(route);
-        }
-      },
+      onPressed: () => isDialog ? _showContactDialog(context, theme) : context.go(item.route),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isOutlined ? Colors.white : theme.colors.chineseBlack,
+        // Use theme.colors.milk or Colors.transparent for outlined if needed
+        backgroundColor: isOutlined ? theme.colors.milk : theme.colors.chineseBlack,
         foregroundColor: isOutlined ? theme.colors.chineseBlack : Colors.white,
         side: BorderSide(color: theme.colors.chineseBlack),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
         elevation: 0,
       ),
       child: Text(
-        title,
-        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.2),
+          item.title,
+          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.2)
       ),
     );
   }
 
-  // --- ПОСИЛАННЯ ТЕКСТОМ ---
-  Widget _navLink(BuildContext context, PrestThemeData theme, String title, String route) {
-    return TextButton(
-      onPressed: () => context.go(route),
-      child: Text(
-        title,
-        style: theme.blackTextTheme.font7.copyWith(fontWeight: FontWeight.bold),
+  Widget _buildPremiumDrawer(BuildContext context, PrestThemeData theme) {
+    return Drawer(
+      backgroundColor: Colors.white.withValues(alpha: 0.95),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            ...[NavItem.about, NavItem.sale, NavItem.design, NavItem.contact].map((item) => ListTile(
+              title: Center(child: Text(item.title, style: theme.blackTextTheme.font6)),
+              onTap: () { Navigator.pop(context); context.go(item.route); },
+            )),
+          ],
+        ),
       ),
     );
   }
 
-  // --- ДІАЛОГ "РОЗМОВА" ---
   void _showContactDialog(BuildContext context, PrestThemeData theme) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Contact',
       barrierColor: Colors.black.withValues(alpha: 0.8),
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, anim1, anim2) {
-        return Center(
-          child: Material(
-            color: Colors.transparent,
+      transitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (context, anim1, anim2) => Center(
+        child: Material(
+          color: Colors.transparent,
+          child: ScaleTransition(
+            scale: anim1,
             child: Container(
               width: 450,
-              padding: const EdgeInsets.all(40),
+              padding: const EdgeInsets.all(60),
               color: Colors.white,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('UMÓW ROZMOWĘ', style: theme.blackTextTheme.font4.copyWith(letterSpacing: 2)),
-                  const SizedBox(height: 30),
-                  TextField(decoration: InputDecoration(hintText: 'Imię i Nazwisko', hintStyle: theme.blackTextTheme.font7)),
-                  const SizedBox(height: 15),
-                  TextField(decoration: InputDecoration(hintText: 'Numer telefonu', hintStyle: theme.blackTextTheme.font7)),
-                  const SizedBox(height: 30),
+                  Text(
+                    'UMÓW ROZMOWĘ',
+                    style: theme.blackTextTheme.font4.copyWith(
+                      letterSpacing: 4,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  _buildField(theme, 'Imię i Nazwisko'),
+                  const SizedBox(height: 20),
+                  _buildField(theme, 'Numer телефону / Email'),
+                  const SizedBox(height: 40),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    height: 55,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: theme.colors.chineseBlack),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colors.chineseBlack,
+                        foregroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                      ),
                       onPressed: () => Navigator.pop(context),
                       child: Text('WYŚLIJ', style: theme.whiteTextTheme.font7),
                     ),
@@ -172,58 +158,21 @@ class NavigationHubWebView extends NavigationHubScreen {
               ),
             ),
           ),
-        );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return FadeTransition(opacity: anim1, child: child);
-      },
-    );
-  }
-
-  // --- МОБІЛЬНИЙ DRAWER ---
-  Widget _buildMobileDrawer(BuildContext context, PrestThemeData theme) {
-    return Drawer(
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-      backgroundColor: Colors.white.withValues(alpha: 0.9),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.black, size: 28),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ),
-              const SizedBox(height: 50),
-              _drawerLink(context, theme, 'O NAS', Routes.about),
-              _drawerLink(context, theme, 'NIERUCHOMOŚCI', Routes.propertiesSale),
-              _drawerLink(context, theme, 'USŁUGI', Routes.servicesDesign),
-              _drawerLink(context, theme, 'KONTAKT', Routes.contact),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(40),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: _ctaButton(context, theme, 'UMÓW ROZMOWĘ', isDialog: true),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
   }
 
-  Widget _drawerLink(BuildContext context, PrestThemeData theme, String title, String route) {
-    return ListTile(
-      title: Center(child: Text(title, style: theme.blackTextTheme.font6.copyWith(letterSpacing: 2))),
-      onTap: () {
-        Navigator.pop(context);
-        context.go(route);
-      },
+  Widget _buildField(PrestThemeData theme, String hint) {
+    return TextField(
+      style: theme.blackTextTheme.font6,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: theme.grayTextTheme.font7,
+        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+      ),
     );
   }
 }

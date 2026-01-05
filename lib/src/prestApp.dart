@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prest/generated/l10n.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/routing/app_router.dart';
-
-import 'prest_provider.dart';
+// import 'package:prest/src/ui/prest_provider.dart'; // Розкоментуй, коли знадобиться themeProvider
 
 class PrestApp extends ConsumerWidget {
   const PrestApp({super.key});
@@ -13,40 +11,52 @@ class PrestApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = ref.watch(routerProvider);
 
-    /// getting from the provider
-    final themeMode = ref.watch(themeProvider);
+    // Watch for theme changes (light/dark/system)
+    // final themeMode = ref.watch(themeProvider);
+    const themeMode = ThemeMode.light; // Forced to light for now
 
-    /// determining whether light/dark mode depends on system settings
-    /// TODO(VIK): for different mode uncomment
-    // final systemBrightness = View.of(
-    //   context,
-    // ).platformDispatcher.platformBrightness;
-    // final isDarkMode = themeMode == ThemeMode.system
-    //     ? systemBrightness == Brightness.dark
-    //     : themeMode == ThemeMode.dark;
+    // Logic for future theme switching
+    final systemBrightness = View.of(context).platformDispatcher.platformBrightness;
+    final bool isDark = themeMode == ThemeMode.system
+        ? systemBrightness == Brightness.dark
+        : themeMode == ThemeMode.dark;
 
-    /// Choose data for custom theme
-    // final prestThemeData = isDarkMode ? PrestTheme.dark : PrestTheme.light;
+    // Pick our custom theme data
+    final prestThemeData = isDark ? defaultDarkTheme : defaultLightTheme;
 
     return PrestTheme(
-      data: PrestTheme.light,
-      // data: prestThemeData,
+      data: prestThemeData, // This will change when you change themeMode
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'prEST',
-        routeInformationProvider: appRouter.routeInformationProvider,
-        routeInformationParser: appRouter.routeInformationParser,
-        routerDelegate: appRouter.routerDelegate,
 
-        /// pass the current themeMode
+        // Connect our GoRouter
+        routerConfig: appRouter,
+
+        // Material themes (standard wrappers)
+        theme: _buildMaterialTheme(Brightness.light),
+        darkTheme: _buildMaterialTheme(Brightness.dark),
         themeMode: themeMode,
 
-        /// standard Material themes
-        theme: PrestThemeFactory.light(),
-        darkTheme: PrestThemeFactory.dark(),
+        // Localization
+        // localizationsDelegates: const [S.delegate],
+        // supportedLocales: S.delegate.supportedLocales,
+      ),
+    );
+  }
 
-        localizationsDelegates: const [S.delegate],
-        supportedLocales: S.delegate.supportedLocales,
+  /// Creates a basic Material theme wrapper
+  ThemeData _buildMaterialTheme(Brightness brightness) {
+    final isLight = brightness == Brightness.light;
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      scaffoldBackgroundColor: isLight ? PrestColors.white : PrestColors.chineseBlack,
+      fontFamily: 'Inter',
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
       ),
     );
   }
