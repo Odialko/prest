@@ -1,126 +1,71 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/legacy.dart'; // Using legacy as requested
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:prest/src/constants/constants.dart';
-import 'package:prest/src/models/property.dart';
+import 'package:prest/src/models/offer_model.dart';
+import 'package:prest/src/providers/offer_service_provider.dart';
+import 'package:prest/src/repositories/offer_repository.dart';
 
 part 'home_store.freezed.dart';
 
-// ---------------------------------------------------------------------------
-// CRM DATA STATES
-// ---------------------------------------------------------------------------
 @freezed
-sealed class PropertiesState with _$PropertiesState {
-  const factory PropertiesState.init() = PropertiesStateInit;
-  const factory PropertiesState.loading() = PropertiesStateLoading;
-  const factory PropertiesState.error({String? message}) = PropertiesStateError;
-  const factory PropertiesState.loaded({@Default([]) List<Property> items}) =
-  PropertiesStateLoaded;
+sealed class OffersState with _$OffersState {
+  const factory OffersState.init() = OffersStateInit;
+  const factory OffersState.loading() = OffersStateLoading;
+  const factory OffersState.error({String? message}) = OffersStateError;
+  const factory OffersState.loaded({@Default([]) List<OfferModel> items}) = OffersStateLoaded;
 }
 
-// ---------------------------------------------------------------------------
-// HOME SCREEN GLOBAL STATE
-// ---------------------------------------------------------------------------
 @freezed
 abstract class HomeStoreState with _$HomeStoreState {
-  /// propertiesState: CRM data loading status
-  /// pageController: Viewport scroll controller
-  /// isScrolled: Header animation trigger
-  /// currentPage: Active section index
   const factory HomeStoreState({
-    required PropertiesState propertiesState,
+    required OffersState offersState,
     required PageController pageController,
     @Default(false) bool isScrolled,
     @Default(0) int currentPage,
   }) = _HomeStoreState;
 }
 
-// ---------------------------------------------------------------------------
-// HOME NOTIFIER
-// ---------------------------------------------------------------------------
 class HomeNotifier extends StateNotifier<HomeStoreState> {
-  HomeNotifier()
-      : super(
-    HomeStoreState(
-      propertiesState: const PropertiesState.init(),
-      pageController: PageController(),
-    ),
-  ) {
+  final OfferRepository _offerRepository;
+
+  HomeNotifier(this._offerRepository)
+      : super(HomeStoreState(
+    offersState: const OffersState.init(),
+    pageController: PageController(),
+  )) {
     _initializeListeners();
-    fetchProperties();
+    fetchOffers();
   }
 
-  /// Sets up scroll monitoring for UI state changes
   void _initializeListeners() {
     state.pageController.addListener(() {
       if (state.pageController.hasClients) {
-        final offset = state.pageController.offset;
-        setScrolled(offset > 10);
+        setScrolled(state.pageController.offset > 10);
       }
     });
   }
 
-  /// Fetches property data with a simulated network delay
-  Future<void> fetchProperties() async {
-    state = state.copyWith(propertiesState: const PropertiesState.loading());
+  Future<void> fetchOffers() async {
+    state = state.copyWith(offersState: const OffersState.loading());
+    final result = await _offerRepository.getOffers(take: 15);
 
-    try {
-      await Future.delayed(const Duration(seconds: 2));
-
-      final mockItems = [
-        const Property(
-          id: '1',
-          title: 'VILLA MODERN LUX',
-          location: 'Warszawa, Wilanów',
-          price: '8 500 000 PLN',
-          imageUrl: ImagesConstants.house1,
-          area: 350.5,
-          rooms: 6,
-        ),
-        const Property(
-          id: '2',
-          title: 'PENTHOUSE PANORAMA',
-          location: 'Warszawa, Śródmieście',
-          price: '12 000 000 PLN',
-          imageUrl: ImagesConstants.house2,
-          area: 180.0,
-          rooms: 4,
-        ),
-      ];
-
-      state = state.copyWith(
-        propertiesState: PropertiesState.loaded(items: mockItems),
-      );
-    } catch (e) {
-      state = state.copyWith(
-        propertiesState: PropertiesState.error(message: e.toString()),
-      );
-    }
+    result.fold(
+          (error) => state = state.copyWith(
+        offersState: OffersState.error(message: error.toString()),
+      ),
+          (listModel) => state = state.copyWith(
+        offersState: OffersState.loaded(items: listModel.offers), // Дістаємо список з моделі
+      ),
+    );
   }
 
-  /// Updates the scrolled flag based on scroll offset
   void setScrolled(bool scrolled) {
-    if (state.isScrolled != scrolled) {
-      state = state.copyWith(isScrolled: scrolled);
-    }
-  }
-
-  /// Handles smooth navigation to a specific section
-  void scrollToPage(int index) {
-    if (state.pageController.hasClients) {
-      state.pageController.animateToPage(
-        index,
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeInOutCubic,
-      );
-    }
+    if (state.isScrolled != scrolled) state = state.copyWith(isScrolled: scrolled);
   }
 }
 
-// ---------------------------------------------------------------------------
-// PROVIDER
-// ---------------------------------------------------------------------------
 final homeProvider = StateNotifierProvider<HomeNotifier, HomeStoreState>((ref) {
-  return HomeNotifier();
+  final repo = ref.watch(offerRepositoryProvider);
+  return HomeNotifier(repo);
 });

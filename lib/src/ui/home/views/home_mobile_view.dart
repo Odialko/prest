@@ -14,15 +14,19 @@ class HomeMobileView extends ConsumerWidget implements HomeScreen {
     final state = ref.watch(homeProvider);
     final theme = context.prestTheme;
 
-    return PageView(
-      controller: state.pageController,
-      scrollDirection: Axis.vertical,
-      pageSnapping: true,
-      children: [
-        _buildHeroMobile(context, theme),
-        _buildAboutMobile(context, theme),
-        _buildPropertiesMobile(context, ref, theme),
-      ],
+    return SizedBox(
+      // Set explicit screen dimensions
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: PageView(
+        controller: state.pageController,
+        scrollDirection: Axis.vertical,
+        children: [
+          _buildHeroMobile(context, theme),
+          _buildAboutMobile(context, theme),
+          _buildPropertiesMobile(context, ref, theme),
+        ],
+      ),
     );
   }
 
@@ -38,13 +42,14 @@ class HomeMobileView extends ConsumerWidget implements HomeScreen {
           items: ImagesConstants.heroImages
               .map(
                 (path) => Image.asset(
-                  path,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
-              )
+              path,
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
+          )
               .toList(),
         ),
+        // Overlay Title
         Center(
           child: Text(
             'PREST',
@@ -65,7 +70,7 @@ class HomeMobileView extends ConsumerWidget implements HomeScreen {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('O NAS', style: theme.grayTextTheme.font4),
+          Text('ABOUT US', style: theme.grayTextTheme.font4),
           const SizedBox(height: 20),
           Image.asset(
             ImagesConstants.aboutImage,
@@ -74,13 +79,13 @@ class HomeMobileView extends ConsumerWidget implements HomeScreen {
           ),
           const SizedBox(height: 30),
           Text(
-            'Twoje marzenia,\nnasza pasja',
+            'Your dreams,\nour passion',
             textAlign: TextAlign.center,
             style: theme.blackTextTheme.font2,
           ),
           const SizedBox(height: 20),
           Text(
-            'Luksus zdefiniowany na nowo.',
+            'Luxury redefined.',
             textAlign: TextAlign.center,
             style: theme.blackTextTheme.font6,
           ),
@@ -90,10 +95,11 @@ class HomeMobileView extends ConsumerWidget implements HomeScreen {
   }
 
   Widget _buildPropertiesMobile(
-    BuildContext context,
-    WidgetRef ref,
-    PrestThemeData theme,
-  ) {
+      BuildContext context,
+      WidgetRef ref,
+      PrestThemeData theme,
+      ) {
+    // This section will be populated with the properties list/grid
     return const Center(child: Text('Properties Mobile'));
   }
 }

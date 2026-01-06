@@ -12,7 +12,7 @@ part of 'home_store.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$PropertiesState {
+mixin _$OffersState {
 
 
 
@@ -20,7 +20,7 @@ mixin _$PropertiesState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PropertiesState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OffersState);
 }
 
 
@@ -29,20 +29,20 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'PropertiesState()';
+  return 'OffersState()';
 }
 
 
 }
 
 /// @nodoc
-class $PropertiesStateCopyWith<$Res>  {
-$PropertiesStateCopyWith(PropertiesState _, $Res Function(PropertiesState) __);
+class $OffersStateCopyWith<$Res>  {
+$OffersStateCopyWith(OffersState _, $Res Function(OffersState) __);
 }
 
 
-/// Adds pattern-matching-related methods to [PropertiesState].
-extension PropertiesStatePatterns on PropertiesState {
+/// Adds pattern-matching-related methods to [OffersState].
+extension OffersStatePatterns on OffersState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -55,13 +55,13 @@ extension PropertiesStatePatterns on PropertiesState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( PropertiesStateInit value)?  init,TResult Function( PropertiesStateLoading value)?  loading,TResult Function( PropertiesStateError value)?  error,TResult Function( PropertiesStateLoaded value)?  loaded,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( OffersStateInit value)?  init,TResult Function( OffersStateLoading value)?  loading,TResult Function( OffersStateError value)?  error,TResult Function( OffersStateLoaded value)?  loaded,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case PropertiesStateInit() when init != null:
-return init(_that);case PropertiesStateLoading() when loading != null:
-return loading(_that);case PropertiesStateError() when error != null:
-return error(_that);case PropertiesStateLoaded() when loaded != null:
+case OffersStateInit() when init != null:
+return init(_that);case OffersStateLoading() when loading != null:
+return loading(_that);case OffersStateError() when error != null:
+return error(_that);case OffersStateLoaded() when loaded != null:
 return loaded(_that);case _:
   return orElse();
 
@@ -80,13 +80,13 @@ return loaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( PropertiesStateInit value)  init,required TResult Function( PropertiesStateLoading value)  loading,required TResult Function( PropertiesStateError value)  error,required TResult Function( PropertiesStateLoaded value)  loaded,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( OffersStateInit value)  init,required TResult Function( OffersStateLoading value)  loading,required TResult Function( OffersStateError value)  error,required TResult Function( OffersStateLoaded value)  loaded,}){
 final _that = this;
 switch (_that) {
-case PropertiesStateInit():
-return init(_that);case PropertiesStateLoading():
-return loading(_that);case PropertiesStateError():
-return error(_that);case PropertiesStateLoaded():
+case OffersStateInit():
+return init(_that);case OffersStateLoading():
+return loading(_that);case OffersStateError():
+return error(_that);case OffersStateLoaded():
 return loaded(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -101,13 +101,13 @@ return loaded(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( PropertiesStateInit value)?  init,TResult? Function( PropertiesStateLoading value)?  loading,TResult? Function( PropertiesStateError value)?  error,TResult? Function( PropertiesStateLoaded value)?  loaded,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( OffersStateInit value)?  init,TResult? Function( OffersStateLoading value)?  loading,TResult? Function( OffersStateError value)?  error,TResult? Function( OffersStateLoaded value)?  loaded,}){
 final _that = this;
 switch (_that) {
-case PropertiesStateInit() when init != null:
-return init(_that);case PropertiesStateLoading() when loading != null:
-return loading(_that);case PropertiesStateError() when error != null:
-return error(_that);case PropertiesStateLoaded() when loaded != null:
+case OffersStateInit() when init != null:
+return init(_that);case OffersStateLoading() when loading != null:
+return loading(_that);case OffersStateError() when error != null:
+return error(_that);case OffersStateLoaded() when loaded != null:
 return loaded(_that);case _:
   return null;
 
@@ -125,12 +125,12 @@ return loaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  init,TResult Function()?  loading,TResult Function( String? message)?  error,TResult Function( List<Property> items)?  loaded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  init,TResult Function()?  loading,TResult Function( String? message)?  error,TResult Function( List<OfferModel> items)?  loaded,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case PropertiesStateInit() when init != null:
-return init();case PropertiesStateLoading() when loading != null:
-return loading();case PropertiesStateError() when error != null:
-return error(_that.message);case PropertiesStateLoaded() when loaded != null:
+case OffersStateInit() when init != null:
+return init();case OffersStateLoading() when loading != null:
+return loading();case OffersStateError() when error != null:
+return error(_that.message);case OffersStateLoaded() when loaded != null:
 return loaded(_that.items);case _:
   return orElse();
 
@@ -149,12 +149,12 @@ return loaded(_that.items);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  init,required TResult Function()  loading,required TResult Function( String? message)  error,required TResult Function( List<Property> items)  loaded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  init,required TResult Function()  loading,required TResult Function( String? message)  error,required TResult Function( List<OfferModel> items)  loaded,}) {final _that = this;
 switch (_that) {
-case PropertiesStateInit():
-return init();case PropertiesStateLoading():
-return loading();case PropertiesStateError():
-return error(_that.message);case PropertiesStateLoaded():
+case OffersStateInit():
+return init();case OffersStateLoading():
+return loading();case OffersStateError():
+return error(_that.message);case OffersStateLoaded():
 return loaded(_that.items);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -169,12 +169,12 @@ return loaded(_that.items);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  init,TResult? Function()?  loading,TResult? Function( String? message)?  error,TResult? Function( List<Property> items)?  loaded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  init,TResult? Function()?  loading,TResult? Function( String? message)?  error,TResult? Function( List<OfferModel> items)?  loaded,}) {final _that = this;
 switch (_that) {
-case PropertiesStateInit() when init != null:
-return init();case PropertiesStateLoading() when loading != null:
-return loading();case PropertiesStateError() when error != null:
-return error(_that.message);case PropertiesStateLoaded() when loaded != null:
+case OffersStateInit() when init != null:
+return init();case OffersStateLoading() when loading != null:
+return loading();case OffersStateError() when error != null:
+return error(_that.message);case OffersStateLoaded() when loaded != null:
 return loaded(_that.items);case _:
   return null;
 
@@ -186,8 +186,8 @@ return loaded(_that.items);case _:
 /// @nodoc
 
 
-class PropertiesStateInit implements PropertiesState {
-  const PropertiesStateInit();
+class OffersStateInit implements OffersState {
+  const OffersStateInit();
   
 
 
@@ -197,7 +197,7 @@ class PropertiesStateInit implements PropertiesState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PropertiesStateInit);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OffersStateInit);
 }
 
 
@@ -206,7 +206,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'PropertiesState.init()';
+  return 'OffersState.init()';
 }
 
 
@@ -218,8 +218,8 @@ String toString() {
 /// @nodoc
 
 
-class PropertiesStateLoading implements PropertiesState {
-  const PropertiesStateLoading();
+class OffersStateLoading implements OffersState {
+  const OffersStateLoading();
   
 
 
@@ -229,7 +229,7 @@ class PropertiesStateLoading implements PropertiesState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PropertiesStateLoading);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OffersStateLoading);
 }
 
 
@@ -238,7 +238,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'PropertiesState.loading()';
+  return 'OffersState.loading()';
 }
 
 
@@ -250,23 +250,23 @@ String toString() {
 /// @nodoc
 
 
-class PropertiesStateError implements PropertiesState {
-  const PropertiesStateError({this.message});
+class OffersStateError implements OffersState {
+  const OffersStateError({this.message});
   
 
  final  String? message;
 
-/// Create a copy of PropertiesState
+/// Create a copy of OffersState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$PropertiesStateErrorCopyWith<PropertiesStateError> get copyWith => _$PropertiesStateErrorCopyWithImpl<PropertiesStateError>(this, _$identity);
+$OffersStateErrorCopyWith<OffersStateError> get copyWith => _$OffersStateErrorCopyWithImpl<OffersStateError>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PropertiesStateError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OffersStateError&&(identical(other.message, message) || other.message == message));
 }
 
 
@@ -275,15 +275,15 @@ int get hashCode => Object.hash(runtimeType,message);
 
 @override
 String toString() {
-  return 'PropertiesState.error(message: $message)';
+  return 'OffersState.error(message: $message)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $PropertiesStateErrorCopyWith<$Res> implements $PropertiesStateCopyWith<$Res> {
-  factory $PropertiesStateErrorCopyWith(PropertiesStateError value, $Res Function(PropertiesStateError) _then) = _$PropertiesStateErrorCopyWithImpl;
+abstract mixin class $OffersStateErrorCopyWith<$Res> implements $OffersStateCopyWith<$Res> {
+  factory $OffersStateErrorCopyWith(OffersStateError value, $Res Function(OffersStateError) _then) = _$OffersStateErrorCopyWithImpl;
 @useResult
 $Res call({
  String? message
@@ -294,17 +294,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$PropertiesStateErrorCopyWithImpl<$Res>
-    implements $PropertiesStateErrorCopyWith<$Res> {
-  _$PropertiesStateErrorCopyWithImpl(this._self, this._then);
+class _$OffersStateErrorCopyWithImpl<$Res>
+    implements $OffersStateErrorCopyWith<$Res> {
+  _$OffersStateErrorCopyWithImpl(this._self, this._then);
 
-  final PropertiesStateError _self;
-  final $Res Function(PropertiesStateError) _then;
+  final OffersStateError _self;
+  final $Res Function(OffersStateError) _then;
 
-/// Create a copy of PropertiesState
+/// Create a copy of OffersState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = freezed,}) {
-  return _then(PropertiesStateError(
+  return _then(OffersStateError(
 message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -316,29 +316,29 @@ as String?,
 /// @nodoc
 
 
-class PropertiesStateLoaded implements PropertiesState {
-  const PropertiesStateLoaded({final  List<Property> items = const []}): _items = items;
+class OffersStateLoaded implements OffersState {
+  const OffersStateLoaded({final  List<OfferModel> items = const []}): _items = items;
   
 
- final  List<Property> _items;
-@JsonKey() List<Property> get items {
+ final  List<OfferModel> _items;
+@JsonKey() List<OfferModel> get items {
   if (_items is EqualUnmodifiableListView) return _items;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_items);
 }
 
 
-/// Create a copy of PropertiesState
+/// Create a copy of OffersState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$PropertiesStateLoadedCopyWith<PropertiesStateLoaded> get copyWith => _$PropertiesStateLoadedCopyWithImpl<PropertiesStateLoaded>(this, _$identity);
+$OffersStateLoadedCopyWith<OffersStateLoaded> get copyWith => _$OffersStateLoadedCopyWithImpl<OffersStateLoaded>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PropertiesStateLoaded&&const DeepCollectionEquality().equals(other._items, _items));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OffersStateLoaded&&const DeepCollectionEquality().equals(other._items, _items));
 }
 
 
@@ -347,18 +347,18 @@ int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(
 
 @override
 String toString() {
-  return 'PropertiesState.loaded(items: $items)';
+  return 'OffersState.loaded(items: $items)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $PropertiesStateLoadedCopyWith<$Res> implements $PropertiesStateCopyWith<$Res> {
-  factory $PropertiesStateLoadedCopyWith(PropertiesStateLoaded value, $Res Function(PropertiesStateLoaded) _then) = _$PropertiesStateLoadedCopyWithImpl;
+abstract mixin class $OffersStateLoadedCopyWith<$Res> implements $OffersStateCopyWith<$Res> {
+  factory $OffersStateLoadedCopyWith(OffersStateLoaded value, $Res Function(OffersStateLoaded) _then) = _$OffersStateLoadedCopyWithImpl;
 @useResult
 $Res call({
- List<Property> items
+ List<OfferModel> items
 });
 
 
@@ -366,19 +366,19 @@ $Res call({
 
 }
 /// @nodoc
-class _$PropertiesStateLoadedCopyWithImpl<$Res>
-    implements $PropertiesStateLoadedCopyWith<$Res> {
-  _$PropertiesStateLoadedCopyWithImpl(this._self, this._then);
+class _$OffersStateLoadedCopyWithImpl<$Res>
+    implements $OffersStateLoadedCopyWith<$Res> {
+  _$OffersStateLoadedCopyWithImpl(this._self, this._then);
 
-  final PropertiesStateLoaded _self;
-  final $Res Function(PropertiesStateLoaded) _then;
+  final OffersStateLoaded _self;
+  final $Res Function(OffersStateLoaded) _then;
 
-/// Create a copy of PropertiesState
+/// Create a copy of OffersState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? items = null,}) {
-  return _then(PropertiesStateLoaded(
+  return _then(OffersStateLoaded(
 items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
-as List<Property>,
+as List<OfferModel>,
   ));
 }
 
@@ -388,11 +388,7 @@ as List<Property>,
 /// @nodoc
 mixin _$HomeStoreState {
 
-// State of property listings fetched from CRM
- PropertiesState get propertiesState;// Controls scrolling behavior and anchors
- PageController get pageController;// Tracks if the user has scrolled down (for header animations)
- bool get isScrolled;// Tracks the active section index
- int get currentPage;
+ OffersState get offersState; PageController get pageController; bool get isScrolled; int get currentPage;
 /// Create a copy of HomeStoreState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -403,16 +399,16 @@ $HomeStoreStateCopyWith<HomeStoreState> get copyWith => _$HomeStoreStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeStoreState&&(identical(other.propertiesState, propertiesState) || other.propertiesState == propertiesState)&&(identical(other.pageController, pageController) || other.pageController == pageController)&&(identical(other.isScrolled, isScrolled) || other.isScrolled == isScrolled)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeStoreState&&(identical(other.offersState, offersState) || other.offersState == offersState)&&(identical(other.pageController, pageController) || other.pageController == pageController)&&(identical(other.isScrolled, isScrolled) || other.isScrolled == isScrolled)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,propertiesState,pageController,isScrolled,currentPage);
+int get hashCode => Object.hash(runtimeType,offersState,pageController,isScrolled,currentPage);
 
 @override
 String toString() {
-  return 'HomeStoreState(propertiesState: $propertiesState, pageController: $pageController, isScrolled: $isScrolled, currentPage: $currentPage)';
+  return 'HomeStoreState(offersState: $offersState, pageController: $pageController, isScrolled: $isScrolled, currentPage: $currentPage)';
 }
 
 
@@ -423,11 +419,11 @@ abstract mixin class $HomeStoreStateCopyWith<$Res>  {
   factory $HomeStoreStateCopyWith(HomeStoreState value, $Res Function(HomeStoreState) _then) = _$HomeStoreStateCopyWithImpl;
 @useResult
 $Res call({
- PropertiesState propertiesState, PageController pageController, bool isScrolled, int currentPage
+ OffersState offersState, PageController pageController, bool isScrolled, int currentPage
 });
 
 
-$PropertiesStateCopyWith<$Res> get propertiesState;
+$OffersStateCopyWith<$Res> get offersState;
 
 }
 /// @nodoc
@@ -440,10 +436,10 @@ class _$HomeStoreStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeStoreState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? propertiesState = null,Object? pageController = null,Object? isScrolled = null,Object? currentPage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? offersState = null,Object? pageController = null,Object? isScrolled = null,Object? currentPage = null,}) {
   return _then(_self.copyWith(
-propertiesState: null == propertiesState ? _self.propertiesState : propertiesState // ignore: cast_nullable_to_non_nullable
-as PropertiesState,pageController: null == pageController ? _self.pageController : pageController // ignore: cast_nullable_to_non_nullable
+offersState: null == offersState ? _self.offersState : offersState // ignore: cast_nullable_to_non_nullable
+as OffersState,pageController: null == pageController ? _self.pageController : pageController // ignore: cast_nullable_to_non_nullable
 as PageController,isScrolled: null == isScrolled ? _self.isScrolled : isScrolled // ignore: cast_nullable_to_non_nullable
 as bool,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,
@@ -453,10 +449,10 @@ as int,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PropertiesStateCopyWith<$Res> get propertiesState {
+$OffersStateCopyWith<$Res> get offersState {
   
-  return $PropertiesStateCopyWith<$Res>(_self.propertiesState, (value) {
-    return _then(_self.copyWith(propertiesState: value));
+  return $OffersStateCopyWith<$Res>(_self.offersState, (value) {
+    return _then(_self.copyWith(offersState: value));
   });
 }
 }
@@ -540,10 +536,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PropertiesState propertiesState,  PageController pageController,  bool isScrolled,  int currentPage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OffersState offersState,  PageController pageController,  bool isScrolled,  int currentPage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeStoreState() when $default != null:
-return $default(_that.propertiesState,_that.pageController,_that.isScrolled,_that.currentPage);case _:
+return $default(_that.offersState,_that.pageController,_that.isScrolled,_that.currentPage);case _:
   return orElse();
 
 }
@@ -561,10 +557,10 @@ return $default(_that.propertiesState,_that.pageController,_that.isScrolled,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PropertiesState propertiesState,  PageController pageController,  bool isScrolled,  int currentPage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OffersState offersState,  PageController pageController,  bool isScrolled,  int currentPage)  $default,) {final _that = this;
 switch (_that) {
 case _HomeStoreState():
-return $default(_that.propertiesState,_that.pageController,_that.isScrolled,_that.currentPage);case _:
+return $default(_that.offersState,_that.pageController,_that.isScrolled,_that.currentPage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -581,10 +577,10 @@ return $default(_that.propertiesState,_that.pageController,_that.isScrolled,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PropertiesState propertiesState,  PageController pageController,  bool isScrolled,  int currentPage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OffersState offersState,  PageController pageController,  bool isScrolled,  int currentPage)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeStoreState() when $default != null:
-return $default(_that.propertiesState,_that.pageController,_that.isScrolled,_that.currentPage);case _:
+return $default(_that.offersState,_that.pageController,_that.isScrolled,_that.currentPage);case _:
   return null;
 
 }
@@ -596,16 +592,12 @@ return $default(_that.propertiesState,_that.pageController,_that.isScrolled,_tha
 
 
 class _HomeStoreState implements HomeStoreState {
-  const _HomeStoreState({required this.propertiesState, required this.pageController, this.isScrolled = false, this.currentPage = 0});
+  const _HomeStoreState({required this.offersState, required this.pageController, this.isScrolled = false, this.currentPage = 0});
   
 
-// State of property listings fetched from CRM
-@override final  PropertiesState propertiesState;
-// Controls scrolling behavior and anchors
+@override final  OffersState offersState;
 @override final  PageController pageController;
-// Tracks if the user has scrolled down (for header animations)
 @override@JsonKey() final  bool isScrolled;
-// Tracks the active section index
 @override@JsonKey() final  int currentPage;
 
 /// Create a copy of HomeStoreState
@@ -618,16 +610,16 @@ _$HomeStoreStateCopyWith<_HomeStoreState> get copyWith => __$HomeStoreStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeStoreState&&(identical(other.propertiesState, propertiesState) || other.propertiesState == propertiesState)&&(identical(other.pageController, pageController) || other.pageController == pageController)&&(identical(other.isScrolled, isScrolled) || other.isScrolled == isScrolled)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeStoreState&&(identical(other.offersState, offersState) || other.offersState == offersState)&&(identical(other.pageController, pageController) || other.pageController == pageController)&&(identical(other.isScrolled, isScrolled) || other.isScrolled == isScrolled)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,propertiesState,pageController,isScrolled,currentPage);
+int get hashCode => Object.hash(runtimeType,offersState,pageController,isScrolled,currentPage);
 
 @override
 String toString() {
-  return 'HomeStoreState(propertiesState: $propertiesState, pageController: $pageController, isScrolled: $isScrolled, currentPage: $currentPage)';
+  return 'HomeStoreState(offersState: $offersState, pageController: $pageController, isScrolled: $isScrolled, currentPage: $currentPage)';
 }
 
 
@@ -638,11 +630,11 @@ abstract mixin class _$HomeStoreStateCopyWith<$Res> implements $HomeStoreStateCo
   factory _$HomeStoreStateCopyWith(_HomeStoreState value, $Res Function(_HomeStoreState) _then) = __$HomeStoreStateCopyWithImpl;
 @override @useResult
 $Res call({
- PropertiesState propertiesState, PageController pageController, bool isScrolled, int currentPage
+ OffersState offersState, PageController pageController, bool isScrolled, int currentPage
 });
 
 
-@override $PropertiesStateCopyWith<$Res> get propertiesState;
+@override $OffersStateCopyWith<$Res> get offersState;
 
 }
 /// @nodoc
@@ -655,10 +647,10 @@ class __$HomeStoreStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeStoreState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? propertiesState = null,Object? pageController = null,Object? isScrolled = null,Object? currentPage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? offersState = null,Object? pageController = null,Object? isScrolled = null,Object? currentPage = null,}) {
   return _then(_HomeStoreState(
-propertiesState: null == propertiesState ? _self.propertiesState : propertiesState // ignore: cast_nullable_to_non_nullable
-as PropertiesState,pageController: null == pageController ? _self.pageController : pageController // ignore: cast_nullable_to_non_nullable
+offersState: null == offersState ? _self.offersState : offersState // ignore: cast_nullable_to_non_nullable
+as OffersState,pageController: null == pageController ? _self.pageController : pageController // ignore: cast_nullable_to_non_nullable
 as PageController,isScrolled: null == isScrolled ? _self.isScrolled : isScrolled // ignore: cast_nullable_to_non_nullable
 as bool,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,
@@ -669,10 +661,10 @@ as int,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PropertiesStateCopyWith<$Res> get propertiesState {
+$OffersStateCopyWith<$Res> get offersState {
   
-  return $PropertiesStateCopyWith<$Res>(_self.propertiesState, (value) {
-    return _then(_self.copyWith(propertiesState: value));
+  return $OffersStateCopyWith<$Res>(_self.offersState, (value) {
+    return _then(_self.copyWith(offersState: value));
   });
 }
 }
