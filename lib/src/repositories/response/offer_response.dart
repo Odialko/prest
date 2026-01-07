@@ -15,12 +15,10 @@ abstract class OfferResponse with _$OfferResponse {
     int? priceCurrency,
     String? pricePermeter,
     String? areaTotal,
-    @JsonKey(name: 'apartmentRoomNumber') int? rooms,
-    @JsonKey(name: 'apartmentFloor') int? floor,
-    @JsonKey(name: 'buildingFloornumber') int? totalFloors,
-    int? buildingYear,
+    String? description,
+    String? portalTitle,
 
-    // Локація
+    // Location
     @JsonKey(name: 'locationCityName') String? cityName,
     @JsonKey(name: 'locationStreetName') String? streetName,
     @JsonKey(name: 'locationDistrictName') String? districtName,
@@ -28,19 +26,23 @@ abstract class OfferResponse with _$OfferResponse {
     @JsonKey(name: 'locationLatitude') String? lat,
     @JsonKey(name: 'locationLongitude') String? lon,
 
-    // Опис та контакти
-    String? portalTitle,
-    String? description,
-    String? contactEmail,
-    String? contactPhone,
+    // Characteristics
+    @JsonKey(name: 'apartmentFloor') int? floor,
+    @JsonKey(name: 'apartmentRoomNumber') int? rooms,
+    @JsonKey(name: 'buildingFloornumber') int? totalFloors,
+    @JsonKey(name: 'buildingYear') int? year,
+
+    // Contacts
     @JsonKey(name: 'contactFirstname') String? firstName,
     @JsonKey(name: 'contactLastname') String? lastName,
+    String? contactEmail,
+    String? contactPhone,
 
-    // Технічні характеристики (перетворюємо int/null на bool)
+    // Technical features
     @JsonKey(name: 'buildingAirConditioning') int? airConditioning,
     @JsonKey(name: 'additionalParking') int? parking,
 
-    // Медіа
+    // Media
     @JsonKey(name: 'main_picture') String? mainPicture,
     List<String>? pictures,
   }) = _OfferResponse;
@@ -60,21 +62,21 @@ extension OfferResponseX on OfferResponse {
       priceCurrency: priceCurrency,
       pricePermeter: pricePermeter,
       areaTotal: areaTotal,
-      rooms: rooms,
-      floor: floor,
-      totalFloors: totalFloors,
-      buildingYear: buildingYear,
+      description: description,
+      portalTitle: portalTitle,
       cityName: cityName,
       streetName: streetName,
       districtName: districtName,
       provinceName: provinceName,
       lat: lat,
       lon: lon,
-      portalTitle: portalTitle,
-      description: description,
+      floor: floor,
+      rooms: rooms,
+      totalFloors: totalFloors,
+      buildingYear: year,
+      contactName: '${firstName ?? ''} ${lastName ?? ''}'.trim(),
       contactEmail: contactEmail,
       contactPhone: contactPhone,
-      contactName: '${firstName ?? ''} ${lastName ?? ''}'.trim(),
       mainPicture: mainPicture,
       pictures: pictures,
       isAirConditioned: airConditioning == 1,
