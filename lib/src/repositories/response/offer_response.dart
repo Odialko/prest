@@ -2,12 +2,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:prest/src/models/offer_model.dart';
 
 part 'offer_response.freezed.dart';
-part 'offer_response.g.dart';
 
 @freezed
 abstract class OfferResponse with _$OfferResponse {
   const factory OfferResponse({
-    required int id,
+    required dynamic id,
     String? estateOfferUuid,
     String? number,
     String? typeName,
@@ -17,44 +16,70 @@ abstract class OfferResponse with _$OfferResponse {
     String? areaTotal,
     String? description,
     String? portalTitle,
-
-    // Location
-    @JsonKey(name: 'locationCityName') String? cityName,
-    @JsonKey(name: 'locationStreetName') String? streetName,
-    @JsonKey(name: 'locationDistrictName') String? districtName,
-    @JsonKey(name: 'locationProvinceName') String? provinceName,
-    @JsonKey(name: 'locationLatitude') String? lat,
-    @JsonKey(name: 'locationLongitude') String? lon,
-
-    // Characteristics
-    @JsonKey(name: 'apartmentFloor') int? floor,
-    @JsonKey(name: 'apartmentRoomNumber') int? rooms,
-    @JsonKey(name: 'buildingFloornumber') int? totalFloors,
-    @JsonKey(name: 'buildingYear') int? year,
-
-    // Contacts
-    @JsonKey(name: 'contactFirstname') String? firstName,
-    @JsonKey(name: 'contactLastname') String? lastName,
+    String? cityName,
+    String? streetName,
+    String? districtName,
+    String? provinceName,
+    String? lat,
+    String? lon,
+    int? floor,
+    int? rooms,
+    int? totalFloors,
+    int? year,
+    String? firstName,
+    String? lastName,
     String? contactEmail,
     String? contactPhone,
-
-    // Technical features
-    @JsonKey(name: 'buildingAirConditioning') int? airConditioning,
-    @JsonKey(name: 'additionalParking') int? parking,
-
-    // Media
-    @JsonKey(name: 'main_picture') String? mainPicture,
+    int? airConditioning,
+    int? parking,
+    String? mainPicture,
     List<String>? pictures,
   }) = _OfferResponse;
 
-  factory OfferResponse.fromJson(Map<String, dynamic> json) =>
-      _$OfferResponseFromJson(json);
+  // Ручний парсинг JSON для Offer
+  factory OfferResponse.fromJson(Map<String, dynamic> json) {
+    return OfferResponse(
+      id: json['id'],
+      estateOfferUuid: json['estateOfferUuid'] as String?,
+      number: json['number'] as String?,
+      typeName: json['typeName'] as String?,
+      price: json['price']?.toString(),
+      priceCurrency: json['priceCurrency'] as int?,
+      pricePermeter: json['pricePermeter']?.toString(),
+      areaTotal: json['areaTotal']?.toString(),
+      description: json['description'] as String?,
+      portalTitle: json['portalTitle'] as String?,
+      // Мапінг локації з ключів EstiCRM
+      cityName: json['locationCityName'] as String?,
+      streetName: json['locationStreetName'] as String?,
+      districtName: json['locationDistrictName'] as String?,
+      provinceName: json['locationProvinceName'] as String?,
+      lat: json['locationLatitude']?.toString(),
+      lon: json['locationLongitude']?.toString(),
+      // Характеристики
+      floor: json['apartmentFloor'] as int?,
+      rooms: json['apartmentRoomNumber'] as int?,
+      totalFloors: json['buildingFloornumber'] as int?,
+      year: json['buildingYear'] as int?,
+      // Контакти
+      firstName: json['contactFirstname'] as String?,
+      lastName: json['contactLastname'] as String?,
+      contactEmail: json['contactEmail'] as String?,
+      contactPhone: json['contactPhone'] as String?,
+      // Технічні параметри
+      airConditioning: json['buildingAirConditioning'] as int?,
+      parking: json['additionalParking'] as int?,
+      // Медіа
+      mainPicture: json['main_picture'] as String?,
+      pictures: (json['pictures'] as List?)?.map((e) => e.toString()).toList(),
+    );
+  }
 }
 
 extension OfferResponseX on OfferResponse {
   OfferModel toDomain() {
     return OfferModel(
-      id: id,
+      id: int.tryParse(id.toString()) ?? 0,
       estateOfferUuid: estateOfferUuid,
       number: number ?? '',
       typeName: typeName,

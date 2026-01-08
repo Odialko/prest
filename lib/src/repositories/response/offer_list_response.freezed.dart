@@ -11,11 +11,9 @@ part of 'offer_list_response.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$OfferListResponse {
 
-// Using @Default to prevent 'null is not a subtype of bool' in release builds
  bool get success; int get count; List<OfferResponse> get data;
 /// Create a copy of OfferListResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -23,8 +21,6 @@ mixin _$OfferListResponse {
 @pragma('vm:prefer-inline')
 $OfferListResponseCopyWith<OfferListResponse> get copyWith => _$OfferListResponseCopyWithImpl<OfferListResponse>(this as OfferListResponse, _$identity);
 
-  /// Serializes this OfferListResponse to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -32,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is OfferListResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.count, count) || other.count == count)&&const DeepCollectionEquality().equals(other.data, data));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,success,count,const DeepCollectionEquality().hash(data));
 
@@ -209,13 +205,12 @@ return $default(_that.success,_that.count,_that.data);case _:
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _OfferListResponse implements OfferListResponse {
   const _OfferListResponse({this.success = false, this.count = 0, final  List<OfferResponse> data = const []}): _data = data;
-  factory _OfferListResponse.fromJson(Map<String, dynamic> json) => _$OfferListResponseFromJson(json);
+  
 
-// Using @Default to prevent 'null is not a subtype of bool' in release builds
 @override@JsonKey() final  bool success;
 @override@JsonKey() final  int count;
  final  List<OfferResponse> _data;
@@ -232,17 +227,14 @@ class _OfferListResponse implements OfferListResponse {
 @pragma('vm:prefer-inline')
 _$OfferListResponseCopyWith<_OfferListResponse> get copyWith => __$OfferListResponseCopyWithImpl<_OfferListResponse>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$OfferListResponseToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _OfferListResponse&&(identical(other.success, success) || other.success == success)&&(identical(other.count, count) || other.count == count)&&const DeepCollectionEquality().equals(other._data, _data));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,success,count,const DeepCollectionEquality().hash(_data));
 

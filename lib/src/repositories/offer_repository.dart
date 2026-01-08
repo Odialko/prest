@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:prest/src/api/api_client.dart';
 import 'package:prest/src/models/offer_model.dart';
 import 'package:prest/src/models/offer_list_model.dart';
-// ПЕРЕКОНАЙТЕСЯ, ЩО ЦІ ДВА ІМПОРТИ ПРАВИЛЬНІ:
 import 'package:prest/src/repositories/response/offer_list_response.dart';
 import 'package:prest/src/repositories/response/offer_response.dart';
 
@@ -15,33 +15,35 @@ class OfferRepository {
 
   const OfferRepository(this._apiClient);
 
-  Future<OfferListEither> getOffers({
-    int take = 20,
-    int skip = 0,
-  }) async {
+  Future<OfferListEither> getOffers({int take = 20, int skip = 0}) async {
     try {
-      final response = await _apiClient.getOffersFull(
-        take: take,
-        skip: skip,
-      );
+      final response = await _apiClient.getOffersFull(take: take, skip: skip);
 
-      final dto = OfferListResponse.fromJson(response.data);
+      print('--- [DEBUG] START PARSING OFFERS ---');
+      print('--- [DEBUG] DATA TYPE: ${response.data.runtimeType}');
+      print('--- [DEBUG] RAW DATA: ${response.data}');
 
-      final offerList = OfferListModel(
-        success: dto.success,
-        count: dto.count,
-        // Тепер .toDomain() буде доступний завдяки імпорту offer_response.dart
-        offers: dto.data.map((offerDto) => offerDto.toDomain()).toList(),
-      );
+      // 1. Парсимо JSON у DTO за допомогою ручного fromJson
+      final dto = OfferListResponse.fromJson(response.data as Map<String, dynamic>);
 
-      return right(offerList);
+      print('--- [DEBUG] DTO PARSED SUCCESSFULLY ---');
+
+      // 2. Перетворюємо DTO в доменну модель за допомогою toDomain()
+      // Цей метод тепер включає конвертацію всього списку Offers
+      final domainModel = dto.toDomain();
+
+      return right(domainModel);
     } on DioException catch (e) {
       return left(e);
-    } catch (e) {
+    } catch (e, stack) {
+      print('❌❌❌ JSON PARSING ERROR (getOffers): $e');
+      print('❌ ERROR TYPE: ${e.runtimeType}');
+      print('❌ STACKTRACE: $stack');
+
       return left(
         DioException(
-          requestOptions: RequestOptions(path: ''),
-          error: e.toString(),
+          requestOptions: RequestOptions(path: 'getOffers'),
+          error: 'Parsing error: $e',
           type: DioExceptionType.unknown,
         ),
       );
@@ -51,20 +53,29 @@ class OfferRepository {
   Future<OfferEither> getOffer(int id) async {
     try {
       final response = await _apiClient.getOfferDetails(id);
+
+      print('--- [DEBUG] START PARSING SINGLE OFFER ---');
+
       final rawData = response.data['data'];
       final json = (rawData is List) ? rawData.first : rawData;
 
-      // OfferResponse тепер видимий тут
+      // Використовуємо ручний fromJson
       final offerDto = OfferResponse.fromJson(json as Map<String, dynamic>);
 
+      print('--- [DEBUG] SINGLE OFFER DTO PARSED ---');
+
+      // Повертаємо доменну модель
       return right(offerDto.toDomain());
     } on DioException catch (e) {
       return left(e);
-    } catch (e) {
+    } catch (e, stack) {
+      print('❌❌❌ JSON PARSING ERROR (getOffer): $e');
+      print('❌ STACKTRACE: $stack');
+
       return left(
         DioException(
-          requestOptions: RequestOptions(path: ''),
-          error: e.toString(),
+          requestOptions: RequestOptions(path: 'getOffer'),
+          error: 'Parsing error: $e',
           type: DioExceptionType.unknown,
         ),
       );

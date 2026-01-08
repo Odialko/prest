@@ -17,7 +17,6 @@ class HomePropertiesSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Correctly watching the offersState via ref using a selector for optimization
     final offersState = ref.watch(homeProvider.select((s) => s.offersState));
 
     return Container(
@@ -29,6 +28,7 @@ class HomePropertiesSection extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Column(
+              mainAxisSize: MainAxisSize.min, // Додано для стабільності
               children: [
                 Text(
                   'SPECIAL OFFERS',
@@ -43,19 +43,18 @@ class HomePropertiesSection extends ConsumerWidget {
 
                 offersState.when(
                   init: () => const SizedBox.shrink(),
-                  // Custom skeleton loader that matches the UI theme
                   loading: () => _buildCustomLoadingGrid(),
                   error: (msg) => Center(
                     child: Text('Error: $msg', style: theme.blackTextTheme.font5),
                   ),
                   loaded: (items) => GridView.builder(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(), // Grid height is managed by children
+                    physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: isMobile ? 1 : 3,
                       crossAxisSpacing: 30,
                       mainAxisSpacing: 60,
-                      childAspectRatio: 0.75,
+                      childAspectRatio: 0.7, // Трохи підкориговано
                     ),
                     itemCount: items.length,
                     itemBuilder: (context, index) => _PropertyCard(
@@ -72,7 +71,6 @@ class HomePropertiesSection extends ConsumerWidget {
     );
   }
 
-  // Skeleton loading grid implementation for a polished UX during data fetching
   Widget _buildCustomLoadingGrid() {
     return GridView.builder(
       shrinkWrap: true,
@@ -81,13 +79,15 @@ class HomePropertiesSection extends ConsumerWidget {
         crossAxisCount: isMobile ? 1 : 3,
         crossAxisSpacing: 30,
         mainAxisSpacing: 60,
-        childAspectRatio: 0.75,
+        childAspectRatio: 0.7,
       ),
       itemCount: 3,
       itemBuilder: (context, index) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
+          // Замість Expanded використовуємо AspectRatio
+          AspectRatio(
+            aspectRatio: 1,
             child: Container(
               width: double.infinity,
               color: theme.colors.chineseBlack.withOpacity(0.05),
@@ -126,7 +126,6 @@ class _PropertyCardState extends State<_PropertyCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Sanitizing the URL from the pictures array; fallback to placeholder if null
     final String imageUrl = (widget.item.pictures != null && widget.item.pictures!.isNotEmpty)
         ? widget.item.pictures!.first.trim()
         : 'https://via.placeholder.com/600x800?text=No+Image';
@@ -137,12 +136,14 @@ class _PropertyCardState extends State<_PropertyCard> {
       onExit: (_) => setState(() => _isHovered = false),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Важливо для GridView
         children: [
-          Expanded(
+          // Expanded замінено на AspectRatio для усунення помилки RenderFlex
+          AspectRatio(
+            aspectRatio: 1,
             child: ClipRRect(
               child: Stack(
                 children: [
-                  // Smooth scaling animation on hover
                   AnimatedScale(
                     scale: _isHovered ? 1.05 : 1.0,
                     duration: const Duration(milliseconds: 600),
@@ -153,6 +154,8 @@ class _PropertyCardState extends State<_PropertyCard> {
                       child: Image.network(
                         imageUrl,
                         fit: BoxFit.cover,
+                        // На веб це допоможе використовувати правильний рендерер
+                        filterQuality: FilterQuality.medium,
                         errorBuilder: (context, error, stackTrace) => Container(
                           color: widget.theme.colors.chineseBlack.withOpacity(0.05),
                           child: Icon(
@@ -163,7 +166,6 @@ class _PropertyCardState extends State<_PropertyCard> {
                       ),
                     ),
                   ),
-                  // Subtle dark overlay on hover
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 400),
                     color: _isHovered
@@ -190,7 +192,6 @@ class _PropertyCardState extends State<_PropertyCard> {
             style: widget.theme.grayTextTheme.font7.copyWith(letterSpacing: 1.5),
           ),
           const SizedBox(height: 16),
-          // Price text color switches between gold and black on hover
           AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 300),
             style: widget.theme.goldTextTheme.font6.copyWith(
@@ -200,7 +201,6 @@ class _PropertyCardState extends State<_PropertyCard> {
             child: Text('${widget.item.price ?? '---'} PLN'),
           ),
           const SizedBox(height: 10),
-          // Expanding underline animation
           AnimatedContainer(
             duration: const Duration(milliseconds: 400),
             height: 1,

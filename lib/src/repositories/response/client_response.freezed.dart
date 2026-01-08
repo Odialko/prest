@@ -11,19 +11,16 @@ part of 'client_response.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$ClientResponse {
 
- int get id;@JsonKey(name: 'fullname') String? get fullname;@JsonKey(name: 'phone') String? get phone;@JsonKey(name: 'email') String? get email;@JsonKey(name: 'add_user_name') String? get addUserName;@JsonKey(name: 'add_date') String? get addDate;
+ int get id; String? get fullname; String? get phone; String? get email; String? get addUserName; String? get addDate;
 /// Create a copy of ClientResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $ClientResponseCopyWith<ClientResponse> get copyWith => _$ClientResponseCopyWithImpl<ClientResponse>(this as ClientResponse, _$identity);
 
-  /// Serializes this ClientResponse to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is ClientResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.fullname, fullname) || other.fullname == fullname)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.addUserName, addUserName) || other.addUserName == addUserName)&&(identical(other.addDate, addDate) || other.addDate == addDate));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,fullname,phone,email,addUserName,addDate);
 
@@ -48,7 +45,7 @@ abstract mixin class $ClientResponseCopyWith<$Res>  {
   factory $ClientResponseCopyWith(ClientResponse value, $Res Function(ClientResponse) _then) = _$ClientResponseCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'fullname') String? fullname,@JsonKey(name: 'phone') String? phone,@JsonKey(name: 'email') String? email,@JsonKey(name: 'add_user_name') String? addUserName,@JsonKey(name: 'add_date') String? addDate
+ int id, String? fullname, String? phone, String? email, String? addUserName, String? addDate
 });
 
 
@@ -158,7 +155,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'fullname')  String? fullname, @JsonKey(name: 'phone')  String? phone, @JsonKey(name: 'email')  String? email, @JsonKey(name: 'add_user_name')  String? addUserName, @JsonKey(name: 'add_date')  String? addDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? fullname,  String? phone,  String? email,  String? addUserName,  String? addDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ClientResponse() when $default != null:
 return $default(_that.id,_that.fullname,_that.phone,_that.email,_that.addUserName,_that.addDate);case _:
@@ -179,7 +176,7 @@ return $default(_that.id,_that.fullname,_that.phone,_that.email,_that.addUserNam
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'fullname')  String? fullname, @JsonKey(name: 'phone')  String? phone, @JsonKey(name: 'email')  String? email, @JsonKey(name: 'add_user_name')  String? addUserName, @JsonKey(name: 'add_date')  String? addDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? fullname,  String? phone,  String? email,  String? addUserName,  String? addDate)  $default,) {final _that = this;
 switch (_that) {
 case _ClientResponse():
 return $default(_that.id,_that.fullname,_that.phone,_that.email,_that.addUserName,_that.addDate);case _:
@@ -199,7 +196,7 @@ return $default(_that.id,_that.fullname,_that.phone,_that.email,_that.addUserNam
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'fullname')  String? fullname, @JsonKey(name: 'phone')  String? phone, @JsonKey(name: 'email')  String? email, @JsonKey(name: 'add_user_name')  String? addUserName, @JsonKey(name: 'add_date')  String? addDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? fullname,  String? phone,  String? email,  String? addUserName,  String? addDate)?  $default,) {final _that = this;
 switch (_that) {
 case _ClientResponse() when $default != null:
 return $default(_that.id,_that.fullname,_that.phone,_that.email,_that.addUserName,_that.addDate);case _:
@@ -211,18 +208,18 @@ return $default(_that.id,_that.fullname,_that.phone,_that.email,_that.addUserNam
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _ClientResponse implements ClientResponse {
-  const _ClientResponse({required this.id, @JsonKey(name: 'fullname') this.fullname, @JsonKey(name: 'phone') this.phone, @JsonKey(name: 'email') this.email, @JsonKey(name: 'add_user_name') this.addUserName, @JsonKey(name: 'add_date') this.addDate});
-  factory _ClientResponse.fromJson(Map<String, dynamic> json) => _$ClientResponseFromJson(json);
+  const _ClientResponse({required this.id, this.fullname, this.phone, this.email, this.addUserName, this.addDate});
+  
 
 @override final  int id;
-@override@JsonKey(name: 'fullname') final  String? fullname;
-@override@JsonKey(name: 'phone') final  String? phone;
-@override@JsonKey(name: 'email') final  String? email;
-@override@JsonKey(name: 'add_user_name') final  String? addUserName;
-@override@JsonKey(name: 'add_date') final  String? addDate;
+@override final  String? fullname;
+@override final  String? phone;
+@override final  String? email;
+@override final  String? addUserName;
+@override final  String? addDate;
 
 /// Create a copy of ClientResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -230,17 +227,14 @@ class _ClientResponse implements ClientResponse {
 @pragma('vm:prefer-inline')
 _$ClientResponseCopyWith<_ClientResponse> get copyWith => __$ClientResponseCopyWithImpl<_ClientResponse>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$ClientResponseToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClientResponse&&(identical(other.id, id) || other.id == id)&&(identical(other.fullname, fullname) || other.fullname == fullname)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.addUserName, addUserName) || other.addUserName == addUserName)&&(identical(other.addDate, addDate) || other.addDate == addDate));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,fullname,phone,email,addUserName,addDate);
 
@@ -257,7 +251,7 @@ abstract mixin class _$ClientResponseCopyWith<$Res> implements $ClientResponseCo
   factory _$ClientResponseCopyWith(_ClientResponse value, $Res Function(_ClientResponse) _then) = __$ClientResponseCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'fullname') String? fullname,@JsonKey(name: 'phone') String? phone,@JsonKey(name: 'email') String? email,@JsonKey(name: 'add_user_name') String? addUserName,@JsonKey(name: 'add_date') String? addDate
+ int id, String? fullname, String? phone, String? email, String? addUserName, String? addDate
 });
 
 
