@@ -126,9 +126,14 @@ class _PropertyCardState extends State<_PropertyCard> {
 
   @override
   Widget build(BuildContext context) {
-    final String imageUrl = (widget.item.pictures != null && widget.item.pictures!.isNotEmpty)
+    final String rawImageUrl = (widget.item.pictures != null && widget.item.pictures!.isNotEmpty)
         ? widget.item.pictures!.first.trim()
         : 'https://via.placeholder.com/600x800?text=No+Image';
+
+// Цей рядок обов'язковий для обходу CORS після деплою
+    final String imageUrl = rawImageUrl.contains('placeholder')
+        ? rawImageUrl
+        : 'https://images.weserv.nl/?url=${Uri.encodeComponent(rawImageUrl)}';
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
