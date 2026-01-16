@@ -14,11 +14,11 @@ abstract class NavigationHubState with _$NavigationHubState {
 class NavigationNotifier extends StateNotifier<NavigationHubState> {
   NavigationNotifier() : super(const NavigationHubState());
 
-  void setScrolled(bool value) {
-    if (state.isScrolled != value) {
-      state = state.copyWith(isScrolled: value);
-    }
-  }
+  // void setScrolled(bool value) {
+  //   if (state.isScrolled != value) {
+  //     state = state.copyWith(isScrolled: value);
+  //   }
+  // }
 
   void setActiveRoute(String? route) {
     if (state.activeRoute != route) {

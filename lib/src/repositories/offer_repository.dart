@@ -21,7 +21,7 @@ class OfferRepository {
 
       print('--- [DEBUG] START PARSING OFFERS ---');
       print('--- [DEBUG] DATA TYPE: ${response.data.runtimeType}');
-      print('--- [DEBUG] RAW DATA: ${response.data}');
+      // print('--- [DEBUG] RAW DATA: ${response.data}');
 
       // 1. Парсимо JSON у DTO за допомогою ручного fromJson
       final dto = OfferListResponse.fromJson(response.data as Map<String, dynamic>);

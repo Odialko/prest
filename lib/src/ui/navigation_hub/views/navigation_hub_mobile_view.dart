@@ -38,24 +38,14 @@ class NavigationHubMobileView extends ConsumerWidget
         ],
       ),
       drawer: _buildPremiumDrawer(context, theme),
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification.metrics.pixels > 20) {
-            ref.read(navigationProvider.notifier).setScrolled(true);
-          } else {
-            ref.read(navigationProvider.notifier).setScrolled(false);
-          }
-          return true;
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Тестовий контент для скролу
-              _buildMobileHero(theme),
-              _buildMobileContent(theme),
-              child,
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Тестовий контент для скролу
+            _buildMobileHero(theme),
+            _buildMobileContent(theme),
+            child,
+          ],
         ),
       ),
     );

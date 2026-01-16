@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <base href="$FLUTTER_BASE_HREF">
+    <base href="/">
 
     <meta charset="UTF-8">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Prestige Estate - Luksusowe Nieruchomości">
-
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Prestige Estate">
-    <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
     <link rel="icon" type="image/png" href="favicon.png"/>
 
@@ -18,10 +14,12 @@
     <link rel="manifest" href="manifest.json">
 
     <script>
-        // Це новий спосіб конфігурації для Flutter 3.22+
-        // Ми створюємо об'єкт налаштувань, який bootstrap зчитає автоматично
-        window.flutterConfig = {
-          renderer: "html"
+        // Це єдиний надійний спосіб для нових версій Flutter
+        // Об'єкт має бути створений ДО завантаження flutter_bootstrap.js
+        window._flutter = {
+          config: {
+            renderer: "html",
+          },
         };
     </script>
 </head>

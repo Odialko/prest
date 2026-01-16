@@ -1,29 +1,28 @@
 class Routes {
   static const home = '/';
 
-  // Poznaj nas
-  static const about = '/about';
-  static const team = '/team';
-  static const joinUs = '/join-us';
+  // --- PROPERTIES (Нерухомість) ---
+  static const offers = 'offers';
 
-  // Nieruchomości
-  static const propertiesSale = '/properties/sale';
-  static const propertiesRent = '/properties/rent';
-  static const propertiesOffMarket = '/properties/off-market';
-  static const propertyDetails = '/properties/:id'; // Детальна сторінка об'єкта
+  static String propertyDetails(String id) => 'offers/$id';
 
-  // Usługi
+  // --- SERVICES (Послуги) ---
+  static const services = '/services';
+  static const servicesSegment = 'services';
+
   static const servicesDesign = '/services/design';
   static const servicesCredit = '/services/credit';
-  static const servicesDoradztwo = '/services/doradztwo';
-  static const servicesZaGranica = '/services/za_granica';
-  static const servicesInvestment = '/services/investment';
-  static const servicesGlobal = '/services/global-purchases';
+  static const servicesAdvice = '/services/advice';
+  static const servicesAbroad = '/services/abroad';
 
+  // --- OTHER (Самостійні сторінки) ---
+  static const about = '/about';
+  static const team = '/team';
   static const contact = '/contact';
 
-  static const politykaPrywatnosci = '/polityka_prywatnosci';
-  static const regulamin = '/regulamin';
-  static const cookies = '/cookies';
-
+  // --- LEGAL (Юридичні) ---
+  static const legal = '/legal';
+  static const privacy = '/legal/privacy';
+  static const terms = '/legal/terms';
+  static const cookies = '/legal/cookies';
 }

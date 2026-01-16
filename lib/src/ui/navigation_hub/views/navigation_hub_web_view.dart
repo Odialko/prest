@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prest/src/prest_theme.dart';
+import 'package:prest/src/providers/scroll_provider.dart';
 import 'package:prest/src/ui/common_widgets/hover_menu.dart';
 import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
-import 'package:prest/src/ui/navigation_hub/store/navigation_hub_store.dart';
-import 'package:prest/src/ui/navigation_hub/widgets/footer_widget.dart';
 import 'package:prest/src/ui/navigation_hub/widgets/navigation_app_bar.dart';
 
 class NavigationHubWebView extends NavigationHubScreen {
@@ -15,8 +14,8 @@ class NavigationHubWebView extends NavigationHubScreen {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isScrolled = ref.watch(navigationProvider.select((s) => s.isScrolled));
     final theme = context.prestTheme;
+    final isScrolled = ref.watch(isScrolledProvider);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -24,31 +23,44 @@ class NavigationHubWebView extends NavigationHubScreen {
       appBar: NavigationAppBar(
         isScrolled: isScrolled,
         actions: [
-          _buildDropdown(context, theme, 'POZNAJ NAS', [NavItem.about, NavItem.team, NavItem.joinUs]),
-          _buildDropdown(context, theme, 'NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket]),
-          _buildDropdown(context, theme, 'USŁUGI', [NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
+          _buildDropdown(context, theme, 'POZNAJ NAS', [
+            NavItem.about,
+            NavItem.team,
+            NavItem.joinUs,
+          ]),
+          _buildDropdown(context, theme, 'NIERUCHOMOŚCI', [
+            NavItem.sale,
+            NavItem.rent,
+            NavItem.offMarket,
+          ]),
+          _buildDropdown(context, theme, 'USŁUGI', [
+            NavItem.design,
+            NavItem.credit,
+            NavItem.advice,
+            NavItem.abroad,
+          ]),
           _buildNavLink(context, theme, NavItem.contact),
           const SizedBox(width: 20),
-          _buildCtaButton(context, theme, NavItem.submitProperty, isOutlined: true),
+          _buildCtaButton(
+            context,
+            theme,
+            NavItem.submitProperty,
+            isOutlined: true,
+          ),
           const SizedBox(width: 10),
           _buildCtaButton(context, theme, NavItem.bookCall, isDialog: true),
         ],
       ),
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (scroll) {
-          if (scroll.depth == 0) {
-            ref.read(navigationProvider.notifier).setScrolled(scroll.metrics.pixels > 50);
-          }
-          return false;
-        },
-        child: SingleChildScrollView(
-          child: Column(children: [child, const FooterWidget()]),
-        ),
-      ),
+      body: SelectionArea(child: child),
     );
   }
 
-  Widget _buildDropdown(BuildContext context, PrestThemeData theme, String label, List<NavItem> items) {
+  Widget _buildDropdown(
+    BuildContext context,
+    PrestThemeData theme,
+    String label,
+    List<NavItem> items,
+  ) {
     return HoverMenu(
       title: label,
       items: items.map((e) => e.title).toList(),
@@ -60,7 +72,11 @@ class NavigationHubWebView extends NavigationHubScreen {
     );
   }
 
-  Widget _buildNavLink(BuildContext context, PrestThemeData theme, NavItem item) {
+  Widget _buildNavLink(
+    BuildContext context,
+    PrestThemeData theme,
+    NavItem item,
+  ) {
     // We use a ValueNotifier or simple State to track hover if this were a
     // StatefulWidget, but since we are in a Hub, we can use a local hover state
     // or a simple HoverMenu in 'isStaticLink' mode to guarantee 100% identity.
@@ -68,17 +84,28 @@ class NavigationHubWebView extends NavigationHubScreen {
     return HoverMenu(
       title: item.title,
       theme: theme,
-      isStaticLink: true, // This flag in your HoverMenu handles the "link-only" style
+      isStaticLink:
+          true, // This flag in your HoverMenu handles the "link-only" style
       onSelected: (_) => context.go(item.route),
     );
   }
 
-  Widget _buildCtaButton(BuildContext context, PrestThemeData theme, NavItem item, {bool isOutlined = false, bool isDialog = false}) {
+  Widget _buildCtaButton(
+    BuildContext context,
+    PrestThemeData theme,
+    NavItem item, {
+    bool isOutlined = false,
+    bool isDialog = false,
+  }) {
     return ElevatedButton(
-      onPressed: () => isDialog ? _showContactDialog(context, theme) : context.go(item.route),
+      onPressed: () => isDialog
+          ? _showContactDialog(context, theme)
+          : context.go(item.route),
       style: ElevatedButton.styleFrom(
         // Use theme.colors.milk or Colors.transparent for outlined if needed
-        backgroundColor: isOutlined ? theme.colors.milk : theme.colors.chineseBlack,
+        backgroundColor: isOutlined
+            ? theme.colors.milk
+            : theme.colors.chineseBlack,
         foregroundColor: isOutlined ? theme.colors.chineseBlack : Colors.white,
         side: BorderSide(color: theme.colors.chineseBlack),
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -86,8 +113,12 @@ class NavigationHubWebView extends NavigationHubScreen {
         elevation: 0,
       ),
       child: Text(
-          item.title,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.2)
+        item.title,
+        style: const TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1.2,
+        ),
       ),
     );
   }
@@ -100,10 +131,22 @@ class NavigationHubWebView extends NavigationHubScreen {
         child: Column(
           children: [
             const SizedBox(height: 50),
-            ...[NavItem.about, NavItem.sale, NavItem.design, NavItem.contact].map((item) => ListTile(
-              title: Center(child: Text(item.title, style: theme.blackTextTheme.font6)),
-              onTap: () { Navigator.pop(context); context.go(item.route); },
-            )),
+            ...[
+              NavItem.about,
+              NavItem.sale,
+              NavItem.design,
+              NavItem.contact,
+            ].map(
+              (item) => ListTile(
+                title: Center(
+                  child: Text(item.title, style: theme.blackTextTheme.font6),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.go(item.route);
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -148,7 +191,9 @@ class NavigationHubWebView extends NavigationHubScreen {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.colors.chineseBlack,
                         foregroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                       child: Text('WYŚLIJ', style: theme.whiteTextTheme.font7),
@@ -169,8 +214,12 @@ class NavigationHubWebView extends NavigationHubScreen {
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: theme.grayTextTheme.font7,
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black12),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
         contentPadding: const EdgeInsets.symmetric(vertical: 10),
       ),
     );

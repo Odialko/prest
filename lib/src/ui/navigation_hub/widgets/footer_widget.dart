@@ -10,7 +10,8 @@ class FooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.prestTheme;
-    final bool isMobile = MediaQuery.of(context).size.width < LayoutsConstants.brakePointToMobile;
+    final bool isMobile =
+        MediaQuery.of(context).size.width < LayoutsConstants.brakePointToMobile;
 
     return Container(
       color: theme.colors.chineseBlack,
@@ -19,10 +20,14 @@ class FooterWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 100),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
+          constraints: const BoxConstraints(
+            maxWidth: LayoutsConstants.maxContentWidth,
+          ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: isMobile ? 24 : LayoutsConstants.horizontalPaddingDesktop,
+              horizontal: isMobile
+                  ? 24
+                  : LayoutsConstants.horizontalPaddingDesktop,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,11 +59,16 @@ class FooterWidget extends StatelessWidget {
         Expanded(flex: 3, child: _buildBrandColumn(theme)),
         const Spacer(),
         _buildLinkColumn(context, theme, 'EXPLORE', [
-          NavItem.about, NavItem.sale, NavItem.rent, NavItem.team
+          NavItem.about,
+          NavItem.sale,
+          NavItem.rent,
+          NavItem.team,
         ]),
         const SizedBox(width: 80),
         _buildLinkColumn(context, theme, 'SERVICES', [
-          NavItem.design, NavItem.credit, NavItem.advice
+          NavItem.design,
+          NavItem.credit,
+          NavItem.advice,
         ]),
         const SizedBox(width: 80),
         _buildContactColumn(theme),
@@ -76,8 +86,20 @@ class FooterWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: _buildLinkColumn(context, theme, 'EXPLORE', [NavItem.about, NavItem.sale, NavItem.rent])),
-            Expanded(child: _buildLinkColumn(context, theme, 'SERVICES', [NavItem.design, NavItem.credit, NavItem.advice])),
+            Expanded(
+              child: _buildLinkColumn(context, theme, 'EXPLORE', [
+                NavItem.about,
+                NavItem.sale,
+                NavItem.rent,
+              ]),
+            ),
+            Expanded(
+              child: _buildLinkColumn(context, theme, 'SERVICES', [
+                NavItem.design,
+                NavItem.credit,
+                NavItem.advice,
+              ]),
+            ),
           ],
         ),
         const SizedBox(height: 60),
@@ -93,11 +115,11 @@ class FooterWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            'prEST',
-            style: theme.whiteTextTheme.font1.copyWith(
-              letterSpacing: 10,
-              fontWeight: FontWeight.w200,
-            )
+          'prEST',
+          style: theme.whiteTextTheme.font1.copyWith(
+            letterSpacing: 10,
+            fontWeight: FontWeight.w200,
+          ),
         ),
         const SizedBox(height: 30),
         SizedBox(
@@ -115,23 +137,30 @@ class FooterWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLinkColumn(BuildContext context, PrestThemeData theme, String title, List<NavItem> items) {
+  Widget _buildLinkColumn(
+    BuildContext context,
+    PrestThemeData theme,
+    String title,
+    List<NavItem> items,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            title,
-            style: theme.whiteTextTheme.font8.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colors.gold,
-              letterSpacing: 2,
-            )
+          title,
+          style: theme.whiteTextTheme.font8.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colors.gold,
+            letterSpacing: 2,
+          ),
         ),
         const SizedBox(height: 30),
-        ...items.map((item) => Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: _FooterLink(item: item),
-        )),
+        ...items.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: _FooterLink(item: item),
+          ),
+        ),
       ],
     );
   }
@@ -141,11 +170,11 @@ class FooterWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            'KONTAKT',
-            style: theme.whiteTextTheme.font8.copyWith(
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
-            )
+          'KONTAKT',
+          style: theme.whiteTextTheme.font8.copyWith(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2,
+          ),
         ),
         const SizedBox(height: 30),
         _contactRow(Icons.location_on_outlined, 'Poznań, Polska'),
@@ -163,12 +192,12 @@ class FooterWidget extends StatelessWidget {
           Icon(icon, color: Colors.white24, size: 18),
           const SizedBox(width: 15),
           Text(
-              text,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 13,
-                letterSpacing: 0.5,
-              )
+            text,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 13,
+              letterSpacing: 0.5,
+            ),
           ),
         ],
       ),
@@ -180,8 +209,8 @@ class FooterWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-            '© 2026 prEST. All rights reserved.',
-            style: theme.whiteTextTheme.font9.copyWith(color: Colors.white24)
+          '© 2026 prEST. All rights reserved.',
+          style: theme.whiteTextTheme.font9.copyWith(color: Colors.white24),
         ),
         Row(
           children: [
@@ -189,7 +218,7 @@ class FooterWidget extends StatelessWidget {
             const SizedBox(width: 24),
             _socialIcon(Icons.business_outlined),
           ],
-        )
+        ),
       ],
     );
   }

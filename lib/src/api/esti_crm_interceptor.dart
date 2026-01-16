@@ -20,7 +20,7 @@ class EstiCrmInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    debugPrint('--- API Response [${response.statusCode}] ---');
+    // debugPrint('--- API Response [${response.statusCode}] ---');
 
     // Security check: if the server returns HTML instead of JSON (common on auth failure or 404s)
     if (response.data is String &&

@@ -13,7 +13,8 @@ sealed class OffersState with _$OffersState {
   const factory OffersState.init() = OffersStateInit;
   const factory OffersState.loading() = OffersStateLoading;
   const factory OffersState.error({String? message}) = OffersStateError;
-  const factory OffersState.loaded({@Default([]) List<OfferModel> items}) = OffersStateLoaded;
+  const factory OffersState.loaded({@Default([]) List<OfferModel> items}) =
+      OffersStateLoaded;
 }
 
 @freezed
@@ -30,10 +31,12 @@ class HomeNotifier extends StateNotifier<HomeStoreState> {
   final OfferRepository _offerRepository;
 
   HomeNotifier(this._offerRepository)
-      : super(HomeStoreState(
-    offersState: const OffersState.init(),
-    pageController: PageController(),
-  )) {
+    : super(
+        HomeStoreState(
+          offersState: const OffersState.init(),
+          pageController: PageController(),
+        ),
+      ) {
     _initializeListeners();
     fetchOffers();
   }
@@ -51,17 +54,20 @@ class HomeNotifier extends StateNotifier<HomeStoreState> {
     final result = await _offerRepository.getOffers(take: 15);
 
     result.fold(
-          (error) => state = state.copyWith(
+      (error) => state = state.copyWith(
         offersState: OffersState.error(message: error.toString()),
       ),
-          (listModel) => state = state.copyWith(
-        offersState: OffersState.loaded(items: listModel.offers), // Дістаємо список з моделі
+      (listModel) => state = state.copyWith(
+        offersState: OffersState.loaded(
+          items: listModel.offers,
+        ),
       ),
     );
   }
 
   void setScrolled(bool scrolled) {
-    if (state.isScrolled != scrolled) state = state.copyWith(isScrolled: scrolled);
+    if (state.isScrolled != scrolled)
+      state = state.copyWith(isScrolled: scrolled);
   }
 }
 

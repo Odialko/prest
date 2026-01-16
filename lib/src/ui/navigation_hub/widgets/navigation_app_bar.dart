@@ -14,13 +14,14 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(LayoutsConstants.headerHeight);
+  Size get preferredSize =>
+      const Size.fromHeight(LayoutsConstants.headerHeight);
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
 
-    // Switch to mobile earlier to prevent crowding
+    // if the width is less than 1150 switch on mobile
     final bool isMobile = width < 1150;
 
     return AnimatedContainer(
@@ -29,21 +30,23 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
       height: isScrolled ? 70 : (isMobile ? 80 : 110),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: isScrolled ? [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ] : [],
+        boxShadow: isScrolled
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ]
+            : [],
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
+          constraints: const BoxConstraints(
+            maxWidth: LayoutsConstants.maxContentWidth,
+          ),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: isMobile ? 24 : 40,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 40),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -58,17 +61,24 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
                       alignment: Alignment.centerRight,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ...actions, // Contains nav links and 'UMÓW ROZMOWĘ'
-                        ],
+                        children: [...actions],
                       ),
                     ),
                   )
                 else
-                // Mobile Burger
-                  IconButton(
-                    icon: const Icon(Icons.menu_rounded, color: Colors.black, size: 30),
-                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  // Use Builder, for button "seen" the Scaffold
+                  Builder(
+                    builder: (scaffoldContext) => IconButton(
+                      icon: const Icon(
+                        Icons.menu_rounded,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        // open Drawer, using right context
+                        Scaffold.of(scaffoldContext).openEndDrawer();
+                      },
+                    ),
                   ),
               ],
             ),
@@ -79,7 +89,6 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildLogo(BuildContext context, bool isMobile, double width) {
-    // Dynamic logo sizing for different screen widths
     double logoHeight = isScrolled ? 35 : (isMobile ? 45 : 65);
     if (width < 1300 && !isMobile) logoHeight = isScrolled ? 32 : 48;
 
@@ -96,6 +105,7 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
+
 /// in case if we need to keep glass
 // import 'dart:ui';
 // import 'package:flutter/material.dart';
