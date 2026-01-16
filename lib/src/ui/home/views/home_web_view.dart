@@ -4,7 +4,6 @@ import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/ui/common_widgets/prest_page.dart';
 import 'package:prest/src/ui/home/home_screen.dart';
-import 'package:prest/src/ui/navigation_hub/widgets/footer_widget.dart';
 
 // Import your new widgets
 import 'widgets/home_hero_section.dart';

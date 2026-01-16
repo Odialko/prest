@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:prest/src/api/api_client.dart';
 import 'package:prest/src/models/offer_model.dart';
 import 'package:prest/src/models/offer_list_model.dart';
