@@ -48,38 +48,44 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 40),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Image.asset(
+                  ImagesConstants.mainLogo, // <- поміняй на свій шлях до логотипу
+                  width: 200,
+                  height: 200,
+                ),
                 // 1. LOGO
-                _buildLogo(context, isMobile, width),
-
-                // 2. NAVIGATION & CTA BUTTONS
-                if (!isMobile)
-                  Flexible(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerRight,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [...actions],
-                      ),
-                    ),
-                  )
-                else
-                  // Use Builder, for button "seen" the Scaffold
-                  Builder(
-                    builder: (scaffoldContext) => IconButton(
-                      icon: const Icon(
-                        Icons.menu_rounded,
-                        color: Colors.black,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        // open Drawer, using right context
-                        Scaffold.of(scaffoldContext).openEndDrawer();
-                      },
-                    ),
-                  ),
+                // _buildLogo(context, isMobile, width),
+                //
+                // // 2. NAVIGATION & CTA BUTTONS
+                // if (!isMobile)
+                //   Flexible(
+                //     child: FittedBox(
+                //       fit: BoxFit.scaleDown,
+                //       alignment: Alignment.centerRight,
+                //       child: Row(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [...actions],
+                //       ),
+                //     ),
+                //   )
+                // else
+                //   // Use Builder, for button "seen" the Scaffold
+                //   Builder(
+                //     builder: (scaffoldContext) => IconButton(
+                //       icon: const Icon(
+                //         Icons.menu_rounded,
+                //         color: Colors.black,
+                //         size: 30,
+                //       ),
+                //       onPressed: () {
+                //         // open Drawer, using right context
+                //         Scaffold.of(scaffoldContext).openEndDrawer();
+                //       },
+                //     ),
+                //   ),
               ],
             ),
           ),
@@ -89,8 +95,8 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildLogo(BuildContext context, bool isMobile, double width) {
-    double logoHeight = isScrolled ? 35 : (isMobile ? 45 : 65);
-    if (width < 1300 && !isMobile) logoHeight = isScrolled ? 32 : 48;
+    double logoHeight = isScrolled ? 35 : (isMobile ? 85 : 115);
+    if (width < 1300 && !isMobile) logoHeight = isScrolled ? 42 : 68;
 
     return GestureDetector(
       onTap: () => context.go(Routes.home),

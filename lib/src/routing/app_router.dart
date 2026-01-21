@@ -5,6 +5,7 @@ import 'package:prest/src/models/offer_model.dart';
 import 'package:prest/src/routing/redirect.dart';
 import 'package:prest/src/services/router_notifier.dart';
 import 'package:prest/src/ui/common_widgets/placeholder_screen.dart';
+import 'package:prest/src/ui/common_widgets/welcome_screen.dart';
 import 'package:prest/src/ui/home/home_screen.dart';
 import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
@@ -35,10 +36,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
 
           // 1. ГОЛОВНА: prest.pl/
+          // GoRoute(
+          //   path: '/',
+          //   name: 'home',
+          //   pageBuilder: (context, state) => buildPage(HomeScreen.create(), state),
+          // ),
           GoRoute(
             path: '/',
-            name: 'home',
-            pageBuilder: (context, state) => buildPage(HomeScreen.create(), state),
+            name: 'welcome',
+            pageBuilder: (context, state) => buildPage(WelcomeScreen(), state),
           ),
 
           // 2. НЕРУХОМІСТЬ: prest.pl/offers
