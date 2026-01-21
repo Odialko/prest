@@ -7,40 +7,76 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Темно-синій фон
+      // Głęboki granatowy kolor tła
       backgroundColor: const Color(0xFF0B1D51),
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Лого по центру
-            // Image.asset(
-            //   ImagesConstants.mainLogo, // <- поміняй на свій шлях до логотипу
-            //   width: 200,
-            //   height: 200,
-            // ),
-            // const SizedBox(height: 32),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Logo (jeśli chcesz je odkomentować w przyszłości)
+              // Image.asset(
+              //   ImagesConstants.mainLogo,
+              //   width: 250,
+              //   height: 100,
+              //   fit: BoxFit.contain,
+              // ),
+              // const SizedBox(height: 48),
 
-            // Текст під лого
-            const Text(
-              'Projektujemy, budujemy…',
-              style: TextStyle(
-                fontSize: 48,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              // GŁÓWNE HASŁO
+              const Text(
+                'Tworzymy miejsce dla dobrych adresów.',
+                style: TextStyle(
+                  fontSize: 48,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w300, // Lżejsza waga dodaje elegancji
+                  letterSpacing: 1.2,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 18),
-            const Text(
-              'Zapraszamy w lutym.',
-              style: TextStyle(
-                fontSize: 31,
-                color: Colors.white70,
+
+              const SizedBox(height: 24),
+
+              // DATA OTWARCIA
+              const Text(
+                'Zapraszamy w lutym.',
+                style: TextStyle(
+                  fontSize: 28,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+
+              const SizedBox(height: 48),
+
+              // KONTAKT
+              const Text(
+                'Chcesz się z nami skontaktować już teraz?',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white54,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: 12),
+
+              // NUMER TELEFONU (Wyróżniony na biało)
+              const Text(
+                '+48 690 175 317',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );
