@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
-import 'package:prest/src/ui/navigation_hub/widgets/footer_widget.dart';
+import 'package:prest/src/ui/common_widgets/footer_widget.dart';
 
 class PlaceholderScreen extends StatelessWidget {
   final NavItem item;

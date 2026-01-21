@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prest/src/providers/scroll_provider.dart'; // Імпортуй свій новий провайдер
-import 'package:prest/src/ui/navigation_hub/widgets/footer_widget.dart'; // Твій футер
+import 'package:prest/src/ui/common_widgets/footer_widget.dart'; // Твій футер
 
 class PrestPage extends ConsumerWidget {
   final List<Widget> slivers;

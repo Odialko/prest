@@ -14,30 +14,33 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(LayoutsConstants.headerHeight);
+  Size get preferredSize {
+    // ЯКЩО СКРОЛИМО - 70, ЯКЩО НІ - 110. Це змусить Scaffold змінити розмір
+    return Size.fromHeight(isScrolled ? 70 : 110);
+  }
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-
-    // if the width is less than 1150 switch on mobile
     final bool isMobile = width < 1150;
+
+    // Робимо висоту, яка збігається з preferredSize
+    final double targetHeight = isScrolled ? 70 : (isMobile ? 80 : 110);
 
     return AnimatedContainer(
       duration: LayoutsConstants.animationHeaderDuration,
       curve: Curves.easeInOut,
-      height: isScrolled ? 70 : (isMobile ? 80 : 110),
+      height: targetHeight,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: isScrolled
             ? [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
-                ),
-              ]
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ]
             : [],
       ),
       child: Center(
@@ -48,44 +51,31 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 40),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  ImagesConstants.mainLogo, // <- поміняй на свій шлях до логотипу
-                  width: 200,
-                  height: 200,
-                ),
-                // 1. LOGO
-                // _buildLogo(context, isMobile, width),
-                //
-                // // 2. NAVIGATION & CTA BUTTONS
-                // if (!isMobile)
-                //   Flexible(
-                //     child: FittedBox(
-                //       fit: BoxFit.scaleDown,
-                //       alignment: Alignment.centerRight,
-                //       child: Row(
-                //         mainAxisSize: MainAxisSize.min,
-                //         children: [...actions],
-                //       ),
-                //     ),
-                //   )
-                // else
-                //   // Use Builder, for button "seen" the Scaffold
-                //   Builder(
-                //     builder: (scaffoldContext) => IconButton(
-                //       icon: const Icon(
-                //         Icons.menu_rounded,
-                //         color: Colors.black,
-                //         size: 30,
-                //       ),
-                //       onPressed: () {
-                //         // open Drawer, using right context
-                //         Scaffold.of(scaffoldContext).openEndDrawer();
-                //       },
-                //     ),
-                //   ),
+                _buildLogo(context, isMobile, width),
+                if (!isMobile)
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: actions, // Передаємо список без розгортки для чистоти
+                      ),
+                    ),
+                  )
+                else
+                  Builder(
+                    builder: (scaffoldContext) => IconButton(
+                      icon: const Icon(
+                        Icons.menu_rounded,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      onPressed: () => Scaffold.of(scaffoldContext).openEndDrawer(),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -95,7 +85,8 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildLogo(BuildContext context, bool isMobile, double width) {
-    double logoHeight = isScrolled ? 35 : (isMobile ? 85 : 115);
+    // Логотип також має реагувати на скрол
+    double logoHeight = isScrolled ? 60 : (isMobile ? 70 : 90);
     if (width < 1300 && !isMobile) logoHeight = isScrolled ? 42 : 68;
 
     return GestureDetector(
