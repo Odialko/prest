@@ -40,7 +40,7 @@ class WelcomeScreen extends StatelessWidget {
 
               // DATA OTWARCIA
               const Text(
-                'Zapraszamy w lutym.',
+                'Zapraszamy za kilka dni.',
                 style: TextStyle(
                   fontSize: 28,
                   color: Colors.white70,
