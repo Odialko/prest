@@ -2,20 +2,29 @@ import 'package:prest/src/routing/routes.dart';
 
 enum NavItem {
   // POZNAJ NAS (ABOUT US)
-  about, team, joinUs,
+  about,
+  team,
+  joinUs,
   // NIERUCHOMOŚCI (PROPERTIES)
-  sale, rent, offMarket, allProperties,
+  sale,
+  rent,
+  offMarket,
+  allProperties,
   // USŁUGI (SERVICES)
-  design, credit, advice, abroad,
+  design,
+  credit,
+  advice,
+  abroad,
   // Buttons and actions
-  contact, submitProperty, bookCall
+  contact,
+  submitProperty,
+  bookCall,
 }
 
 extension NavItemExtension on NavItem {
-  // Returns the display label for the UI
   String get title {
     switch (this) {
-      case NavItem.about: return 'O prEST';
+      case NavItem.about: return 'o prEST';
       case NavItem.team: return 'Zespół';
       case NavItem.joinUs: return 'Dołącz do nas';
       case NavItem.allProperties: return 'Wszystkie oferty';
@@ -24,14 +33,15 @@ extension NavItemExtension on NavItem {
       case NavItem.offMarket: return 'OFFmarket';
       case NavItem.design: return 'prEST design';
       case NavItem.credit: return 'Kredyt';
-      case NavItem.advice: return 'Doradztwo';
-      case NavItem.abroad: return 'Zakupy за granicą';
+      case NavItem.advice: return 'Doradztwo inwestycyjne';
+      case NavItem.abroad: return 'Zakupy za granicą';
       case NavItem.contact: return 'KONTAKT';
       case NavItem.submitProperty: return 'ZGŁOŚ NIERUCHOMOŚĆ';
       case NavItem.bookCall: return 'UMÓW ROZMOWĘ';
     }
   }
 
+  // ОСЬ ЦЕЙ ГЕТТЕР МАЄ БУТИ ТУТ
   String get description {
     switch (this) {
       case NavItem.about:
@@ -40,31 +50,30 @@ extension NavItemExtension on NavItem {
         return 'Nasz zespół specjalistów – już wkrótce!';
       case NavItem.offMarket:
         return 'Dostęp do ofert poza rynkiem – już wkrótce!';
+      case NavItem.joinUs:
+        return 'Stań się częścią naszej wizji – już wkrótce!';
       default:
         return 'Strona w budowie – już wkrótce!';
     }
   }
 
-  // Returns the navigation route path
   String get route {
     switch (this) {
-    // Прямі маршрути
-      case NavItem.about: return Routes.about;
-      case NavItem.team: return Routes.team;
-      case NavItem.contact: return Routes.contact;
-      case NavItem.submitProperty: return Routes.contact;
+      case NavItem.about: return '/${Routes.about}';
+      case NavItem.team: return '/${Routes.team}';
+      case NavItem.joinUs: return '/${Routes.joinUs}';
+      case NavItem.contact: return '/${Routes.contact}';
+      case NavItem.submitProperty: return '/${Routes.contact}';
 
-    // Група PROPERTIES (через Query-параметри для SEO)
-      case NavItem.allProperties: return Routes.offers;
-      case NavItem.sale: return '${Routes.offers}?type=sale';
-      case NavItem.rent: return '${Routes.offers}?type=rent';
-      case NavItem.offMarket: return '${Routes.offers}?type=off-market';
+      case NavItem.allProperties: return '/${Routes.offers}';
+      case NavItem.sale: return '/${Routes.offers}?type=sale';
+      case NavItem.rent: return '/${Routes.offers}?type=rent';
+      case NavItem.offMarket: return '/${Routes.offers}?type=off-market';
 
-    // Група SERVICES (Вкладені маршрути)
-      case NavItem.design: return Routes.servicesDesign;
-      case NavItem.credit: return Routes.servicesCredit;
-      case NavItem.advice: return Routes.servicesAdvice;
-      case NavItem.abroad: return Routes.servicesAbroad;
+      case NavItem.design: return '/${Routes.services}/${Routes.servicesDesign}';
+      case NavItem.credit: return '/${Routes.services}/${Routes.servicesCredit}';
+      case NavItem.advice: return '/${Routes.services}/${Routes.servicesAdvice}';
+      case NavItem.abroad: return '/${Routes.services}/${Routes.servicesAbroad}';
 
       default: return Routes.home;
     }

@@ -87,7 +87,10 @@ case OffersStateInit():
 return init(_that);case OffersStateLoading():
 return loading(_that);case OffersStateError():
 return error(_that);case OffersStateLoaded():
-return loaded(_that);}
+return loaded(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -155,7 +158,10 @@ case OffersStateInit():
 return init();case OffersStateLoading():
 return loading();case OffersStateError():
 return error(_that.message);case OffersStateLoaded():
-return loaded(_that.items);}
+return loaded(_that.items);case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -388,7 +394,8 @@ as List<OfferModel>,
 /// @nodoc
 mixin _$HomeStoreState {
 
- OffersState get offersState; PageController get pageController; bool get isScrolled; int get currentPage;
+ OffersState get offersState; PageController get pageController;// Обов'язкове поле
+ bool get isScrolled; int get currentPage;
 /// Create a copy of HomeStoreState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -597,6 +604,7 @@ class _HomeStoreState implements HomeStoreState {
 
 @override final  OffersState offersState;
 @override final  PageController pageController;
+// Обов'язкове поле
 @override@JsonKey() final  bool isScrolled;
 @override@JsonKey() final  int currentPage;
 
