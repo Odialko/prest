@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prest/src/models/offer_model.dart';
-import 'package:prest/src/routing/redirect.dart';
 import 'package:prest/src/routing/routes.dart';
-import 'package:prest/src/services/router_notifier.dart';
 import 'package:prest/src/ui/common_widgets/placeholder_screen.dart';
 import 'package:prest/src/ui/home/home_screen.dart';
 import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
@@ -12,7 +9,7 @@ import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
 import 'package:prest/src/ui/offer_details/offer_details_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final routerListener = RouterNotifier(ref);
+  // final routerListener = RouterNotifier(ref);
 
   CustomTransitionPage buildPage(Widget child, GoRouterState state) {
     return CustomTransitionPage(
