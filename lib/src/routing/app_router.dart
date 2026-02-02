@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:prest/src/models/offer_model.dart';
-import 'package:prest/src/routing/redirect.dart';
-import 'package:prest/src/services/router_notifier.dart';
+import 'package:prest/src/routing/routes.dart';
 import 'package:prest/src/ui/common_widgets/placeholder_screen.dart';
-import 'package:prest/src/ui/common_widgets/welcome_screen.dart';
 import 'package:prest/src/ui/home/home_screen.dart';
 import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
 import 'package:prest/src/ui/offer_details/offer_details_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final routerListener = RouterNotifier(ref);
+  // final routerListener = RouterNotifier(ref);
 
   CustomTransitionPage buildPage(Widget child, GoRouterState state) {
     return CustomTransitionPage(
@@ -26,95 +23,42 @@ final routerProvider = Provider<GoRouter>((ref) {
   }
 
   return GoRouter(
-    initialLocation: '/',
-    debugLogDiagnostics: true,
-    refreshListenable: routerListener,
-    redirect: (context, state) => authRedirect(context, state, ref),
+    initialLocation: Routes.home,
     routes: [
       ShellRoute(
         builder: (context, state, child) => NavigationHubScreen.create(child: child),
         routes: [
+          GoRoute(path: Routes.home, name: 'home', pageBuilder: (context, state) => buildPage(HomeScreen.create(), state)),
 
-          // 1. ГОЛОВНА: prest.pl/
-          // GoRoute(
-          //   path: '/',
-          //   name: 'home',
-          //   pageBuilder: (context, state) => buildPage(HomeScreen.create(), state),
-          // ),
+          // NIERUCHOMOŚCI
           GoRoute(
-            path: '/',
-            name: 'welcome',
-            pageBuilder: (context, state) => buildPage(WelcomeScreen(), state),
-          ),
-
-          // 2. НЕРУХОМІСТЬ: prest.pl/offers
-          GoRoute(
-            path: '/offers',
-            name: 'offers',
+            path: '/${Routes.offers}',
+            name: Routes.offers,
             pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.allProperties), state),
             routes: [
-              // ДЕТАЛІ: prest.pl/offers/id_123
               GoRoute(
                 path: ':id',
                 name: 'offer_details',
-                pageBuilder: (context, state) {
-                  final id = state.pathParameters['id'] ?? '';
-                  final extraOffer = state.extra is OfferModel ? state.extra as OfferModel : null;
-                  return buildPage(OfferDetailsScreen(id: id, initialOffer: extraOffer), state);
-                },
+                pageBuilder: (context, state) => buildPage(OfferDetailsScreen(id: state.pathParameters['id'] ?? ''), state),
               ),
             ],
           ),
 
-          // 3. ПРЯМІ КАТЕГОРІЇ (SEO): prest.pl/sale та prest.pl/rent
-          GoRoute(
-            path: '/sale',
-            name: 'sale',
-            // pageBuilder: (context, state) => buildPage(const OfferListScreen(type: 'sale'), state),
-            pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.allProperties), state),
-          ),
-          GoRoute(
-            path: '/rent',
-            name: 'rent',
-            // pageBuilder: (context, state) => buildPage(const OfferListScreen(type: 'rent'), state),
-            pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.rent), state),
-          ),
+          // POZNAJ NAS
+          GoRoute(path: '/${Routes.about}', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.about), state)),
+          GoRoute(path: '/${Routes.team}', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.team), state)),
+          GoRoute(path: '/${Routes.joinUs}', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.joinUs), state)),
+          GoRoute(path: '/${Routes.contact}', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.contact), state)),
 
-          // 4. КОМПАНІЯ: prest.pl/about, prest.pl/team
+          // USŁUGI
           GoRoute(
-            path: '/about',
-            name: 'about',
-            pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.about), state),
-          ),
-          GoRoute(
-            path: '/team',
-            name: 'team',
-            pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.team), state),
-          ),
-          GoRoute(
-            path: '/contact',
-            name: 'contact',
-            pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.contact), state),
-          ),
-
-          // 5. ПОСЛУГИ: prest.pl/services/design
-          GoRoute(
-            path: '/services',
+            path: '/${Routes.services}',
             pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.advice), state),
             routes: [
-              GoRoute(path: 'design', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.design), state)),
-              GoRoute(path: 'credit', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.credit), state)),
-              GoRoute(path: 'advice', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.advice), state)),
-            ],
-          ),
-
-          // 6. ЮРИДИЧНИЙ БЛОК: prest.pl/legal/privacy
-          GoRoute(
-            path: '/legal',
-            pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.about), state),
-            routes: [
-              GoRoute(path: 'privacy', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.about), state)),
-              GoRoute(path: 'terms', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.about), state)),
+              GoRoute(path: Routes.servicesDesign, pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.design), state)),
+              GoRoute(path: Routes.servicesCredit, pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.credit), state)),
+              GoRoute(path: Routes.servicesAdvice, pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.advice), state)),
+              GoRoute(path: Routes.servicesAbroad, pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.abroad), state)),
             ],
           ),
         ],

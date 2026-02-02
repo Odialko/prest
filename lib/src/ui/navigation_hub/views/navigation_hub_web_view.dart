@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/providers/scroll_provider.dart';
 import 'package:prest/src/ui/common_widgets/hover_menu.dart';
+import 'package:prest/src/ui/common_widgets/prest_buttons.dart';
 import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
 import 'package:prest/src/ui/navigation_hub/widgets/navigation_app_bar.dart';
@@ -44,14 +45,21 @@ class NavigationHubWebView extends NavigationHubScreen {
           _buildCtaButton(
             context,
             theme,
+            ref,
             NavItem.submitProperty,
             isOutlined: true,
           ),
           const SizedBox(width: 10),
-          _buildCtaButton(context, theme, NavItem.bookCall, isDialog: true),
+          _buildCtaButton(
+            context,
+            theme,
+            ref,
+            NavItem.bookCall,
+            isDialog: true,
+          ),
         ],
       ),
-      body: SelectionArea(child: child),
+      body: child,
     );
   }
 
@@ -73,53 +81,66 @@ class NavigationHubWebView extends NavigationHubScreen {
   }
 
   Widget _buildNavLink(
-    BuildContext context,
-    PrestThemeData theme,
-    NavItem item,
-  ) {
-    // We use a ValueNotifier or simple State to track hover if this were a
-    // StatefulWidget, but since we are in a Hub, we can use a local hover state
-    // or a simple HoverMenu in 'isStaticLink' mode to guarantee 100% identity.
+      BuildContext context,
+      PrestThemeData theme,
+      NavItem item,
+      ) {
+    final bool isContact = item == NavItem.contact;
 
-    return HoverMenu(
-      title: item.title,
-      theme: theme,
-      isStaticLink:
-          true, // This flag in your HoverMenu handles the "link-only" style
-      onSelected: (_) => context.go(item.route),
+    // Створюємо стиль спеціально для Контакту
+    final TextStyle contactStyle = theme.blackTextTheme.font7.copyWith(
+      fontSize: isContact ? 13 : 12,        // Трішки більший шрифт
+      letterSpacing: isContact ? 3.5 : 2.5, // Ширші відступи між буквами
+      fontWeight: isContact ? FontWeight.w600 : FontWeight.w400,
+    );
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: isContact ? 12.0 : 8.0), // Більше простору навколо
+      child: DefaultTextStyle(
+        style: contactStyle,
+        child: HoverMenu(
+          title: item.title,
+          theme: theme,
+          isStaticLink: true,
+          onSelected: (_) => context.go(item.route),
+        ),
+      ),
     );
   }
 
   Widget _buildCtaButton(
     BuildContext context,
     PrestThemeData theme,
+    WidgetRef ref,
     NavItem item, {
     bool isOutlined = false,
     bool isDialog = false,
   }) {
-    return ElevatedButton(
-      onPressed: () => isDialog
-          ? _showContactDialog(context, theme)
-          : context.go(item.route),
-      style: ElevatedButton.styleFrom(
-        // Use theme.colors.milk or Colors.transparent for outlined if needed
-        backgroundColor: isOutlined
-            ? theme.colors.milk
-            : theme.colors.chineseBlack,
-        foregroundColor: isOutlined ? theme.colors.chineseBlack : Colors.white,
-        side: BorderSide(color: theme.colors.chineseBlack),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-        elevation: 0,
-      ),
-      child: Text(
-        item.title,
-        style: const TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 1.2,
-        ),
-      ),
+    // Дивимось, чи прокручена сторінка (через Riverpod або стан)
+    final isScrolled = ref.watch(isScrolledProvider);
+
+    // Розраховуємо динамічну висоту
+    final double dynamicHeight = isScrolled ? 38.0 : 45.0;
+
+    void onPressed() =>
+        isDialog ? _showContactDialog(context, theme) : context.go(item.route);
+
+    return AnimatedContainer(
+      // Додаємо для плавності зміни відступів
+      duration: const Duration(milliseconds: 300),
+      child: isOutlined
+          ? PrestDarkBorderButton(
+              label: item.title,
+              onPressed: onPressed,
+              height: dynamicHeight, // Передаємо висоту
+              width: 180,
+            )
+          : PrestPrimaryButton(
+              label: item.title,
+              onPressed: onPressed,
+              height: dynamicHeight, // Передаємо висоту
+              width: 180,
+            ),
     );
   }
 
