@@ -35,6 +35,7 @@ class HomeHeroSection extends ConsumerWidget {
               // 1. CAROUSEL
               Positioned.fill(
                 child: CarouselSlider(
+                  key: const ValueKey('team_carousel'),
                   options: CarouselOptions(
                     height: height,
                     viewportFraction: 1.0,

@@ -4,13 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/models/offer_model.dart';
 import 'package:prest/src/routing/routes.dart';
-// Імпортуй свій сервіс та провайдер
 import 'package:prest/src/providers/service_providers.dart';
 
 class PropertyCard extends ConsumerStatefulWidget {
   final OfferModel item;
 
-  // Тему (theme) видалили з конструктора
   const PropertyCard({super.key, required this.item});
 
   @override
@@ -22,18 +20,19 @@ class _PropertyCardState extends ConsumerState<PropertyCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Отримуємо тему та сервіс через контекст і реф
     final theme = context.prestTheme;
-    final imageService = ref.read(imageProcessorProvider);
+    final imageService = ref.watch(imageProcessorProvider);
 
-    // Використовуємо сервіс для отримання безпечного URL
-    // Беремо mainPicture, а якщо її немає — першу з pictures
-    final String imageUrl = imageService.getProcessedUrl(
-      widget.item.mainPicture ??
-          (widget.item.pictures?.isNotEmpty == true
-              ? widget.item.pictures!.first
-              : null),
-    );
+    // ЛОГІКА ВИБОРУ КАРТИНКИ:
+    // 1. Спочатку перевіряємо, чи є список pictures і чи він не порожній
+    // 2. Якщо є, беремо першу картинку (там повний URL)
+    // 3. Якщо немає, пробуємо main_picture (але сервіс має вміти перетворити ID на URL)
+
+    final String? rawImage = (widget.item.pictures != null && widget.item.pictures!.isNotEmpty)
+        ? widget.item.pictures!.first
+        : widget.item.mainPicture;
+
+    final String imageUrl = imageService.getProcessedUrl(rawImage);
 
     return SelectionContainer.disabled(
       child: MouseRegion(
@@ -51,15 +50,15 @@ class _PropertyCardState extends ConsumerState<PropertyCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // СЕКЦІЯ ЗОБРАЖЕННЯ
               AspectRatio(
                 aspectRatio: 1,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                    2,
-                  ), // Легке закруглення для преміальності
+                  borderRadius: BorderRadius.circular(2),
                   child: Stack(
                     children: [
+                      // ФОНОВИЙ КОЛІР (поки вантажиться картинка)
+                      Container(color: const Color(0xFFF5F5F5)),
+
                       AnimatedScale(
                         scale: _isHovered ? 1.05 : 1.0,
                         duration: const Duration(milliseconds: 600),
@@ -69,26 +68,30 @@ class _PropertyCardState extends ConsumerState<PropertyCard> {
                           fit: BoxFit.cover,
                           width: double.infinity,
                           height: double.infinity,
-                          // Використовуємо withValues як ти і хотів
+                          gaplessPlayback: true,
+                          // Оптимізація: обмежуємо розмір кешу для сітки
+                          cacheWidth: 800,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              color: theme.colors.chineseBlack.withValues(alpha: 0.03),
+                            );
+                          },
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
-                                color: theme.colors.chineseBlack.withValues(
-                                  alpha: 0.05,
-                                ),
+                                color: theme.colors.chineseBlack.withValues(alpha: 0.05),
                                 child: Icon(
-                                  Icons.broken_image,
-                                  color: theme.colors.chineseBlack.withValues(
-                                    alpha: 0.2,
-                                  ),
+                                  Icons.broken_image_outlined,
+                                  color: theme.colors.chineseBlack.withValues(alpha: 0.2),
                                 ),
                               ),
                         ),
                       ),
-                      // Темний оверлей при наведенні
+
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 400),
                         color: _isHovered
-                            ? Colors.black.withValues(alpha: 0.1)
+                            ? Colors.black.withValues(alpha: 0.08)
                             : Colors.transparent,
                       ),
                     ],
@@ -98,11 +101,8 @@ class _PropertyCardState extends ConsumerState<PropertyCard> {
 
               const SizedBox(height: 24),
 
-              // ЗАГОЛОВОК
               Text(
-                widget.item.portalTitle ??
-                    widget.item.typeName ??
-                    'Nieruchomość',
+                widget.item.portalTitle ?? widget.item.typeName ?? 'Nieruchomość',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: theme.blackTextTheme.font4.copyWith(
@@ -113,7 +113,6 @@ class _PropertyCardState extends ConsumerState<PropertyCard> {
 
               const SizedBox(height: 8),
 
-              // ЛОКАЦІЯ ТА ПЛОЩА
               Text(
                 '${widget.item.cityName ?? ''}${widget.item.areaTotal != null ? " • ${widget.item.areaTotal} m²" : ""}'
                     .toUpperCase(),
@@ -125,7 +124,6 @@ class _PropertyCardState extends ConsumerState<PropertyCard> {
 
               const SizedBox(height: 16),
 
-              // ЦІНА
               AnimatedDefaultTextStyle(
                 duration: const Duration(milliseconds: 300),
                 style: theme.blackTextTheme.font6.copyWith(
@@ -137,13 +135,12 @@ class _PropertyCardState extends ConsumerState<PropertyCard> {
                 child: Text(
                   widget.item.price != null
                       ? '${widget.item.price} PLN'
-                      : 'Zapytaj про cenę',
+                      : 'Zapytaj o cenę',
                 ),
               ),
 
               const SizedBox(height: 10),
 
-              // ДИНАМІЧНА ЛІНІЯ (Underline)
               AnimatedContainer(
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeOutCubic,

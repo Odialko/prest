@@ -24,7 +24,7 @@ enum NavItem {
 extension NavItemExtension on NavItem {
   String get title {
     switch (this) {
-      case NavItem.about: return 'o prEST';
+      case NavItem.about: return 'O prEST';
       case NavItem.team: return 'Zespół';
       case NavItem.joinUs: return 'Dołącz do nas';
       case NavItem.allProperties: return 'Wszystkie oferty';

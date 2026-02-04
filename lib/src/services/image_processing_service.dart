@@ -2,24 +2,30 @@ class ImageProcessingService {
   static const String _placeholderUrl =
       'https://via.placeholder.com/600x800?text=No+Image';
 
-  // Використовуємо weserv.nl для обходу CORS та оптимізації
+  // Базовий URL вашого сховища картинок (перевір, чи він такий у EstiCRM)
+  static const String _baseCrmUrl = 'https://static.esticrm.pl/foto/';
   static const String _proxyPrefix = 'https://images.weserv.nl/?url=';
 
-  /// Обробляє сире посилання, додає проксі та обробляє плейсхолдери
   String getProcessedUrl(String? originalUrl) {
     if (originalUrl == null || originalUrl.trim().isEmpty) {
       return _placeholderUrl;
     }
 
-    final trimmedUrl = originalUrl.trim();
+    String finalUrl = originalUrl.trim();
 
-    // Якщо це вже плейсхолдер або локальний асет — повертаємо як є
-    if (trimmedUrl.contains('placeholder') ||
-        trimmedUrl.startsWith('assets/')) {
-      return trimmedUrl;
+    // 1. Якщо це просто ID (наприклад "12345") або шлях без домену
+    if (!finalUrl.startsWith('http')) {
+      // Склеюємо базовий домен CRM та ID/шлях
+      // Можливо, треба додати розширення .jpg, якщо CRM його не дає
+      finalUrl = '$_baseCrmUrl$finalUrl';
     }
 
-    // Додаємо проксі та енкодимо компонент
-    return '$_proxyPrefix${Uri.encodeComponent(trimmedUrl)}';
+    // 2. Якщо це асет — повертаємо без проксі
+    if (finalUrl.startsWith('assets/')) {
+      return finalUrl;
+    }
+
+    // 3. Додаємо проксі для обходу CORS
+    return '$_proxyPrefix${Uri.encodeComponent(finalUrl)}&default=$_placeholderUrl';
   }
 }

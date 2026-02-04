@@ -14,8 +14,7 @@ class ZoomingImage extends StatefulWidget {
   State<ZoomingImage> createState() => _ZoomingImageState();
 }
 
-class _ZoomingImageState extends State<ZoomingImage>
-    with SingleTickerProviderStateMixin {
+class _ZoomingImageState extends State<ZoomingImage> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   bool _isPortrait = false;
 
@@ -27,30 +26,42 @@ class _ZoomingImageState extends State<ZoomingImage>
       duration: const Duration(seconds: 12),
     )..repeat(reverse: true);
 
+    // Викликаємо перевірку, але не даємо їй блокувати рендер
     _checkImageSize();
   }
 
   void _checkImageSize() {
-    // chosse correct ImageProvider залежно від типу джерела
-    final ImageProvider provider = widget.isNetwork
-        ? NetworkImage(widget.path)
-        : AssetImage(widget.path) as ImageProvider;
+    try {
+      final ImageProvider provider = widget.isNetwork
+          ? NetworkImage(widget.path)
+          : AssetImage(widget.path) as ImageProvider;
 
-    provider
-        .resolve(const ImageConfiguration())
-        .addListener(
-          ImageStreamListener((ImageInfo info, bool _) {
+      final ImageStream stream = provider.resolve(const ImageConfiguration());
+
+      stream.addListener(
+        ImageStreamListener(
+              (ImageInfo info, bool synchronousCall) {
             if (mounted) {
               setState(() {
                 _isPortrait = info.image.height > info.image.width;
               });
             }
-          }),
-        );
+          },
+          onError: (dynamic exception, StackTrace? stackTrace) {
+            // Якщо не вдалося прочитати розмір — просто ігноруємо,
+            // щоб не "повісити" весь віджет
+            debugPrint('Could not check image size: $exception');
+          },
+        ),
+      );
+    } catch (e) {
+      debugPrint('Image check error: $e');
+    }
   }
 
   @override
   void dispose() {
+    // ЦЕЙ РЯДОК ВИПРАВЛЯЄ ВАШУ ПОМИЛКУ
     _controller.dispose();
     super.dispose();
   }
@@ -64,30 +75,25 @@ class _ZoomingImageState extends State<ZoomingImage>
           scale: 1.0 + (_controller.value * 0.1),
           child: widget.isNetwork
               ? Image.network(
-                  widget.path,
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  alignment: _isPortrait
-                      ? const Alignment(0, -0.3)
-                      : const Alignment(0, -0.2),
-                  // Додаємо заглушку, поки вантажиться мережева картинка
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(color: Colors.black12);
-                  },
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.error),
-                )
+            widget.path,
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+            // Якщо ми ще не знаємо розмір, ставимо дефолт
+            alignment: _isPortrait
+                ? const Alignment(0, -0.3)
+                : const Alignment(0, -0.2),
+            errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+          )
               : Image.asset(
-                  widget.path,
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  alignment: _isPortrait
-                      ? const Alignment(0, -0.3)
-                      : const Alignment(0, -0.2),
-                ),
+            widget.path,
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+            alignment: _isPortrait
+                ? const Alignment(0, -0.3)
+                : const Alignment(0, -0.2),
+          ),
         );
       },
     );

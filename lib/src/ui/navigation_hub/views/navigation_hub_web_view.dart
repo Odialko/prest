@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/providers/scroll_provider.dart';
+import 'package:prest/src/ui/common_widgets/contact_dialog.dart';
 import 'package:prest/src/ui/common_widgets/hover_menu.dart';
 import 'package:prest/src/ui/common_widgets/prest_buttons.dart';
 import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
@@ -81,21 +82,23 @@ class NavigationHubWebView extends NavigationHubScreen {
   }
 
   Widget _buildNavLink(
-      BuildContext context,
-      PrestThemeData theme,
-      NavItem item,
-      ) {
+    BuildContext context,
+    PrestThemeData theme,
+    NavItem item,
+  ) {
     final bool isContact = item == NavItem.contact;
 
     // Створюємо стиль спеціально для Контакту
     final TextStyle contactStyle = theme.blackTextTheme.font7.copyWith(
-      fontSize: isContact ? 13 : 12,        // Трішки більший шрифт
+      fontSize: isContact ? 13 : 12, // Трішки більший шрифт
       letterSpacing: isContact ? 3.5 : 2.5, // Ширші відступи між буквами
       fontWeight: isContact ? FontWeight.w600 : FontWeight.w400,
     );
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: isContact ? 12.0 : 8.0), // Більше простору навколо
+      padding: EdgeInsets.symmetric(
+        horizontal: isContact ? 12.0 : 8.0,
+      ), // Більше простору навколо
       child: DefaultTextStyle(
         style: contactStyle,
         child: HoverMenu(
@@ -123,7 +126,7 @@ class NavigationHubWebView extends NavigationHubScreen {
     final double dynamicHeight = isScrolled ? 38.0 : 45.0;
 
     void onPressed() =>
-        isDialog ? _showContactDialog(context, theme) : context.go(item.route);
+        isDialog ? PrestDialogs.showContact(context) : context.go(item.route);
 
     return AnimatedContainer(
       // Додаємо для плавності зміни відступів
@@ -170,78 +173,6 @@ class NavigationHubWebView extends NavigationHubScreen {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  void _showContactDialog(BuildContext context, PrestThemeData theme) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: 'Contact',
-      barrierColor: Colors.black.withValues(alpha: 0.8),
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, anim1, anim2) => Center(
-        child: Material(
-          color: Colors.transparent,
-          child: ScaleTransition(
-            scale: anim1,
-            child: Container(
-              width: 450,
-              padding: const EdgeInsets.all(60),
-              color: Colors.white,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'UMÓW ROZMOWĘ',
-                    style: theme.blackTextTheme.font4.copyWith(
-                      letterSpacing: 4,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  _buildField(theme, 'Imię i Nazwisko'),
-                  const SizedBox(height: 20),
-                  _buildField(theme, 'Numer телефону / Email'),
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.colors.chineseBlack,
-                        foregroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: Text('WYŚLIJ', style: theme.whiteTextTheme.font7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildField(PrestThemeData theme, String hint) {
-    return TextField(
-      style: theme.blackTextTheme.font6,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: theme.grayTextTheme.font7,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black12),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
-        ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 10),
       ),
     );
   }
