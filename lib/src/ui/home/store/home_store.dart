@@ -87,52 +87,35 @@ final heroSlidesProvider = Provider<List<HeroSlide>>((ref) {
   final homeState = ref.watch(homeProvider);
   final imageProcessor = ref.watch(imageProcessorProvider);
 
-  // 1. Створюємо список із захардкоджених слайдів (вони будуть завжди)
   final staticSlides = [
-    HeroSlide(
-      imagePath: ImagesConstants.heroImages[1],
-      title: 'ZOBACZ OFERTĘ',
-      route: Routes.team,
-      isNetwork: false,
-    ),
-    HeroSlide(
-      imagePath: ImagesConstants.heroImages[2],
-      title: 'ZOBACZ OFERTĘ',
-      route: Routes.team,
-      isNetwork: false,
-    ),
-    HeroSlide(
-      imagePath: ImagesConstants.heroImages[3],
-      title: 'ZOBACZ OFERTĘ',
-      route: Routes.team,
-      isNetwork: false,
-    ),
-
     HeroSlide(
       imagePath: ImagesConstants.heroImages.last,
       title: 'POZNAJ NAS',
-      route: Routes.team,
+      description: '',
+      route: '/${Routes.team}',
       isNetwork: false,
     ),
   ];
 
-  // 2. Додаємо оферти, ТІЛЬКИ якщо вони завантажились
   final dynamicSlides = homeState.offersState.maybeWhen(
-    loaded: (items) => items
-        .take(3)
-        .map(
-          (offer) => HeroSlide(
-            imagePath: imageProcessor.getProcessedUrl(offer.mainPicture),
-            title: 'ZOBACZ OFERTĘ',
-            route: '${Routes.offers}/${offer.id}',
-            isNetwork: true,
-          ),
-        )
-        .toList(),
-    orElse: () =>
-        [], // Якщо вантажиться або помилка — динамічних слайдів просто 0
+    loaded: (items) => items.take(3).map((offer) {
+      // Тут ми беремо першу картинку.
+      // Якщо pictures містить ["123.jpg", "456.jpg"], imageUrl буде "123.jpg"
+      final imageUrl = (offer.pictures != null && offer.pictures!.isNotEmpty)
+          ? offer.pictures!.first
+          : null;
+
+      return HeroSlide(
+        // Сервіс тепер сам доклеїть домен, якщо його немає
+        imagePath: imageProcessor.getProcessedUrl(imageUrl),
+        title: 'ZOBACZ OFERTĘ',
+        description: offer.portalTitle ?? '',
+        route: '${Routes.offers}/${offer.id}',
+        isNetwork: true,
+      );
+    }).toList(),
+    orElse: () => [],
   );
 
-  // 3. Склеюємо їх (оферти спочатку, статика в кінці)
   return [...dynamicSlides, ...staticSlides];
 });
