@@ -1,51 +1,52 @@
-// lib/src/features/navigation/views/navigation_hub_mobile_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prest/src/prest_theme.dart';
+import 'package:prest/src/providers/scroll_provider.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
 import '../widgets/navigation_app_bar.dart';
-import '../store/navigation_hub_store.dart';
 
-class NavigationHubMobileView extends ConsumerWidget
-    implements NavigationHubScreen {
+class NavigationHubMobileView extends ConsumerWidget implements NavigationHubScreen {
   final Widget child;
   const NavigationHubMobileView({super.key, required this.child});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isScrolled = ref.watch(
-      navigationProvider.select((s) => s.isScrolled),
-    );
+    final scrollOffset = ref.watch(scrollPositionProvider);
     final theme = context.prestTheme;
+    final bool isHeaderWhite = scrollOffset > 40;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // Використовуємо той самий AppBar, що і для Web
+      endDrawer: _buildPremiumDrawer(context, theme),
       appBar: NavigationAppBar(
-        isScrolled: isScrolled,
+        scrollOffset: scrollOffset,
         actions: [
-          // На мобільних ми показуємо лише іконку меню (Drawer)
           Builder(
-            builder: (context) => IconButton(
+            builder: (ctx) => IconButton(
               icon: Icon(
                 Icons.menu_rounded,
-                color: isScrolled ? theme.colors.black : Colors.white,
+                color: isHeaderWhite ? theme.colors.black : Colors.white,
               ),
-              onPressed: () => Scaffold.of(context).openDrawer(),
+              onPressed: () => Scaffold.of(ctx).openEndDrawer(),
             ),
           ),
-          const SizedBox(width: 10),
         ],
       ),
-      drawer: _buildPremiumDrawer(context, theme),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Тестовий контент для скролу
-            _buildMobileHero(theme),
-            _buildMobileContent(theme),
-            child,
-          ],
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification is ScrollUpdateNotification) {
+            // Оновлюємо стейт для синхронізації AppBar
+            ref.read(scrollPositionProvider.notifier).state = notification.metrics.pixels;
+          }
+          return true;
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildMobileHero(theme),
+              child,
+            ],
+          ),
         ),
       ),
     );
@@ -55,42 +56,12 @@ class NavigationHubMobileView extends ConsumerWidget
     return Container(
       height: 500,
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: theme.colors.chineseBlack,
-        image: const DecorationImage(
-          image: AssetImage('assets/images/hero_bg.jpg'), // якщо є фон
-          fit: BoxFit.cover,
-          opacity: 0.6,
-        ),
-      ),
+      color: theme.colors.chineseBlack,
       child: Center(
         child: Text(
-          'PREMIUM\nEXPERIENCE',
+          'PREMIUM\nESTATE',
           textAlign: TextAlign.center,
-          style: theme.whiteTextTheme.font1.copyWith(
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMobileContent(PrestThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      color: theme.colors.background,
-      child: Column(
-        children: List.generate(
-          5,
-          (i) => Container(
-            margin: const EdgeInsets.only(bottom: 15),
-            height: 150,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: theme.colors.milk,
-              borderRadius: BorderRadius.circular(15),
-            ),
-          ),
+          style: theme.whiteTextTheme.font1.copyWith(letterSpacing: 8),
         ),
       ),
     );
@@ -99,40 +70,24 @@ class NavigationHubMobileView extends ConsumerWidget
   Widget _buildPremiumDrawer(BuildContext context, PrestThemeData theme) {
     return Drawer(
       backgroundColor: theme.colors.background,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
       child: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(30),
-              child: Image.asset(
-                'assets/images/logo-prest.jpeg',
-                height: 30,
-                color: theme.colors.black,
-                colorBlendMode: BlendMode.srcIn,
-              ),
-            ),
-            _drawerItem(theme, 'O NAS', Icons.info_outline_rounded),
-            _drawerItem(theme, 'PROJEKTY', Icons.auto_awesome_mosaic_outlined),
-            _drawerItem(theme, 'KONTAKT', Icons.phone_android_rounded),
+            const SizedBox(height: 40),
+            _drawerItem(theme, 'O NAS', Icons.info_outline),
+            _drawerItem(theme, 'NIERUCHOMOŚCI', Icons.home_work_outlined),
+            _drawerItem(theme, 'KONTAKT', Icons.mail_outline),
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.all(30),
+              padding: const EdgeInsets.all(24),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: theme.colors.chineseBlack,
-                  foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 55),
-                  shape: StadiumBorder(),
+                  shape: const StadiumBorder(),
                 ),
                 onPressed: () {},
-                child: const Text('UMÓW ROZMOWĘ'),
+                child: const Text('UMÓW ROZMOWĘ', style: TextStyle(color: Colors.white)),
               ),
             ),
           ],
@@ -144,10 +99,7 @@ class NavigationHubMobileView extends ConsumerWidget
   Widget _drawerItem(PrestThemeData theme, String title, IconData icon) {
     return ListTile(
       leading: Icon(icon, color: theme.colors.gold),
-      title: Text(
-        title,
-        style: theme.blackTextTheme.font5.copyWith(fontWeight: FontWeight.w600),
-      ),
+      title: Text(title, style: theme.blackTextTheme.font6),
       onTap: () {},
     );
   }

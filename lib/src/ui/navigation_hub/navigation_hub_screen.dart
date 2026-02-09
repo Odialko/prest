@@ -6,12 +6,12 @@ import 'views/navigation_hub_mobile_view.dart';
 
 /// Base class for the Navigation Hub.
 /// Decides whether to show Web or Mobile view based on the platform.
-abstract class NavigationHubScreen extends ConsumerWidget {
-  final Widget child;
+abstract class NavigationHubScreen extends Widget {
+  // final Widget child;
+  //
+  // const NavigationHubScreen({super.key, required this.child});
 
-  const NavigationHubScreen({super.key, required this.child});
-
-  factory NavigationHubScreen.create({Key? key, required Widget child}) {
+  factory NavigationHubScreen({Key? key, required Widget child}) {
     if (kIsWeb) {
       return NavigationHubWebView(key: key, child: child);
     }
