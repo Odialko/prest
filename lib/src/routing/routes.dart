@@ -20,4 +20,5 @@ class Routes {
 
   // --- LEGAL ---
   static const legal = 'legal';
+  static const privacyPolicy = '/privacy-policy';
 }

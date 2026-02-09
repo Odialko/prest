@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/routing/app_router.dart';
-// import 'package:prest/src/ui/prest_provider.dart'; // Розкоментуй, коли знадобиться themeProvider
 
 class PrestApp extends ConsumerWidget {
   const PrestApp({super.key});
@@ -11,52 +10,59 @@ class PrestApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = ref.watch(routerProvider);
 
-    // Watch for theme changes (light/dark/system)
-    // final themeMode = ref.watch(themeProvider);
-    const themeMode = ThemeMode.light; // Forced to light for now
+    // Forced to light for now, as the Navy+Beige palette is tuned for light mode aesthetics
+    const themeMode = ThemeMode.light;
 
-    // Logic for future theme switching
-    final systemBrightness = View.of(context).platformDispatcher.platformBrightness;
-    final bool isDark = themeMode == ThemeMode.system
-        ? systemBrightness == Brightness.dark
-        : themeMode == ThemeMode.dark;
+    // final systemBrightness = View.of(context).platformDispatcher.platformBrightness;
+    // final bool isDark = themeMode == ThemeMode.system
+    //     ? systemBrightness == Brightness.dark
+    //     : themeMode == ThemeMode.dark;
 
-    // Pick our custom theme data
-    final prestThemeData = isDark ? defaultDarkTheme : defaultLightTheme;
+    // Pick our custom theme data (Navy & Beige)
+    // final prestThemeData = isDark ? defaultDarkTheme : defaultLightTheme;
+    final prestThemeData = defaultLightTheme;
 
     return PrestTheme(
-      data: prestThemeData, // This will change when you change themeMode
+      data: prestThemeData,
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'prEST',
-
-        // Connect our GoRouter
         routerConfig: appRouter,
 
-        // Material themes (standard wrappers)
+        // Material themes wrappers with our new palette
         theme: _buildMaterialTheme(Brightness.light),
         darkTheme: _buildMaterialTheme(Brightness.dark),
         themeMode: themeMode,
-
-        // Localization
-        // localizationsDelegates: const [S.delegate],
-        // supportedLocales: S.delegate.supportedLocales,
       ),
     );
   }
 
-  /// Creates a basic Material theme wrapper
+  /// Creates a basic Material theme wrapper synced with Navy & Beige palette
   ThemeData _buildMaterialTheme(Brightness brightness) {
     final isLight = brightness == Brightness.light;
+
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
-      scaffoldBackgroundColor: isLight ? PrestColors.white : PrestColors.chineseBlack,
+      // ВИПРАВЛЕНО: Використовуємо нові константи кольорів
+      scaffoldBackgroundColor: isLight
+          ? PrestColors.beigeLight
+          : PrestColors.deepNavy,
       fontFamily: 'Inter',
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
+        // Колір іконок в AppBar (гранат на бежевому або білий на гранаті)
+        iconTheme: IconThemeData(
+          color: isLight ? PrestColors.deepNavy : PrestColors.pureWhite,
+        ),
+      ),
+      // Колір виділення тексту (золотистий акцент)
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: PrestColors.warmGold,
+        selectionColor: PrestColors.warmGold.withValues(alpha: 0.3),
+        selectionHandleColor: PrestColors.warmGold,
       ),
     );
   }
