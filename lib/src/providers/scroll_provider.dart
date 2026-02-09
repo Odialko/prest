@@ -6,7 +6,7 @@ final scrollPositionProvider = StateProvider<double>((ref) => 0.0);
 
 /// Провайдер, який обчислює, чи проскролив користувач достатньо для зміни хедера.
 /// Повертає [true], якщо проскролено більше 50 пікселів.
-// final isScrolledProvider = Provider<bool>((ref) {
-//   final pixels = ref.watch(scrollPositionProvider);
-//   return pixels > 50;
-// });
+final isScrolledProvider = Provider<bool>((ref) {
+  final pixels = ref.watch(scrollPositionProvider);
+  return pixels > 50;
+});

@@ -22,31 +22,65 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
     final scrollOffset = ref.watch(scrollPositionProvider);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      endDrawer: _buildPremiumDrawer(context, theme),
-      appBar: NavigationAppBar(
-        scrollOffset: scrollOffset,
-        actions: [
-          _buildDropdown(context, theme, 'POZNAJ NAS', [
-            NavItem.about, NavItem.team, NavItem.joinUs,
-          ]),
-          _buildDropdown(context, theme, 'NIERUCHOMOŚCI', [
-            NavItem.sale, NavItem.rent, NavItem.offMarket,
-          ]),
-          _buildDropdown(context, theme, 'USŁUGI', [
-            NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad,
-          ]),
-          _buildNavLink(context, theme, NavItem.contact),
-          const SizedBox(width: 20),
-          _buildCtaButton(context, theme, scrollOffset, NavItem.submitProperty, isOutlined: true),
-          const SizedBox(width: 10),
-          _buildCtaButton(context, theme, scrollOffset, NavItem.bookCall, isDialog: true),
+      endDrawer: _buildPremiumDrawer(context),
+      // Використовуємо Stack, щоб покласти AppBar поверх body
+      body: Stack(
+        children: [
+          // 1. КОНТЕНТ (НИЖНІЙ ШАР)
+          child,
+
+          // 2. ХЕДЕР (ВЕРХНІЙ ШАР)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: NavigationAppBar(
+              scrollOffset: scrollOffset,
+              actions: [
+                _buildDropdown(context, theme, 'POZNAJ NAS', [NavItem.about, NavItem.team, NavItem.joinUs]),
+                _buildDropdown(context, theme, 'NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket]),
+                _buildDropdown(context, theme, 'USŁUGI', [NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
+                _buildDropdown(
+                  context,
+                  theme,
+                  'ZGŁOŚ',
+                  ['Nieruchomość', 'Poszukiwanie'],
+                  onCustomSelected: (val) => PrestDialog.showContact(context, title: 'Zgłoś $val'),
+                ),
+                const SizedBox(width: 20),
+                _buildCtaButton(context, theme, scrollOffset, NavItem.bookCall, isDialog: true),
+              ],
+            ),
+          ),
         ],
       ),
-      body: child,
     );
   }
 
+  // 2. ВИПАДАЮЧИЙ СПИСОК (HOVER MENU)
+  Widget _buildDropdown(
+      BuildContext context,
+      PrestThemeData theme,
+      String label,
+      List<dynamic> items, {
+        Function(String)? onCustomSelected,
+      }) {
+    return HoverMenu(
+      title: label,
+      theme: theme,
+      items: items.map((e) => e is NavItem ? e.title : e.toString()).toList(),
+      onSelected: (title) {
+        if (onCustomSelected != null) {
+          onCustomSelected(title);
+        } else {
+          final item = items.firstWhere((e) => e is NavItem && e.title == title) as NavItem;
+          context.go(item.route);
+        }
+      },
+    );
+  }
+
+  // 3. CTA КНОПКА З АНІМАЦІЄЮ РОЗМІРУ
   Widget _buildCtaButton(
       BuildContext context,
       PrestThemeData theme,
@@ -55,71 +89,82 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
         bool isOutlined = false,
         bool isDialog = false,
       }) {
-    // Синхронна зміна розміру з хедером
     final bool isShrunk = scrollOffset > 40;
-    final double dynamicHeight = isShrunk ? 38.0 : 45.0;
+    final double dynamicHeight = isShrunk ? 38.0 : 46.0; // Трохи вища для солідності
 
-    void onPressed() => isDialog ? PrestDialogs.showContact(context) : context.go(item.route);
+    void onPressed() => isDialog ? PrestDialog.showContact(context) : context.go(item.route);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutCubic,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
       child: isOutlined
-          ? PrestDarkBorderButton(label: item.title, onPressed: onPressed, height: dynamicHeight, width: 180)
-          : PrestPrimaryButton(label: item.title, onPressed: onPressed, height: dynamicHeight, width: 180),
-    );
-  }
-
-  Widget _buildDropdown(BuildContext context, PrestThemeData theme, String label, List<NavItem> items) {
-    return HoverMenu(
-      title: label,
-      items: items.map((e) => e.title).toList(),
-      theme: theme,
-      onSelected: (title) {
-        final item = items.firstWhere((e) => e.title == title);
-        context.go(item.route);
-      },
-    );
-  }
-
-  Widget _buildNavLink(BuildContext context, PrestThemeData theme, NavItem item) {
-    final bool isContact = item == NavItem.contact;
-    final TextStyle contactStyle = theme.blackTextTheme.font7.copyWith(
-      fontSize: isContact ? 13 : 12,
-      letterSpacing: isContact ? 3.5 : 2.5,
-      fontWeight: isContact ? FontWeight.w600 : FontWeight.w400,
-    );
-
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: isContact ? 12.0 : 8.0),
-      child: DefaultTextStyle(
-        style: contactStyle,
-        child: HoverMenu(
-          title: item.title,
-          theme: theme,
-          isStaticLink: true,
-          onSelected: (_) => context.go(item.route),
-        ),
+          ? PrestDarkBorderButton(
+        label: item.title,
+        onPressed: onPressed,
+        height: dynamicHeight,
+        width: 190,
+      )
+          : PrestPrimaryButton(
+        label: item.title,
+        onPressed: onPressed,
+        height: dynamicHeight,
+        width: 190,
       ),
     );
   }
 
-  Widget _buildPremiumDrawer(BuildContext context, PrestThemeData theme) {
+  // 4. СТАТИЧНІ ПОСИЛАННЯ (НАПРИКЛАД КОНТАКТ)
+  Widget _buildNavLink(BuildContext context, PrestThemeData theme, NavItem item) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: HoverMenu(
+        title: item.title,
+        theme: theme,
+        isStaticLink: true,
+        onSelected: (_) => context.go(item.route),
+      ),
+    );
+  }
+
+  // 5. ПРЕМІАЛЬНЕ БОКОВЕ МЕНЮ (MOBILE)
+  Widget _buildPremiumDrawer(BuildContext context) {
+    final theme = context.prestTheme;
     return Drawer(
       backgroundColor: theme.colors.background.withValues(alpha: 0.98),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
         child: SafeArea(
           child: Column(
             children: [
+              const SizedBox(height: 50),
+              // Логотип у Drawer
+              Image.asset('assets/images/logo-prest.jpeg', height: 60),
               const SizedBox(height: 40),
+              const Divider(indent: 40, endIndent: 40),
               ...[NavItem.about, NavItem.sale, NavItem.design, NavItem.contact].map(
                     (item) => ListTile(
-                  title: Center(child: Text(item.title, style: theme.blackTextTheme.font6)),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                  title: Center(
+                    child: Text(
+                      item.title,
+                      style: theme.blackTextTheme.font5.copyWith(
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 2.0,
+                      ),
+                    ),
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     context.go(item.route);
                   },
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40),
+                child: Text(
+                  'PREST ESTATE © 2026',
+                  style: theme.blackTextTheme.font9.copyWith(color: theme.colors.arsenic),
                 ),
               ),
             ],

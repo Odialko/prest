@@ -74,16 +74,27 @@ class PrestTextTheme {
 }
 
 class PrestColorTheme {
+  // Базові
   final Color background;
   final Color white;
-  final Color milk; // Тепер це світлий беж
-  final Color
-  chineseBlack; // Залишено назву для сумісності, але колір Deep Navy
-  final Color neonBlue; // Deep Navy
-  final Color gold; // Warm Gold
-  final Color gray; // Beige Dark
-  final Color arsenic; // Neutral Gray
-  final Color raisinBlack; // Deep Navy (darker)
+  final Color milk;
+
+  // Твоя Luxury палітра (те, чого не було)
+  final Color beigeLight;
+  final Color beigeMedium;
+  final Color beigeDark;
+  final Color deepNavy;
+  final Color warmGold;
+  final Color warmTerra;
+  final Color neutralGray;
+
+  // Семантичні та старі для сумісності
+  final Color chineseBlack;
+  final Color neonBlue;
+  final Color gold;
+  final Color gray;
+  final Color arsenic;
+  final Color raisinBlack;
   final Color black;
   final Color redSolid;
   final Color niagara;
@@ -92,6 +103,13 @@ class PrestColorTheme {
     required this.background,
     required this.white,
     required this.milk,
+    required this.beigeLight,
+    required this.beigeMedium,
+    required this.beigeDark,
+    required this.deepNavy,
+    required this.warmGold,
+    required this.warmTerra,
+    required this.neutralGray,
     required this.chineseBlack,
     required this.neonBlue,
     required this.gold,
@@ -145,13 +163,20 @@ class PrestTheme extends InheritedWidget {
 final PrestThemeData defaultLightTheme = _buildTheme(Brightness.light);
 
 PrestThemeData _buildTheme(Brightness brightness) {
-  // Для спрощення зараз робимо основну палітру світлою (Beige/Navy)
-
   final colorTheme = PrestColorTheme(
+    // Luxury Palette Mapping
+    beigeLight: PrestColors.beigeLight,
+    beigeMedium: PrestColors.beigeMedium,
+    beigeDark: PrestColors.beigeDark,
+    deepNavy: PrestColors.deepNavy,
+    warmGold: PrestColors.warmGold,
+    warmTerra: PrestColors.warmTerra,
+    neutralGray: PrestColors.neutralGray,
+
+    // Решта полів для сумісності
     background: PrestColors.beigeLight,
     white: PrestColors.pureWhite,
-    milk:
-        PrestColors.beigeMedium, // Використовуємо медіум беж для "milk" секцій
+    milk: PrestColors.beigeMedium,
     chineseBlack: PrestColors.deepNavy,
     neonBlue: PrestColors.deepNavy,
     gold: PrestColors.warmGold,
@@ -165,7 +190,7 @@ PrestThemeData _buildTheme(Brightness brightness) {
 
   return PrestThemeData(
     colors: colorTheme,
-    defaultTextTheme: PrestTextTheme.fromColor(colorTheme.arsenic),
+    defaultTextTheme: PrestTextTheme.fromColor(colorTheme.neutralGray),
     whiteTextTheme: PrestTextTheme.fromColor(PrestColors.pureWhite),
     neonBlueTextTheme: PrestTextTheme.fromColor(PrestColors.deepNavy),
     goldTextTheme: PrestTextTheme.fromColor(PrestColors.warmGold),
