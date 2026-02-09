@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
 
-/// LUXURY COLOR PALETTE
-/// Defined as constants to ensure consistency across light and dark modes
+/// LUXURY COLOR PALETTE - PREST (Navy & Beige Edition)
 class PrestColors {
   PrestColors._();
 
-  // Premium Foundations
-  static const white = Color(0xFFF9F9F7);
-  static const milk = Color(0xFFF1F1E6);
-  static const chineseBlack = Color(0xFF121212);
-  static const raisinBlack = Color(0xFF1A1A1A);
+  // Premium Foundations (Beiges)
+  static const beigeLight = Color(0xFFF5F0E8); // Головне тло
+  static const beigeMedium = Color(0xFFE3D5C3); // Картки, виділені секції
+  static const beigeDark = Color(0xFFC7B299); // Рамки, ховери
 
-  // Accents & Grays
-  static const neonBlue = Color(0xFF002366);
-  static const gold = Color(0xFFC5A059);
-  static const spanishGray = Color(0xFF9E9E9E);
-  static const gray = Color(0xFFBDBDBD);
-  static const arsenic = Color(0xFF424242);
-  static const sonicSilver = Color(0xFF767676);
-  static const silverChalice = Color(0xFFA9A9A9);
+  // Brand Accents
+  static const deepNavy = Color(0xFF0C2B5B); // Навігація, заголовки
+  static const warmGold = Color(0xFFF4A259); // CTA, Акценти
+  static const warmTerra = Color(0xFFD97757); // CTA Hover, важливі деталі
 
-  // Semantic Colors
+  // Typography
+  static const neutralGray = Color(
+    0xFF1F2933,
+  ); // Основний текст (м’якший за чорний)
+  static const pureWhite = Color(0xFFFFFFFF); // Текст на темному тлі
+
+  // Semantic
   static const redSolid = Color(0xFFAF2D2D);
   static const niagara = Color(0xFF05A898);
 }
 
-/// BASE FONT SIZES
-/// Hierarchy from Hero headers to tiny legal text
 class _BaseFonts {
   _BaseFonts._();
   static const fontSizes = [
@@ -39,12 +37,10 @@ class _BaseFonts {
     14.0, // font6: Small body / Button
     12.0, // font7: Footnote
     10.0, // font8: Caption
-    9.0   // font9: Legal / Micro
+    9.0, // font9: Legal / Micro
   ];
 }
 
-/// TEXT THEME HOLDER
-/// Manages font families and scaling for specific colors
 class PrestTextTheme {
   final List<TextStyle> styles;
   PrestTextTheme._(this.styles);
@@ -53,13 +49,13 @@ class PrestTextTheme {
     return PrestTextTheme._(
       List.generate(
         _BaseFonts.fontSizes.length,
-            (index) => TextStyle(
+        (index) => TextStyle(
           fontSize: _BaseFonts.fontSizes[index],
           color: color,
-          height: 1.4,
+          height: 1.5, // Трохи збільшено для кращого читання бежевих тонів
           fontFamily: 'Inter',
           fontWeight: index < 3 ? FontWeight.w300 : FontWeight.w400,
-          letterSpacing: index < 2 ? 8.0 : 0.5, // Wide tracking for headers
+          letterSpacing: index < 2 ? 8.0 : 0.5,
         ),
       ),
     );
@@ -77,18 +73,17 @@ class PrestTextTheme {
   TextStyle get font9 => styles[9];
 }
 
-/// COLOR THEME HOLDER
-/// Centralized access to the brand colors
 class PrestColorTheme {
   final Color background;
   final Color white;
-  final Color milk;
-  final Color chineseBlack;
-  final Color neonBlue;
-  final Color gold;
-  final Color gray;
-  final Color arsenic;
-  final Color raisinBlack;
+  final Color milk; // Тепер це світлий беж
+  final Color
+  chineseBlack; // Залишено назву для сумісності, але колір Deep Navy
+  final Color neonBlue; // Deep Navy
+  final Color gold; // Warm Gold
+  final Color gray; // Beige Dark
+  final Color arsenic; // Neutral Gray
+  final Color raisinBlack; // Deep Navy (darker)
   final Color black;
   final Color redSolid;
   final Color niagara;
@@ -109,8 +104,6 @@ class PrestColorTheme {
   });
 }
 
-/// PREST THEME DATA
-/// The main object provided by the InheritedWidget
 class PrestThemeData {
   final PrestColorTheme colors;
   final PrestTextTheme defaultTextTheme;
@@ -120,8 +113,7 @@ class PrestThemeData {
   final PrestTextTheme arsenicTextTheme;
   final PrestTextTheme grayTextTheme;
   final PrestTextTheme blackTextTheme;
-  final PrestTextTheme redSolidTextTheme;
-  final PrestTextTheme niagaraTextTheme;
+  final PrestThemeData? raw; // Для посилань
 
   PrestThemeData({
     required this.colors,
@@ -132,43 +124,41 @@ class PrestThemeData {
     required this.arsenicTextTheme,
     required this.grayTextTheme,
     required this.blackTextTheme,
-    required this.redSolidTextTheme,
-    required this.niagaraTextTheme,
+    this.raw,
   });
 }
 
-/// INHERITED WIDGET
-/// Facilitates the propagation of theme data down the widget tree
 class PrestTheme extends InheritedWidget {
   final PrestThemeData data;
   const PrestTheme({required super.child, super.key, required this.data});
 
   static PrestThemeData of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<PrestTheme>()?.data ?? defaultLightTheme;
+    return context.dependOnInheritedWidgetOfExactType<PrestTheme>()?.data ??
+        defaultLightTheme;
   }
 
   @override
-  bool updateShouldNotify(covariant PrestTheme oldWidget) => data != oldWidget.data;
+  bool updateShouldNotify(covariant PrestTheme oldWidget) =>
+      data != oldWidget.data;
 }
 
-/// THEME CONFIGURATIONS
 final PrestThemeData defaultLightTheme = _buildTheme(Brightness.light);
-final PrestThemeData defaultDarkTheme = _buildTheme(Brightness.dark);
 
 PrestThemeData _buildTheme(Brightness brightness) {
-  final isLight = brightness == Brightness.light;
+  // Для спрощення зараз робимо основну палітру світлою (Beige/Navy)
 
   final colorTheme = PrestColorTheme(
-    background: isLight ? PrestColors.white : PrestColors.chineseBlack,
-    white: PrestColors.white,
-    milk: PrestColors.milk,
-    chineseBlack: PrestColors.chineseBlack,
-    neonBlue: PrestColors.neonBlue,
-    gold: PrestColors.gold,
-    gray: PrestColors.gray,
-    arsenic: isLight ? PrestColors.arsenic : PrestColors.white,
-    raisinBlack: PrestColors.raisinBlack,
-    black: isLight ? PrestColors.chineseBlack : PrestColors.white,
+    background: PrestColors.beigeLight,
+    white: PrestColors.pureWhite,
+    milk:
+        PrestColors.beigeMedium, // Використовуємо медіум беж для "milk" секцій
+    chineseBlack: PrestColors.deepNavy,
+    neonBlue: PrestColors.deepNavy,
+    gold: PrestColors.warmGold,
+    gray: PrestColors.beigeDark,
+    arsenic: PrestColors.neutralGray,
+    raisinBlack: PrestColors.deepNavy,
+    black: PrestColors.neutralGray,
     redSolid: PrestColors.redSolid,
     niagara: PrestColors.niagara,
   );
@@ -176,18 +166,15 @@ PrestThemeData _buildTheme(Brightness brightness) {
   return PrestThemeData(
     colors: colorTheme,
     defaultTextTheme: PrestTextTheme.fromColor(colorTheme.arsenic),
-    whiteTextTheme: PrestTextTheme.fromColor(PrestColors.white),
-    neonBlueTextTheme: PrestTextTheme.fromColor(PrestColors.neonBlue),
-    goldTextTheme: PrestTextTheme.fromColor(PrestColors.gold),
-    arsenicTextTheme: PrestTextTheme.fromColor(PrestColors.arsenic),
-    grayTextTheme: PrestTextTheme.fromColor(PrestColors.gray),
-    blackTextTheme: PrestTextTheme.fromColor(isLight ? PrestColors.chineseBlack : PrestColors.white),
-    redSolidTextTheme: PrestTextTheme.fromColor(PrestColors.redSolid),
-    niagaraTextTheme: PrestTextTheme.fromColor(PrestColors.niagara),
+    whiteTextTheme: PrestTextTheme.fromColor(PrestColors.pureWhite),
+    neonBlueTextTheme: PrestTextTheme.fromColor(PrestColors.deepNavy),
+    goldTextTheme: PrestTextTheme.fromColor(PrestColors.warmGold),
+    arsenicTextTheme: PrestTextTheme.fromColor(PrestColors.neutralGray),
+    grayTextTheme: PrestTextTheme.fromColor(PrestColors.beigeDark),
+    blackTextTheme: PrestTextTheme.fromColor(PrestColors.neutralGray),
   );
 }
 
-/// CONTEXT EXTENSION
 extension PrestThemeContext on BuildContext {
   PrestThemeData get prestTheme => PrestTheme.of(this);
 }

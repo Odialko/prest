@@ -14,6 +14,7 @@ import 'package:prest/src/ui/our_services/abroad/abroad_screen.dart';
 import 'package:prest/src/ui/our_services/advice/advice_screen.dart';
 import 'package:prest/src/ui/our_services/credit/credit_screen.dart';
 import 'package:prest/src/ui/our_services/designe/design_screen.dart';
+import 'package:prest/src/ui/privacy_policy/privacy_policy_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // final routerListener = RouterNotifier(ref);
@@ -33,40 +34,93 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: Routes.home,
     routes: [
       ShellRoute(
-        builder: (context, state, child) => NavigationHubScreen.create(child: child),
+        builder: (context, state, child) =>
+            NavigationHubScreen.create(child: child),
         routes: [
-          GoRoute(path: Routes.home, name: 'home', pageBuilder: (context, state) => buildPage(HomeScreen.create(), state)),
+          GoRoute(
+            path: Routes.home,
+            name: 'home',
+            pageBuilder: (context, state) =>
+                buildPage(HomeScreen.create(), state),
+          ),
+          GoRoute(
+            path: Routes.privacyPolicy,
+            name: 'privacy-policy',
+            pageBuilder: (context, state) =>
+                buildPage(PrivacyPolicyScreen(), state),
+          ),
 
           // NIERUCHOMOŚCI
           GoRoute(
             path: '/${Routes.offers}',
             name: Routes.offers,
-            pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.allProperties), state),
+            pageBuilder: (context, state) => buildPage(
+              const PlaceholderScreen(item: NavItem.allProperties),
+              state,
+            ),
             routes: [
               GoRoute(
                 path: ':id',
                 name: 'offer_details',
-                pageBuilder: (context, state) => buildPage(OfferDetailsScreen(id: state.pathParameters['id'] ?? ''), state),
+                pageBuilder: (context, state) => buildPage(
+                  OfferDetailsScreen(id: state.pathParameters['id'] ?? ''),
+                  state,
+                ),
               ),
             ],
           ),
 
           // POZNAJ NAS
           // GoRoute(path: '/${Routes.about}', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.about), state)),
-          GoRoute(path: '/${Routes.about}', pageBuilder: (context, state) => buildPage(AboutPrestScreen.create(), state)),
-          GoRoute(path: '/${Routes.team}', pageBuilder: (context, state) => buildPage(TeamScreen.create(), state)),
-          GoRoute(path: '/${Routes.joinUs}', pageBuilder: (context, state) => buildPage(JoinUsScreen.create(), state)),
-          GoRoute(path: '/${Routes.contact}', pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.contact), state)),
+          GoRoute(
+            path: '/${Routes.about}',
+            pageBuilder: (context, state) =>
+                buildPage(AboutPrestScreen.create(), state),
+          ),
+          GoRoute(
+            path: '/${Routes.team}',
+            pageBuilder: (context, state) =>
+                buildPage(TeamScreen.create(), state),
+          ),
+          GoRoute(
+            path: '/${Routes.joinUs}',
+            pageBuilder: (context, state) =>
+                buildPage(JoinUsScreen.create(), state),
+          ),
+          GoRoute(
+            path: '/${Routes.contact}',
+            pageBuilder: (context, state) => buildPage(
+              const PlaceholderScreen(item: NavItem.contact),
+              state,
+            ),
+          ),
 
           // USŁUGI
           GoRoute(
             path: '/${Routes.services}',
-            pageBuilder: (context, state) => buildPage(const PlaceholderScreen(item: NavItem.advice), state),
+            pageBuilder: (context, state) =>
+                buildPage(const PlaceholderScreen(item: NavItem.advice), state),
             routes: [
-              GoRoute(path: Routes.servicesDesign, pageBuilder: (context, state) => buildPage(DesignScreen.create(), state)),
-              GoRoute(path: Routes.servicesCredit, pageBuilder: (context, state) => buildPage(CreditScreen.create(), state)),
-              GoRoute(path: Routes.servicesAdvice, pageBuilder: (context, state) => buildPage(AdviceScreen.create(), state)),
-              GoRoute(path: Routes.servicesAbroad, pageBuilder: (context, state) => buildPage(AbroadScreen.create(), state)),
+              GoRoute(
+                path: Routes.servicesDesign,
+                pageBuilder: (context, state) =>
+                    buildPage(DesignScreen.create(), state),
+              ),
+              GoRoute(
+                path: Routes.servicesCredit,
+                pageBuilder: (context, state) =>
+                    buildPage(CreditScreen.create(), state),
+              ),
+              GoRoute(
+                path: Routes.servicesAdvice,
+                pageBuilder: (context, state) =>
+                    buildPage(AdviceScreen.create(), state),
+              ),
+              GoRoute(
+                path: Routes.servicesAbroad,
+                pageBuilder: (context, state) =>
+                    buildPage(AbroadScreen.create(), state),
+              ),
             ],
           ),
         ],
