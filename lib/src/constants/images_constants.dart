@@ -1,7 +1,8 @@
 class ImagesConstants {
   ImagesConstants._();
 
-  static const mainLogo = 'assets/images/logo-prest.jpeg';
+  static const mainLogoWhite = 'assets/images/logos/logo-prest-white.svg';
+  static const mainLogoDark = 'assets/images/logos/logo-prest.svg';
 
   // static const house1 = 'assets/images/carusele/home1.jpeg';
   // static const house2 = 'assets/images/carusele/home2.jpeg';

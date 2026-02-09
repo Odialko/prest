@@ -35,7 +35,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       ShellRoute(
         builder: (context, state, child) =>
-            NavigationHubScreen.create(child: child),
+            NavigationHubScreen(child: child),
         routes: [
           GoRoute(
             path: Routes.home,

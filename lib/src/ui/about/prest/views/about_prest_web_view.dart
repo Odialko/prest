@@ -79,7 +79,7 @@ class AboutPrestWebView extends AboutPrestScreen {
                           delay: const Duration(milliseconds: 400),
                           child: PrestDarkBorderButton(
                             label: 'UMÓW ROZMOWĘ',
-                            onPressed: () => PrestDialogs.showContact(context),
+                            onPressed: () => PrestDialog.showContact(context, title: 'UMÓW ROZMOWĘ'),
                             width: 280,
                           ),
                         ),
@@ -95,6 +95,8 @@ class AboutPrestWebView extends AboutPrestScreen {
       ],
     );
   }
+
+
 
   /// Обгортка для секції, яка тримає колір фону на всю ширину,
   /// але контент обмежує по LayoutsConstants.maxContentWidth

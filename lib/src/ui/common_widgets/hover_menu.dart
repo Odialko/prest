@@ -1,21 +1,21 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:prest/src/prest_theme.dart';
-import 'package:prest/src/constants/constants.dart';
+import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 
 class HoverMenu extends StatefulWidget {
   final String title;
-  final List<String> items;
+  final List<dynamic>? items;
   final PrestThemeData theme;
-  final Function(String) onSelected;
+  final Function(String)? onSelected;
   final bool isStaticLink;
 
   const HoverMenu({
     super.key,
     required this.title,
-    this.items = const [],
+    this.items,
     required this.theme,
-    required this.onSelected,
+    this.onSelected,
     this.isStaticLink = false,
   });
 
@@ -26,147 +26,93 @@ class HoverMenu extends StatefulWidget {
 class _HoverMenuState extends State<HoverMenu> with SingleTickerProviderStateMixin {
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
-  Timer? _closeTimer;
-  late AnimationController _controller;
-  late Animation<Offset> _slide;
+  bool _isHovered = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-      reverseDuration: const Duration(milliseconds: 200),
-    );
+  // Додаємо контролер для анімації розгортання
+  late final AnimationController _expandController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 300),
+  );
+  late final Animation<double> _expandAnimation = CurvedAnimation(
+    parent: _expandController,
+    curve: Curves.easeInOut,
+  );
 
-    _slide = Tween<Offset>(
-      begin: const Offset(0, -1.0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _insertOverlay();
-    });
-  }
-
-  void _insertOverlay() {
-    if (widget.isStaticLink || widget.items.isEmpty) return;
+  void _showOverlay() {
+    if (widget.isStaticLink || widget.items == null) return;
+    _overlayEntry?.remove();
     _overlayEntry = _createOverlayEntry();
     Overlay.of(context).insert(_overlayEntry!);
+    _expandController.forward(); // Запуск розгортання
   }
 
-  void _handleEnter() {
-    _closeTimer?.cancel();
-    if (mounted) _controller.forward();
-  }
-
-  void _handleExit() {
-    _closeTimer?.cancel();
-    _closeTimer = Timer(const Duration(milliseconds: 100), () {
-      if (mounted && _controller.status != AnimationStatus.dismissed) {
-        _controller.reverse();
-      }
-    });
+  void _hideOverlay() async {
+    await _expandController.reverse(); // Згортання перед видаленням
+    _overlayEntry?.remove();
+    _overlayEntry = null;
   }
 
   OverlayEntry _createOverlayEntry() {
     return OverlayEntry(
       builder: (context) => Positioned(
-        width: LayoutsConstants.hoverMenuWidth,
+        width: 180,
         child: CompositedTransformFollower(
           link: _layerLink,
           showWhenUnlinked: false,
-          offset: const Offset(0, LayoutsConstants.hoverMenuOffset),
+          targetAnchor: Alignment.bottomCenter,
+          followerAnchor: Alignment.topCenter,
           child: MouseRegion(
-            onEnter: (_) => _handleEnter(),
-            onExit: (_) => _handleExit(),
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                // Використовуємо Visibility для повного приховування, коли анімація в 0
-                return Visibility(
-                  visible: _controller.value > 0,
-                  child: ClipRect(
-                    child: SlideTransition(
-                      position: _slide,
-                      child: child,
+            onEnter: (_) => setState(() => _isHovered = true),
+            onExit: (_) {
+              setState(() => _isHovered = false);
+              _hideOverlay();
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                FadeTransition(
+                  opacity: _expandAnimation,
+                  child: CustomPaint(
+                    size: const Size(14, 8),
+                    painter: TrianglePainter(
+                      color: widget.theme.colors.background.withValues(alpha: 0.9), // Один шар кольору для трикутника
                     ),
                   ),
-                );
-              },
-              child: Material(
-                elevation: 0, // ПОВНІСТЮ ПРИБРАНО РИСКУ
-                color: widget.theme.colors.white,
-                shadowColor: Colors.transparent,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: widget.items.map((item) => _buildItem(item)).toList(),
                 ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildItem(String item) {
-    return _HoverMenuItem(
-      title: item,
-      theme: widget.theme,
-      onTap: () {
-        widget.onSelected(item);
-        _closeTimer?.cancel();
-        if (mounted) _controller.reverse();
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: MouseRegion(
-        onEnter: (_) => _handleEnter(),
-        onExit: (_) => _handleExit(),
-        child: InkWell(
-          onTap: widget.isStaticLink ? () => widget.onSelected(widget.title) : null,
-          mouseCursor: SystemMouseCursors.click,
-          hoverColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              final isActive = _controller.value > 0.01;
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                color: isActive ? widget.theme.colors.milk : Colors.transparent,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: widget.theme.blackTextTheme.font7.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: isActive ? widget.theme.colors.gold : widget.theme.colors.black,
-                      ),
-                    ),
-                    if (!widget.isStaticLink) ...[
-                      const SizedBox(width: 4),
-                      RotationTransition(
-                        turns: Tween(begin: 0.0, end: 0.5).animate(_controller),
-                        child: Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 16,
-                          color: isActive ? widget.theme.colors.gold : widget.theme.colors.black,
+                SizeTransition(
+                  sizeFactor: _expandAnimation,
+                  axisAlignment: -1.0,
+                  child: FadeTransition(
+                    opacity: _expandAnimation,
+                    child: Material(
+                      elevation: 8,
+                      color: Colors.transparent, // ПРИБРАНО: Material тепер прозорий
+                      child: Container(
+                        // ОСНОВНИЙ І ЄДИНИЙ ФОН
+                        decoration: BoxDecoration(
+                          color: widget.theme.colors.background.withValues(alpha: 0.95),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Column(
+                          children: widget.items!.map((item) {
+                            final String label = item is NavItem ? item.title : item.toString();
+                            return _MenuItem(
+                              label: label,
+                              theme: widget.theme,
+                              onTap: () {
+                                widget.onSelected?.call(label);
+                                _hideOverlay();
+                              },
+                            );
+                          }).toList(),
                         ),
                       ),
-                    ],
-                  ],
+                    ),
+                  ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
       ),
@@ -175,46 +121,58 @@ class _HoverMenuState extends State<HoverMenu> with SingleTickerProviderStateMix
 
   @override
   void dispose() {
-    _closeTimer?.cancel();
-    _controller.stop(); // ЖОРСТКА ЗУПИНКА ПЕРЕД ВИДАЛЕННЯМ
-    if (_overlayEntry != null && _overlayEntry!.mounted) {
-      _overlayEntry?.remove();
-      _overlayEntry = null;
-    }
-    _controller.dispose();
+    _expandController.dispose();
     super.dispose();
   }
-}
 
-class _HoverMenuItem extends StatefulWidget {
-  final String title;
-  final PrestThemeData theme;
-  final VoidCallback onTap;
-  const _HoverMenuItem({required this.title, required this.theme, required this.onTap});
-
-  @override
-  State<_HoverMenuItem> createState() => _HoverMenuItemState();
-}
-
-class _HoverMenuItemState extends State<_HoverMenuItem> {
-  bool _isItemHovered = false;
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isItemHovered = true),
-      onExit: (_) => setState(() => _isItemHovered = false),
-      child: InkWell(
-        onTap: widget.onTap,
-        hoverColor: Colors.transparent,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          color: _isItemHovered ? widget.theme.colors.milk : Colors.transparent,
-          child: Text(
-            widget.title,
-            style: widget.theme.blackTextTheme.font7.copyWith(
-              color: _isItemHovered ? widget.theme.colors.gold : widget.theme.colors.black,
-              fontWeight: _isItemHovered ? FontWeight.bold : FontWeight.normal,
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: MouseRegion(
+        onEnter: (_) {
+          setState(() => _isHovered = true);
+          _showOverlay();
+        },
+        onExit: (_) {
+          Future.delayed(const Duration(milliseconds: 50), () {
+            if (!_isHovered) _hideOverlay();
+          });
+          setState(() => _isHovered = false);
+        },
+        child: InkWell(
+          onTap: () => widget.isStaticLink ? widget.onSelected?.call(widget.title) : null,
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            // ФІКС: Використовуємо SizedBox з чіткою висотою, щоб Row не панікував
+            child: SizedBox(
+              height: 30,
+              child: IntrinsicWidth(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: widget.theme.neonBlueTextTheme.font7.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    // Підкреслення
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      height: 1.5,
+                      width: _isHovered ? 30 : 0,
+                      color: widget.theme.colors.chineseBlack,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -223,207 +181,73 @@ class _HoverMenuItemState extends State<_HoverMenuItem> {
   }
 }
 
-// import 'dart:async';
-// import 'package:flutter/material.dart';
-// import 'package:prest/src/prest_theme.dart';
-// import 'package:prest/src/constants/constants.dart';
-//
-// class HoverMenu extends StatefulWidget {
-//   final String title;
-//   final List<String> items;
-//   final PrestThemeData theme;
-//   final Function(String) onSelected;
-//   final bool isStaticLink;
-//
-//   const HoverMenu({
-//     super.key,
-//     required this.title,
-//     this.items = const [],
-//     required this.theme,
-//     required this.onSelected,
-//     this.isStaticLink = false,
-//   });
-//
-//   @override
-//   State<HoverMenu> createState() => _HoverMenuState();
-// }
-//
-// class _HoverMenuState extends State<HoverMenu> {
-//   bool _isHovered = false;
-//   final LayerLink _layerLink = LayerLink();
-//   OverlayEntry? _overlayEntry;
-//   Timer? _closeTimer;
-//
-//   void _handleEnter() {
-//     _closeTimer?.cancel();
-//     if (!_isHovered) {
-//       setState(() => _isHovered = true);
-//       _showOverlay();
-//     }
-//   }
-//
-//   void _handleExit() {
-//     _closeTimer?.cancel();
-//     _closeTimer = Timer(LayoutsConstants.hoverMenuExitDelay, () {
-//       if (mounted) {
-//         setState(() => _isHovered = false);
-//         _hideOverlay();
-//       }
-//     });
-//   }
-//
-//   void _showOverlay() {
-//     if (widget.isStaticLink || widget.items.isEmpty) return;
-//     _hideOverlay();
-//     _overlayEntry = _createOverlayEntry();
-//     Overlay.of(context).insert(_overlayEntry!);
-//   }
-//
-//   void _hideOverlay() {
-//     if (_overlayEntry != null) {
-//       _overlayEntry?.remove();
-//       _overlayEntry = null;
-//     }
-//   }
-//
-//   OverlayEntry _createOverlayEntry() {
-//     return OverlayEntry(
-//       builder: (context) => Positioned(
-//         width: LayoutsConstants.hoverMenuWidth,
-//         child: CompositedTransformFollower(
-//           link: _layerLink,
-//           showWhenUnlinked: false,
-//           offset: const Offset(0, LayoutsConstants.hoverMenuOffset),
-//           child: MouseRegion(
-//             onEnter: (_) => _handleEnter(),
-//             onExit: (_) => _handleExit(),
-//             child: Material(
-//               elevation: 8,
-//               color: widget.theme.colors.white,
-//               child: Column(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: widget.items.map((item) => _buildItem(item)).toList(),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildItem(String item) {
-//     return _HoverMenuItem(
-//       title: item,
-//       theme: widget.theme,
-//       onTap: () {
-//         widget.onSelected(item);
-//         _closeTimer?.cancel();
-//         setState(() => _isHovered = false);
-//         _hideOverlay();
-//       },
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return CompositedTransformTarget(
-//       link: _layerLink,
-//       child: MouseRegion(
-//         onEnter: (_) => _handleEnter(),
-//         onExit: (_) => _handleExit(),
-//         child: InkWell(
-//           onTap: widget.isStaticLink
-//               ? () => widget.onSelected(widget.title)
-//               : null,
-//           mouseCursor: SystemMouseCursors.click,
-//           hoverColor: Colors.transparent,
-//           splashColor: Colors.transparent,
-//           highlightColor: Colors.transparent,
-//           child: Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-//             color: _isHovered ? widget.theme.colors.milk : Colors.transparent,
-//             child: Row(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Text(
-//                   widget.title,
-//                   style: widget.theme.blackTextTheme.font7.copyWith(
-//                     fontWeight: FontWeight.w600,
-//                     color: _isHovered
-//                         ? widget.theme.colors.gold
-//                         : widget.theme.colors.black,
-//                   ),
-//                 ),
-//                 if (!widget.isStaticLink) ...[
-//                   const SizedBox(width: 4),
-//                   AnimatedRotation(
-//                     duration: LayoutsConstants.hoverMenuItemAnimationDuration,
-//                     turns: _isHovered ? 0.5 : 0,
-//                     child: Icon(
-//                       Icons.keyboard_arrow_down,
-//                       size: 16,
-//                       color: _isHovered
-//                           ? widget.theme.colors.gold
-//                           : widget.theme.colors.black,
-//                     ),
-//                   ),
-//                 ],
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   @override
-//   void dispose() {
-//     _closeTimer?.cancel();
-//     _hideOverlay();
-//     super.dispose();
-//   }
-// }
-//
-// class _HoverMenuItem extends StatefulWidget {
-//   final String title;
-//   final PrestThemeData theme;
-//   final VoidCallback onTap;
-//
-//   const _HoverMenuItem({
-//     required this.title,
-//     required this.theme,
-//     required this.onTap,
-//   });
-//
-//   @override
-//   State<_HoverMenuItem> createState() => _HoverMenuItemState();
-// }
-//
-// class _HoverMenuItemState extends State<_HoverMenuItem> {
-//   bool _isItemHovered = false;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MouseRegion(
-//       onEnter: (_) => setState(() => _isItemHovered = true),
-//       onExit: (_) => setState(() => _isItemHovered = false),
-//       child: InkWell(
-//         onTap: widget.onTap,
-//         child: Container(
-//           width: double.infinity,
-//           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-//           color: _isItemHovered ? widget.theme.colors.milk : Colors.transparent,
-//           child: Text(
-//             widget.title,
-//             style: widget.theme.blackTextTheme.font7.copyWith(
-//               color: _isItemHovered
-//                   ? widget.theme.colors.gold
-//                   : widget.theme.colors.black,
-//               fontWeight: _isItemHovered ? FontWeight.bold : FontWeight.normal,
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+class TrianglePainter extends CustomPainter {
+  final Color color;
+  TrianglePainter({required this.color});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    final path = Path();
+    path.moveTo(size.width / 2, 0);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    canvas.drawPath(path, paint);
+  }
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _MenuItem extends StatefulWidget {
+  final String label;
+  final PrestThemeData theme;
+  final VoidCallback onTap;
+
+  const _MenuItem({required this.label, required this.theme, required this.onTap});
+
+  @override
+  State<_MenuItem> createState() => _MenuItemState();
+}
+
+class _MenuItemState extends State<_MenuItem> {
+  bool _isItemHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isItemHovered = true),
+      onExit: (_) => setState(() => _isItemHovered = false),
+      child: InkWell(
+        onTap: widget.onTap,
+        // ПРИБИРАЄМО ВСІ ЕФЕКТИ НАВЕДЕННЯ ДЛЯ ПУНКТІВ МЕНЮ
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          width: double.infinity,
+          color: Colors.transparent, // Гарантуємо відсутність фону тут
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.label,
+                style: widget.theme.blackTextTheme.font6.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: widget.theme.colors.chineseBlack,
+                ),
+              ),
+              const SizedBox(height: 2),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                height: 1.5,
+                width: _isItemHovered ? 25 : 0,
+                color: widget.theme.colors.chineseBlack.withValues(alpha: 0.6),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

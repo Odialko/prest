@@ -4,22 +4,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prest/src/ui/common_widgets/prest_buttons.dart';
 import 'package:prest/src/ui/home/store/home_store.dart';
+import 'package:prest/src/ui/home/widgets/hero_arrow.dart'; // Твій новий файл
 import 'package:prest/src/ui/home/widgets/zooming_image.dart';
 
-class HomeHeroSection extends ConsumerWidget {
+class HomeHeroSection extends ConsumerStatefulWidget {
   final double height;
 
   const HomeHeroSection({super.key, required this.height});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // 1. Слухаємо список слайдів (динамічні + статика)
+  ConsumerState<HomeHeroSection> createState() => _HomeHeroSectionState();
+}
+
+class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
+  final CarouselSliderController _carouselController = CarouselSliderController();
+
+  @override
+  Widget build(BuildContext context) {
     final slides = ref.watch(heroSlidesProvider);
-    // 2. Слухаємо поточний індекс сторінки
     final currentPage = ref.watch(homeProvider.select((s) => s.currentPage));
 
-    // Якщо слайдів ще немає (завантаження), показуємо пустий контейнер або скелетон
-    if (slides.isEmpty) return SizedBox(height: height);
+    if (slides.isEmpty) return SizedBox(height: widget.height);
 
     final currentSlide = slides[currentPage];
 
@@ -28,40 +33,37 @@ class HomeHeroSection extends ConsumerWidget {
         final bool isMobile = constraints.maxWidth < 800;
 
         return SizedBox(
-          height: height,
+          height: widget.height,
           width: double.infinity,
           child: Stack(
             children: [
-              // 1. CAROUSEL
+              // 1. CAROUSEL (Фон)
               Positioned.fill(
                 child: CarouselSlider(
-                  key: const ValueKey('team_carousel'),
+                  carouselController: _carouselController,
                   options: CarouselOptions(
-                    height: height,
+                    height: widget.height,
                     viewportFraction: 1.0,
                     autoPlay: true,
                     autoPlayInterval: const Duration(seconds: 8),
-                    autoPlayAnimationDuration: const Duration(
-                      milliseconds: 1500,
-                    ),
+                    autoPlayAnimationDuration: const Duration(milliseconds: 1500),
                     enableInfiniteScroll: true,
-                    // ОНОВЛЮЄМО СТАН ПРИ ЗМІНІ СЛАЙДА
-                    onPageChanged: (index, reason) {
+                    // Забороняємо свайп мишею, щоб не ламати вертикальний скрол сторінки
+                    scrollPhysics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (index, _) {
                       ref.read(homeProvider.notifier).setCurrentPage(index);
                     },
                   ),
-                  items: slides
-                      .map(
-                        (slide) => ZoomingImage(
-                          path: slide.imagePath,
-                          isNetwork: slide.isNetwork,
-                        ),
-                      )
-                      .toList(),
+                  items: slides.map((slide) {
+                    return ZoomingImage(
+                      path: slide.imagePath,
+                      isNetwork: slide.isNetwork,
+                    );
+                  }).toList(),
                 ),
               ),
 
-              // 2. GRADIENT OVERLAY
+              // 2. GRADIENT OVERLAY (Для читабельності контенту)
               Positioned.fill(
                 child: IgnorePointer(
                   child: Container(
@@ -69,10 +71,11 @@ class HomeHeroSection extends ConsumerWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
+                        stops: const [0.0, 0.4, 1.0],
                         colors: [
-                          Colors.black.withValues(alpha: 0.2),
+                          Colors.black.withValues(alpha: 0.25),
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.6),
+                          Colors.black.withValues(alpha: 0.5),
                         ],
                       ),
                     ),
@@ -80,16 +83,20 @@ class HomeHeroSection extends ConsumerWidget {
                 ),
               ),
 
-              // 3. ACTION BUTTON
+              // 3. ПРОГРАМНО НАМАЛЬОВАНІ СТРІЛКИ (Тільки десктоп)
+              if (!isMobile) ...[
+                _buildArrow(isLeft: true),
+                _buildArrow(isLeft: false),
+              ],
+
+              // 4. ACTION BUTTON
               Positioned(
                 right: isMobile ? null : 80,
-                left: isMobile ? 0 : null,
+                left: isMobile ? 20 : null,
                 bottom: isMobile ? 60 : 80,
                 child: Container(
-                  width: isMobile ? constraints.maxWidth : null,
-                  alignment: isMobile
-                      ? Alignment.center
-                      : Alignment.centerRight,
+                  width: isMobile ? constraints.maxWidth - 40 : null,
+                  alignment: isMobile ? Alignment.center : Alignment.centerRight,
                   child: PrestTransparentButton(
                     label: currentSlide.title,
                     onPressed: () => context.go(currentSlide.route),
@@ -100,6 +107,26 @@ class HomeHeroSection extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+
+  // Метод виклику твого нового віджета HeroArrow
+  Widget _buildArrow({required bool isLeft}) {
+    return Align(
+      alignment: isLeft ? Alignment.centerLeft : Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: HeroArrow( // <--- Це має бути назва класу з файлу hero_arrow.dart
+          isLeft: isLeft,
+          onTap: () {
+            if (isLeft) {
+              _carouselController.previousPage();
+            } else {
+              _carouselController.nextPage();
+            }
+          },
+        ),
+      ),
     );
   }
 }

@@ -1,7 +1,7 @@
-// lib/src/features/navigation/views/navigation_hub_mobile_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prest/src/prest_theme.dart';
+import 'package:prest/src/providers/scroll_provider.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
 import '../widgets/navigation_app_bar.dart';
 import '../store/navigation_hub_store.dart';
@@ -17,12 +17,13 @@ class NavigationHubMobileView extends ConsumerWidget
       navigationProvider.select((s) => s.isScrolled),
     );
     final theme = context.prestTheme;
+    final scrollOffset = ref.watch(scrollPositionProvider);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       // Використовуємо той самий AppBar, що і для Web
       appBar: NavigationAppBar(
-        isScrolled: isScrolled,
+        scrollOffset: scrollOffset,
         actions: [
           // На мобільних ми показуємо лише іконку меню (Drawer)
           Builder(

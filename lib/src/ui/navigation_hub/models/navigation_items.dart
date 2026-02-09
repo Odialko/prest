@@ -32,7 +32,7 @@ extension NavItemExtension on NavItem {
       case NavItem.rent: return 'Wynajem';
       case NavItem.offMarket: return 'OFFmarket';
       case NavItem.design: return 'prEST design';
-      case NavItem.credit: return 'Kredyt';
+      case NavItem.credit: return 'Doradztwo kredytowe';
       case NavItem.advice: return 'Doradztwo inwestycyjne';
       case NavItem.abroad: return 'Zakupy za granicą';
       case NavItem.contact: return 'KONTAKT';
