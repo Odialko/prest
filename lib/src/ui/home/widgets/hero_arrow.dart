@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class HeroArrow extends StatefulWidget {
   final bool isLeft;
   final VoidCallback onTap;
@@ -14,25 +15,28 @@ class _HeroArrowState extends State<HeroArrow> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isMobile = MediaQuery.of(context).size.width < 800;
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: widget.onTap,
-        // Огортаємо в Padding, щоб кружечок не обрізався краєм контейнера
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            width: _isHovered ? 100 : 70, // Стрілка видовжується трохи більше
-            height: 40,
-            child: CustomPaint(
-              painter: _ArrowPainter(
-                color: Colors.white.withOpacity(_isHovered ? 1.0 : 0.6),
-                isLeft: widget.isLeft,
-                strokeWidth: 1.0,
-              ),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          // Збільшили ширину: тепер стрілки довші й помітніші
+          width: isMobile
+              ? (_isHovered ? 65 : 50)
+              : (_isHovered ? 120 : 85),
+          height: 50, // Трохи більше висоти для кращого попадання пальцем/мишкою
+          child: CustomPaint(
+            painter: _ArrowPainter(
+              // Робимо колір яскравішим у спокійному стані (0.8 замість 0.6)
+              color: Colors.white.withOpacity(_isHovered ? 1.0 : 0.8),
+              isLeft: widget.isLeft,
+              // Збільшили товщину лінії з 1.0 до 1.4 для чіткості
+              strokeWidth: 1.4,
             ),
           ),
         ),
@@ -54,46 +58,43 @@ class _ArrowPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Стиль для лінії та наконечника
     final paint = Paint()
       ..color = color
       ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    // Стиль для КІЛЬЦЯ (порожнє всередині)
     final ringPaint = Paint()
       ..color = color
-      ..strokeWidth = strokeWidth // Товщина кільця така ж, як у лінії
+      ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
 
     final path = Path();
-    const double ringRadius = 4.0; // Трохи збільшив радіус, щоб кільце було помітним
+    // Збільшили радіус кільця: було 3.5, стало 5.0
+    const double ringRadius = 5.0;
+    // Збільшили наконечник: було 7, стало 10
+    const double headSize = 10.0;
 
     if (isLeft) {
-      // КІЛЬЦЕ СПРАВА
+      // Кільце справа
       canvas.drawCircle(Offset(size.width - ringRadius, size.height / 2), ringRadius, ringPaint);
-
-      // ЛІНІЯ (починається від краю кільця)
+      // Лінія
       path.moveTo(size.width - (ringRadius * 2), size.height / 2);
       path.lineTo(0, size.height / 2);
-
-      // НАКОНЕЧНИК ЗЛІВА
-      path.moveTo(8, size.height / 2 - 5);
+      // Наконечник
+      path.moveTo(headSize, size.height / 2 - 6);
       path.lineTo(0, size.height / 2);
-      path.lineTo(8, size.height / 2 + 5);
+      path.lineTo(headSize, size.height / 2 + 6);
     } else {
-      // КІЛЬЦЕ ЗЛІВА
+      // Кільце зліва
       canvas.drawCircle(Offset(ringRadius, size.height / 2), ringRadius, ringPaint);
-
-      // ЛІНІЯ (починається від краю кільця)
+      // Лінія
       path.moveTo(ringRadius * 2, size.height / 2);
       path.lineTo(size.width, size.height / 2);
-
-      // НАКОНЕЧНИК СПРАВА
-      path.moveTo(size.width - 8, size.height / 2 - 5);
+      // Наконечник
+      path.moveTo(size.width - headSize, size.height / 2 - 6);
       path.lineTo(size.width, size.height / 2);
-      path.lineTo(size.width - 8, size.height / 2 + 5);
+      path.lineTo(size.width - headSize, size.height / 2 + 6);
     }
 
     canvas.drawPath(path, paint);
@@ -101,5 +102,5 @@ class _ArrowPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _ArrowPainter oldDelegate) =>
-      oldDelegate.color != color;
+      oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
 }

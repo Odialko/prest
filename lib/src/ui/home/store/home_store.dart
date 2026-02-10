@@ -92,7 +92,7 @@ final heroSlidesProvider = Provider<List<HeroSlide>>((ref) {
       imagePath: ImagesConstants.heroImages.last,
       title: 'POZNAJ NAS',
       description: '',
-      route: '/${Routes.team}',
+      route: '/${Routes.about}',
       isNetwork: false,
     ),
   ];

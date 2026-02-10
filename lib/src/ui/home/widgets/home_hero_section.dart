@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prest/src/ui/common_widgets/prest_buttons.dart';
 import 'package:prest/src/ui/home/store/home_store.dart';
-import 'package:prest/src/ui/home/widgets/hero_arrow.dart'; // Твій новий файл
+import 'package:prest/src/ui/home/widgets/hero_arrow.dart';
 import 'package:prest/src/ui/home/widgets/zooming_image.dart';
 
 class HomeHeroSection extends ConsumerStatefulWidget {
@@ -37,7 +37,7 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
           width: double.infinity,
           child: Stack(
             children: [
-              // 1. CAROUSEL (Фон)
+              // 1. ФОНОВА КАРУСЕЛЬ
               Positioned.fill(
                 child: CarouselSlider(
                   carouselController: _carouselController,
@@ -48,7 +48,6 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                     autoPlayInterval: const Duration(seconds: 8),
                     autoPlayAnimationDuration: const Duration(milliseconds: 1500),
                     enableInfiniteScroll: true,
-                    // Забороняємо свайп мишею, щоб не ламати вертикальний скрол сторінки
                     scrollPhysics: const NeverScrollableScrollPhysics(),
                     onPageChanged: (index, _) {
                       ref.read(homeProvider.notifier).setCurrentPage(index);
@@ -63,7 +62,7 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                 ),
               ),
 
-              // 2. GRADIENT OVERLAY (Для читабельності контенту)
+              // 2. ГРАДІЄНТ (Для преміального вигляду)
               Positioned.fill(
                 child: IgnorePointer(
                   child: Container(
@@ -71,11 +70,11 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        stops: const [0.0, 0.4, 1.0],
+                        stops: const [0.0, 0.45, 1.0],
                         colors: [
-                          Colors.black.withValues(alpha: 0.25),
+                          Colors.black.withOpacity(0.3),
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.5),
+                          Colors.black.withOpacity(0.6),
                         ],
                       ),
                     ),
@@ -83,13 +82,11 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                 ),
               ),
 
-              // 3. ПРОГРАМНО НАМАЛЬОВАНІ СТРІЛКИ (Тільки десктоп)
-              if (!isMobile) ...[
-                _buildArrow(isLeft: true),
-                _buildArrow(isLeft: false),
-              ],
+              // 3. АДАПТИВНІ СТРІЛКИ (Тепер і на мобайлі)
+              _buildArrow(isLeft: true, isMobile: isMobile),
+              _buildArrow(isLeft: false, isMobile: isMobile),
 
-              // 4. ACTION BUTTON
+              // 4. КНОПКА ДІЇ
               Positioned(
                 right: isMobile ? null : 80,
                 left: isMobile ? 20 : null,
@@ -110,20 +107,17 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
     );
   }
 
-  // Метод виклику твого нового віджета HeroArrow
-  Widget _buildArrow({required bool isLeft}) {
+  Widget _buildArrow({required bool isLeft, required bool isMobile}) {
     return Align(
       alignment: isLeft ? Alignment.centerLeft : Alignment.centerRight,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: HeroArrow( // <--- Це має бути назва класу з файлу hero_arrow.dart
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 40),
+        child: HeroArrow(
           isLeft: isLeft,
           onTap: () {
-            if (isLeft) {
-              _carouselController.previousPage();
-            } else {
-              _carouselController.nextPage();
-            }
+            isLeft
+                ? _carouselController.previousPage()
+                : _carouselController.nextPage();
           },
         ),
       ),

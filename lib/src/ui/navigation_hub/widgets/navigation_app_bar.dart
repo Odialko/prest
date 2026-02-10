@@ -17,7 +17,7 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   static const double topBarHeight = 40.0;
-  static const double headerLarge = 100.0;
+  static const double headerLarge = 90.0; // Зменшено з 100 для кращого UX
   static const double headerSmall = 70.0;
   static const double threshold = 60.0;
 
@@ -34,8 +34,8 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return Material(
       elevation: isCollapsed ? 4.0 : 0.0,
-      shadowColor: Colors.black.withOpacity(0.2),
-      color: theme.colors.white, // Гарантуємо білий фон, щоб контент не просвічував
+      shadowColor: Colors.black.withOpacity(0.1),
+      color: theme.colors.white,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOutCubic,
@@ -58,25 +58,24 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // МЕТОД 1: ТОП-БАР
   Widget _buildTopBar(bool isCollapsed, PrestThemeData theme, BuildContext context) {
-    final bool isMobile = MediaQuery.of(context).size.width < 1150;
+    final double width = MediaQuery.of(context).size.width;
+    final bool isMobile = width < 1150;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOutCubic,
-      height: isCollapsed ? 0 : topBarHeight,
+      height: (isCollapsed || isMobile) ? 0 : topBarHeight, // Ховаємо на мобайлі
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 300),
-        opacity: isCollapsed ? 0.0 : 1.0,
-        child: ClipRect(
-          child: Container(
-            color: theme.colors.milk,
-            width: double.infinity,
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
-                child: _buildTopContent(theme, isMobile),
-              ),
+        opacity: (isCollapsed || isMobile) ? 0.0 : 1.0,
+        child: Container(
+          color: theme.colors.milk,
+          width: double.infinity,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
+              child: _buildTopContent(theme, context),
             ),
           ),
         ),
@@ -84,9 +83,10 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // МЕТОД 2: ОСНОВНИЙ ХЕДЕР
   Widget _buildMainHeader(bool isCollapsed, PrestThemeData theme, BuildContext context) {
-    final bool isMobile = MediaQuery.of(context).size.width < 1150;
+    final double width = MediaQuery.of(context).size.width;
+    final bool isMobile = width < 1150;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOutCubic,
@@ -102,7 +102,10 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 _buildLogo(context, isCollapsed),
                 if (!isMobile)
-                  Row(mainAxisSize: MainAxisSize.min, children: actions)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: actions,
+                  )
                 else
                   _buildMobileIcon(theme),
               ],
@@ -113,12 +116,11 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // ДОПОМІЖНІ МЕТОДИ (Лого, Контакти тощо)
   Widget _buildLogo(BuildContext context, bool isCollapsed) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOutCubic,
-      height: isCollapsed ? 45 : 70,
+      height: isCollapsed ? 60 : 120,
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
@@ -129,18 +131,24 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildTopContent(PrestThemeData theme, bool isMobile) {
+  Widget _buildTopContent(PrestThemeData theme, BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    // Якщо ширина менша за 1350px, ховаємо текст і залишаємо тільки іконки/головне
+    final bool isShort = width < 1350;
+
     return Container(
       height: topBarHeight,
-      padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 40),
+      padding: const EdgeInsets.symmetric(horizontal: 40),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           _contactLink(Icons.phone_outlined, '+48 883 031 339', () => UrlLauncherService.makeCall('+48 883 031 339'), theme),
           const SizedBox(width: 25),
-          _contactLink(Icons.email_outlined, 'kontakt@prestestate.pl', () => UrlLauncherService.sendEmail('kontakt@prestestate.pl'), theme),
-          const SizedBox(width: 25),
-          _contactLink(Icons.camera_alt_outlined, '@prest_estate', () => UrlLauncherService.openInstagram(), theme),
+          if (!isShort) ...[
+            _contactLink(Icons.email_outlined, 'kontakt@prestestate.pl', () => UrlLauncherService.sendEmail('kontakt@prestestate.pl'), theme),
+            const SizedBox(width: 25),
+          ],
+          _contactLink(Icons.camera_alt_outlined, isShort ? '' : '@prest_estate', () => UrlLauncherService.openInstagram(), theme),
         ],
       ),
     );
@@ -154,8 +162,10 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           children: [
             Icon(icon, size: 15, color: theme.colors.chineseBlack),
-            const SizedBox(width: 8),
-            Text(label, style: theme.neonBlueTextTheme.font5.copyWith(fontWeight: FontWeight.w500, fontSize: 13)),
+            if (label.isNotEmpty) ...[
+              const SizedBox(width: 8),
+              Text(label, style: theme.neonBlueTextTheme.font5.copyWith(fontWeight: FontWeight.w500, fontSize: 13)),
+            ],
           ],
         ),
       ),

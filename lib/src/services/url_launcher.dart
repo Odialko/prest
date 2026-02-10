@@ -20,6 +20,14 @@ class UrlLauncherService {
     await _launch(url);
   }
 
+  static Future<void> openMaps(String address) async {
+    // Кодуємо адресу для безпечного використання в URL
+    final encodedAddress = Uri.encodeComponent(address);
+    final url = 'https://www.google.com/maps/search/?api=1&query=$encodedAddress';
+
+    await _launch(url, isExternal: true);
+  }
+
   // Універсальний внутрішній метод
   static Future<void> _launch(String urlString, {bool isExternal = false}) async {
     final Uri url = Uri.parse(urlString);
