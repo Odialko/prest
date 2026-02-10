@@ -34,7 +34,7 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return Material(
       elevation: isCollapsed ? 4.0 : 0.0,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       color: theme.colors.white,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 400),

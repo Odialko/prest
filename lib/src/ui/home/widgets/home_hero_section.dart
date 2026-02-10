@@ -72,9 +72,9 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                         end: Alignment.bottomCenter,
                         stops: const [0.0, 0.45, 1.0],
                         colors: [
-                          Colors.black.withOpacity(0.3),
+                          Colors.black.withValues(alpha: 0.3),
                           Colors.transparent,
-                          Colors.black.withOpacity(0.6),
+                          Colors.black.withValues(alpha: 0.6),
                         ],
                       ),
                     ),

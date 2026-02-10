@@ -30,7 +30,7 @@ class FooterWidget extends StatelessWidget {
               children: [
                 _buildAdaptiveLayout(context, theme, isMobile, isTablet),
                 const SizedBox(height: 80),
-                Divider(color: Colors.white.withOpacity(0.1), thickness: 1),
+                Divider(color: Colors.white.withValues(alpha: 0.1), thickness: 1),
                 const SizedBox(height: 40),
                 _buildBottomBar(context, theme, isMobile),
               ],

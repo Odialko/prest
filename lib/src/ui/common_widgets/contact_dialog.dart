@@ -22,7 +22,7 @@ class PrestDialog extends StatefulWidget {
       }) {
     return showDialog(
       context: context,
-      barrierColor: context.prestTheme.colors.chineseBlack.withOpacity(0.6),
+      barrierColor: context.prestTheme.colors.chineseBlack.withValues(alpha: 0.6),
       builder: (context) => PrestDialog(title: title, showWiadomosc: showWiadomosc),
     );
   }
@@ -146,7 +146,7 @@ class _PrestDialogState extends State<PrestDialog> {
         style: ElevatedButton.styleFrom(
           backgroundColor: theme.colors.chineseBlack,
           foregroundColor: Colors.white,
-          disabledBackgroundColor: theme.colors.chineseBlack.withOpacity(0.3),
+          disabledBackgroundColor: theme.colors.chineseBlack.withValues(alpha: 0.3),
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           elevation: 0,
         ),

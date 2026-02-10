@@ -33,7 +33,7 @@ class PrestCheckbox extends StatelessWidget {
               checkColor: Colors.white,
               // Прямі кути для преміального вигляду
               side: BorderSide(
-                color: theme.colors.chineseBlack.withOpacity(0.4),
+                color: theme.colors.chineseBlack.withValues(alpha: 0.4),
                 width: 1,
               ),
               shape: const RoundedRectangleBorder(

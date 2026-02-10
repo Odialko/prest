@@ -25,17 +25,14 @@ class _HeroArrowState extends State<HeroArrow> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          // Збільшили ширину: тепер стрілки довші й помітніші
           width: isMobile
               ? (_isHovered ? 65 : 50)
               : (_isHovered ? 120 : 85),
-          height: 50, // Трохи більше висоти для кращого попадання пальцем/мишкою
+          height: 50,
           child: CustomPaint(
             painter: _ArrowPainter(
-              // Робимо колір яскравішим у спокійному стані (0.8 замість 0.6)
-              color: Colors.white.withOpacity(_isHovered ? 1.0 : 0.8),
+              color: Colors.white.withValues(alpha: _isHovered ? 1.0 : 0.8),
               isLeft: widget.isLeft,
-              // Збільшили товщину лінії з 1.0 до 1.4 для чіткості
               strokeWidth: 1.4,
             ),
           ),
