@@ -62,7 +62,7 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                 ),
               ),
 
-              // 2. ГРАДІЄНТ (Для преміального вигляду)
+              // 2. ГРАДІЄНТ
               Positioned.fill(
                 child: IgnorePointer(
                   child: Container(
@@ -82,11 +82,19 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                 ),
               ),
 
-              // 3. АДАПТИВНІ СТРІЛКИ (Тепер і на мобайлі)
+              // 3. АДАПТИВНІ СТРІЛКИ
               _buildArrow(isLeft: true, isMobile: isMobile),
               _buildArrow(isLeft: false, isMobile: isMobile),
 
-              // 4. КНОПКА ДІЇ
+              // 4. ТЕНДІТНІ КРАПКИ (DOTS INDICATOR)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: isMobile ? 25 : 40, // Піднімаємо трохи вище нижньої межі
+                child: _buildDotsIndicator(slides.length, currentPage),
+              ),
+
+              // 5. КНОПКА ДІЇ
               Positioned(
                 right: isMobile ? null : 80,
                 left: isMobile ? 20 : null,
@@ -104,6 +112,25 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildDotsIndicator(int count, int currentIndex) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(count, (index) {
+        final bool isActive = currentIndex == index;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 400),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: isActive ? 24 : 6, // Активна крапка трохи подовжена для преміального вигляду
+          height: 2, // Дуже тонкі лінії замість грубих кругів
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: isActive ? 0.9 : 0.3),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        );
+      }),
     );
   }
 
