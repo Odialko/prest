@@ -21,77 +21,85 @@ class JoinUsWebView extends JoinUsScreen {
             builder: (context, constraints) {
               final double width = constraints.maxWidth;
               final double sidePadding = width < 1200 ? 24 : 40;
+              final bool isMobile = width < 1100;
 
-              return Column(
-                children: [
-                  // --- HEADER SECTION ---
-                  _buildSection(
-                    color: theme.colors.milk,
-                    sidePadding: sidePadding,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 140),
-                        ScrollRevealBox(child: _buildCenteredHeader(theme, 'DOŁĄCZ DO NAS')),
-                        const SizedBox(height: 25), // Відступ у 4 рази менший
-                        _buildMainIntro(theme, width),
-                      ],
-                    ),
-                  ),
-
-                  // --- TEXT BLOCK 1 (Text Left, Image Right) ---
-                  _buildSection(
-                    color: theme.colors.white,
-                    sidePadding: sidePadding,
-                    child: _JoinUsRow(
-                      title: 'Nasz zespół to nasz największy kapitał.',
-                      text: 'Jako zaufani doradcy najbardziej wymagających klientów prywatnych i instytucjonalnych, nasi agenci każdego dnia potwierdzają, że ich profesjonalizm, zaangażowanie i skuteczność realnie przekładają się na sukcesy naszych klientów.',
-                      subText: 'Szukamy talentów. Pasjonatów sprzedaży. Ludzi, którzy chcą grać w pierwszej lidze.',
-                      imageUrl: ImagesConstants.aboutImage,
-                      isImageLeft: false,
-                      screenWidth: width,
-                    ),
-                  ),
-
-                  // --- TEXT BLOCK 2 (Image Left, Text Right) ---
-                  _buildSection(
-                    color: theme.colors.milk,
-                    sidePadding: sidePadding,
-                    child: _JoinUsRow(
-                      title: 'Pomagamy realnie osiągać cele.',
-                      text: 'Dołączając do zespołu prEST, stajesz się częścią dynamicznego, ambitnego środowiska, które ceni kreatywność, zaangażowanie i rozwój. Budujemy wiedzę, szlifujemy warsztat i wspieramy w tworzeniu silnej, rozpoznawalnej marki osobistej.',
-                      subText: 'W prEST pomagamy Agentom не tylko skutecznie sprzedawać. Pomagamy im rosnąć, rozwijać skrzydła i błyszczeć własnymi sukcesami.',
-                      imageUrl: ImagesConstants.house5,
-                      isImageLeft: true,
-                      screenWidth: width,
-                    ),
-                  ),
-
-                  // --- FORM PRE-HEADER ---
-                  _buildSection(
-                    color: theme.colors.white,
-                    sidePadding: sidePadding,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 100),
+              return SelectionArea(
+                child: Column(
+                  children: [
+                    // 1. HEADER (MILK)
+                    _buildSection(
+                      theme: theme,
+                      color: theme.colors.milk,
+                      sidePadding: sidePadding,
                       child: Column(
                         children: [
-                          SelectableText(
-                            'DOŁĄCZ DO NAS',
-                            style: theme.blackTextTheme.font3.copyWith(fontSize: 28, letterSpacing: 4),
+                          SizedBox(height: isMobile ? 80 : 140),
+                          ScrollRevealBox(child: _buildCenteredHeader(theme, 'DOŁĄCZ DO NAS', isMobile)),
+                          const SizedBox(height: 40),
+                          ScrollRevealBox(
+                            delay: const Duration(milliseconds: 200),
+                            child: _buildMainIntro(theme, width),
                           ),
-                          const SizedBox(height: 20),
-                          SelectableText(
-                            'WYPEŁNIJ PONIŻSZY FORMULARZ ORAZ WYŚLIJ NAM SWOJE CV,\nA MY SKONTAKTUJEMY SIĘ Z TOBĄ WKTÓTCE.',
-                            textAlign: TextAlign.center,
-                            style: theme.grayTextTheme.font7.copyWith(fontSize: 14, height: 1.6),
-                          ),
-                          const SizedBox(height: 60),
-                          // Тут буде твій віджет форми
-                          _buildMockForm(theme, width),
+                          SizedBox(height: isMobile ? 60 : 100),
                         ],
                       ),
                     ),
-                  ),
-                ],
+
+                    // 2. TEXT BLOCK 1 (WHITE)
+                    _buildSection(
+                      theme: theme,
+                      color: theme.colors.white,
+                      sidePadding: sidePadding,
+                      child: _JoinUsRow(
+                        title: 'Nasz zespół to nasz największy kapitał.',
+                        text: 'Jako zaufani doradcy najbardziej wymagających klientów prywatnych i instytucjonalnych, nasi agenci każdego dnia potwierdzają, що їх професіоналізм realnie przekładają się na sukcesy naszych klientów.',
+                        subText: 'Szukamy talentów. Pasjonatów sprzedaży. Ludzi, którzy chcą grać w pierwszej lidze.',
+                        imageUrl: ImagesConstants.aboutImage,
+                        isImageLeft: false,
+                        screenWidth: width,
+                      ),
+                    ),
+
+                    // 3. OVERLAP SECTION (MILK BACKGROUND EFFECT)
+                    _buildOverlapJoinSection(theme, width, sidePadding),
+
+                    // 4. FORM SECTION (WHITE)
+                    _buildSection(
+                      theme: theme,
+                      color: theme.colors.white,
+                      sidePadding: sidePadding,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 120),
+                        child: Column(
+                          children: [
+                            ScrollRevealBox(
+                              child: Text(
+                                'WYPEŁNIJ FORMULARZ',
+                                style: theme.blackTextTheme.font3.copyWith(
+                                  fontSize: isMobile ? 22 : 28,
+                                  letterSpacing: 4,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            ScrollRevealBox(
+                              delay: const Duration(milliseconds: 200),
+                              child: Text(
+                                'WYŚLIJ NAM SWOJE CV, A MY SKONTAKTUJEMY SIĘ Z TOBĄ WKRÓTCE.',
+                                textAlign: TextAlign.center,
+                                style: theme.grayTextTheme.font7.copyWith(fontSize: 14, height: 1.6),
+                              ),
+                            ),
+                            const SizedBox(height: 80),
+                            // Тут твоя майбутня форма
+                            _buildMockForm(theme, width),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -100,16 +108,110 @@ class JoinUsWebView extends JoinUsScreen {
     );
   }
 
-  Widget _buildCenteredHeader(PrestThemeData theme, String title) {
+  // ЕФЕКТ НАШАРУВАННЯ (Як у About)
+  Widget _buildOverlapJoinSection(PrestThemeData theme, double width, double sidePadding) {
+    final bool isMobile = width < 1100;
+
+    if (isMobile) {
+      return _buildSection(
+        theme: theme,
+        color: theme.colors.milk,
+        sidePadding: sidePadding,
+        child: _JoinUsRow(
+          title: 'Pomagamy realnie osiągać cele.',
+          text: 'Dołączając do zespołu prEST, stajesz się częścią dynamicznego środowiska. Budujemy wiedzę, szlifujemy warsztat i wspieramy в творенні особистого бренду.',
+          subText: 'W prEST pomagamy Agentom rosnąć i błyszczeć własnymi sukcesami.',
+          imageUrl: ImagesConstants.house5,
+          isImageLeft: true,
+          screenWidth: width,
+        ),
+      );
+    }
+
+    return Container(
+      width: double.infinity,
+      color: Colors.white,
+      height: 700,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft, // Фон зліва для різноманіття
+            child: Container(
+              width: width * 0.65,
+              color: theme.colors.milk,
+            ),
+          ),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: sidePadding),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: ScrollRevealBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Pomagamy realnie osiągać cele.',
+                              style: theme.blackTextTheme.font3.copyWith(fontSize: 32, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 30),
+                            Text(
+                              'Dołączając do zespołu prEST, stajesz się częścią dynamicznego, ambitnego środowiska, które ceni kreatywność i rozwój.',
+                              style: theme.blackTextTheme.font7.copyWith(fontSize: 18, height: 1.8, fontWeight: FontWeight.w200),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 100),
+                    Expanded(
+                      flex: 6,
+                      child: ScrollRevealBox(
+                        delay: const Duration(milliseconds: 300),
+                        child: Transform.translate(
+                          offset: const Offset(-60, 0), // Наїзд фотографії на Milk фон зліва
+                          child: Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 40,
+                                  offset: const Offset(-10, 20),
+                                )
+                              ],
+                            ),
+                            child: Image.asset(ImagesConstants.house5, fit: BoxFit.cover, height: 500),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- HELPERS ---
+
+  Widget _buildCenteredHeader(PrestThemeData theme, String title, bool isMobile) {
     return Column(
       children: [
-        SelectableText(
+        Text(
           title,
           textAlign: TextAlign.center,
           style: theme.blackTextTheme.font1.copyWith(
-            letterSpacing: 25,
+            letterSpacing: isMobile ? 12 : 25,
             fontWeight: FontWeight.w100,
-            fontSize: 55,
+            fontSize: isMobile ? 32 : 55,
           ),
         ),
         const SizedBox(height: 30),
@@ -119,52 +221,54 @@ class JoinUsWebView extends JoinUsScreen {
   }
 
   Widget _buildMainIntro(PrestThemeData theme, double width) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 60),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 800),
-        child: SelectableText(
-          'DOSKONAŁA obsługa rodzi skuteczne transakcje dzięki nieprzeciętnym LUDZIOM.',
-          textAlign: TextAlign.center,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 850),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
           style: theme.blackTextTheme.font3.copyWith(
-            fontSize: width < 800 ? 24 : 32,
-            fontWeight: FontWeight.w300,
-            height: 1.4,
+            fontSize: width < 800 ? 20 : 30,
+            fontWeight: FontWeight.w200,
+            height: 1.5,
+            color: theme.colors.chineseBlack,
           ),
+          children: const [
+            TextSpan(text: 'DOSKONAŁA obsługa rodzi skuteczne transakcje dzięki nieprzeciętnym '),
+            TextSpan(text: 'LUDZIOM.', style: TextStyle(fontWeight: FontWeight.w700)),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildSection({required Color color, required double sidePadding, required Widget child}) {
+  Widget _buildSection({required PrestThemeData theme, required Color color, required double sidePadding, required Widget child}) {
     return Container(
       width: double.infinity,
       color: color,
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: sidePadding),
-            child: child,
-          ),
+          child: Padding(padding: EdgeInsets.symmetric(horizontal: sidePadding), child: child),
         ),
       ),
     );
   }
 
-  // Заглушка для форми
   Widget _buildMockForm(PrestThemeData theme, double width) {
     return Container(
-      width: width < 800 ? double.infinity : 600,
-      padding: const EdgeInsets.all(40),
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.gold.withValues(alpha: 0.3)),
-      ),
+      width: width < 800 ? double.infinity : 700,
+      padding: const EdgeInsets.all(60),
+      color: theme.colors.milk,
       child: Column(
         children: [
-          const Text("FORMULARZ REKRUTACYJNY (Work in progress)"),
+          const Icon(Icons.description_outlined, size: 40, color: Colors.grey),
           const SizedBox(height: 20),
-          PrestPrimaryButton(label: 'WYŚLIJ', onPressed: () {}, width: double.infinity),
+          Text(
+            "MIEJSCE NA TWÓJ FORMULARZ",
+            style: theme.blackTextTheme.font9.copyWith(letterSpacing: 2),
+          ),
+          const SizedBox(height: 40),
+          PrestDarkBorderButton(label: 'WGRAJ CV', onPressed: () {}, width: 220),
         ],
       ),
     );
@@ -191,39 +295,41 @@ class _JoinUsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.prestTheme;
-    final bool isMobile = screenWidth < 1000;
+    final bool isMobile = screenWidth < 1100;
 
-    final imageWidget = ScrollRevealBox(
-      child: Container(
-        height: 500,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage(imageUrl), fit: BoxFit.cover),
-        ),
+    final imageWidget = Container(
+      height: isMobile ? 350 : 500,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(image: AssetImage(imageUrl), fit: BoxFit.cover),
       ),
     );
 
-    final textWidget = ScrollRevealBox(
-      delay: const Duration(milliseconds: 200),
+    final textWidget = Padding(
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 0 : 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SelectableText(
+          Text(
             title,
-            style: theme.blackTextTheme.font3.copyWith(fontSize: 26, fontWeight: FontWeight.w600),
+            style: theme.blackTextTheme.font3.copyWith(
+              fontSize: isMobile ? 22 : 28,
+              fontWeight: FontWeight.w600,
+              height: 1.3,
+            ),
           ),
           const SizedBox(height: 25),
-          SelectableText(
+          Text(
             text,
-            style: theme.blackTextTheme.font7.copyWith(fontSize: 17, height: 1.8, fontWeight: FontWeight.w300),
+            style: theme.blackTextTheme.font7.copyWith(fontSize: 17, height: 1.8, fontWeight: FontWeight.w200),
           ),
-          const SizedBox(height: 20),
-          SelectableText(
+          const SizedBox(height: 25),
+          Text(
             subText,
             style: theme.blackTextTheme.font7.copyWith(
               fontSize: 16,
-              height: 1.8,
+              height: 1.6,
               color: theme.colors.gold,
               fontStyle: FontStyle.italic,
             ),
@@ -232,21 +338,21 @@ class _JoinUsRow extends StatelessWidget {
       ),
     );
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 100),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 80),
       child: isMobile
           ? Column(
         children: [
-          imageWidget,
-          const SizedBox(height: 50),
-          textWidget,
+          ScrollRevealBox(child: imageWidget),
+          const SizedBox(height: 40),
+          ScrollRevealBox(delay: const Duration(milliseconds: 200), child: textWidget),
         ],
       )
           : Row(
         children: [
-          Expanded(flex: 5, child: isImageLeft ? imageWidget : textWidget),
+          Expanded(flex: 5, child: isImageLeft ? ScrollRevealBox(child: imageWidget) : ScrollRevealBox(child: textWidget)),
           const SizedBox(width: 80),
-          Expanded(flex: 5, child: isImageLeft ? textWidget : imageWidget),
+          Expanded(flex: 5, child: isImageLeft ? ScrollRevealBox(delay: const Duration(milliseconds: 200), child: textWidget) : ScrollRevealBox(delay: const Duration(milliseconds: 200), child: imageWidget)),
         ],
       ),
     );

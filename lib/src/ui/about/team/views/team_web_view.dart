@@ -7,6 +7,7 @@ import 'package:prest/src/ui/about/team/store/team_store.dart';
 import 'package:prest/src/ui/about/team/team_screen.dart';
 import 'package:prest/src/ui/common_widgets/prest_page.dart';
 import 'package:prest/src/ui/common_widgets/scroll_reveal_box.dart';
+import 'package:prest/src/services/url_launcher.dart'; // Імпортуємо сервіс
 
 class TeamScreenWebView extends TeamScreen {
   const TeamScreenWebView({super.key});
@@ -27,16 +28,10 @@ class TeamScreenWebView extends TeamScreen {
               child: Column(
                 children: [
                   const SizedBox(height: 140),
-
-                  // 1. ЗАГОЛОВОК ПО ЦЕНТРУ
                   ScrollRevealBox(
                     child: _buildHeader(theme, 'ZESPÓŁ'),
                   ),
-
-                  // 2. ВІДСТУП ЗМЕНШЕНО В 4 РАЗИ (25px)
                   const SizedBox(height: 25),
-
-                  // 3. КОНТЕНТ
                   teamState.when(
                     loading: () => const Padding(
                       padding: EdgeInsets.all(100.0),
@@ -45,7 +40,6 @@ class TeamScreenWebView extends TeamScreen {
                     error: (message) => Center(child: SelectableText(message ?? 'Error')),
                     loaded: (members) => _TeamGrid(members: members),
                   ),
-
                   const SizedBox(height: 150),
                 ],
               ),
@@ -86,7 +80,7 @@ class _TeamGrid extends StatelessWidget {
         final double width = constraints.maxWidth;
 
         int crossAxisCount = 3;
-        double sidePadding = 40; // Збігається з NavigationAppBar
+        double sidePadding = 40;
 
         if (width < 850) {
           crossAxisCount = 1;
@@ -104,8 +98,9 @@ class _TeamGrid extends StatelessWidget {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: 40,
-              mainAxisSpacing: 80,
-              childAspectRatio: 0.62, // Коригування під SelectableText
+              mainAxisSpacing: 60,
+              // Змінюємо AspectRatio з 0.62 на 0.8 чи більше, щоб фото стали меншими по висоті
+              childAspectRatio: 0.85,
             ),
             itemCount: members.length,
             itemBuilder: (context, index) {
@@ -140,11 +135,12 @@ class _TeamMemberCardState extends State<_TeamMemberCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ЗОБРАЖЕННЯ
+        // ЗОБРАЖЕННЯ (Тепер займає менше місця через AspectRatio сітки)
         Expanded(
           child: MouseRegion(
             onEnter: (_) => setState(() => _isHovered = true),
             onExit: (_) => setState(() => _isHovered = false),
+            cursor: SystemMouseCursors.click,
             child: ClipRRect(
               child: AnimatedScale(
                 scale: _isHovered ? 1.05 : 1.0,
@@ -164,55 +160,56 @@ class _TeamMemberCardState extends State<_TeamMemberCard> {
             ),
           ),
         ),
-        const SizedBox(height: 25),
+        const SizedBox(height: 20),
 
-        // ТЕКСТ (SELECTABLE ДЛЯ КОПІЮВАННЯ)
         SelectableText(
           m.name,
           style: theme.blackTextTheme.font3.copyWith(
             letterSpacing: 1.5,
-            fontSize: 18,
+            fontSize: 17,
             fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 6),
-        SelectableText(
-          m.role,
-          style: theme.blackTextTheme.font6.copyWith(
-            color: theme.colors.gold,
-            fontSize: 14,
           ),
         ),
         const SizedBox(height: 4),
         SelectableText(
-          m.license,
-          style: theme.grayTextTheme.font8.copyWith(fontSize: 12),
+          m.role,
+          style: theme.blackTextTheme.font6.copyWith(
+            color: theme.colors.gold,
+            fontSize: 13,
+          ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 12),
 
-        // КОНТАКТИ
-        _buildSelectableLink(m.phone, theme, isEmail: false),
-        const SizedBox(height: 8),
-        _buildSelectableLink(m.email, theme, isEmail: true),
-
+        // КЛІКАБЕЛЬНІ КОНТАКТИ
+        _buildClickableLink(m.phone, theme, isEmail: false),
+        const SizedBox(height: 6),
+        _buildClickableLink(m.email, theme, isEmail: true),
       ],
     );
   }
 
-  Widget _buildSelectableLink(String text, PrestThemeData theme, {required bool isEmail}) {
-    // Використовуємо SelectionArea або SelectableText.
-    // Для клікабельності та копіювання SelectableText — найкращий баланс.
-    return SelectableText(
-      text,
-      style: theme.blackTextTheme.font7.copyWith(
-        fontSize: 13,
-        letterSpacing: 0.5,
-        color: isEmail ? theme.colors.gold : theme.colors.chineseBlack,
-        decoration: TextDecoration.none,
+  Widget _buildClickableLink(String text, PrestThemeData theme, {required bool isEmail}) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          if (isEmail) {
+            UrlLauncherService.sendEmail(text);
+          } else {
+            UrlLauncherService.makeCall(text);
+          }
+        },
+        child: Text(
+          text,
+          style: theme.blackTextTheme.font7.copyWith(
+            fontSize: 13,
+            letterSpacing: 0.5,
+            // Для імейла можна залишити золото, для телефону — чорний
+            color: isEmail ? theme.colors.gold : theme.colors.chineseBlack.withValues(alpha: 0.7),
+            decoration: TextDecoration.none,
+          ),
+        ),
       ),
-      onTap: () {
-        // Логіка кліку (дзвінок/мейл)
-      },
     );
   }
 }

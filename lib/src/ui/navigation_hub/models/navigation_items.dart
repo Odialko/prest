@@ -11,6 +11,7 @@ enum NavItem {
   offMarket,
   allProperties,
   // USŁUGI (SERVICES)
+  forDevelopers,
   design,
   credit,
   advice,
@@ -31,6 +32,7 @@ extension NavItemExtension on NavItem {
       case NavItem.sale: return 'Sprzedaż';
       case NavItem.rent: return 'Wynajem';
       case NavItem.offMarket: return 'OFFmarket';
+      case NavItem.forDevelopers: return 'Dla deweloperów';
       case NavItem.design: return 'prEST design';
       case NavItem.credit: return 'Doradztwo kredytowe';
       case NavItem.advice: return 'Doradztwo inwestycyjne';
@@ -70,6 +72,7 @@ extension NavItemExtension on NavItem {
       case NavItem.rent: return '/${Routes.offers}?type=rent';
       case NavItem.offMarket: return '/${Routes.offers}?type=off-market';
 
+      case NavItem.forDevelopers: return '/${Routes.services}/${Routes.forDevelopers}';
       case NavItem.design: return '/${Routes.services}/${Routes.servicesDesign}';
       case NavItem.credit: return '/${Routes.services}/${Routes.servicesCredit}';
       case NavItem.advice: return '/${Routes.services}/${Routes.servicesAdvice}';

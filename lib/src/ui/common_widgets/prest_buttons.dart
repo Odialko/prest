@@ -85,7 +85,7 @@ class _PrestButtonBuilderState extends State<_PrestButtonBuilder> {
                           ? widget.hoverTextColor
                           : widget.baseTextColor,
                     ),
-                    child: Text(widget.label, maxLines: 1, softWrap: false),
+                    child: SelectionContainer.disabled(child: Text(widget.label, maxLines: 1, softWrap: false)),
                   ),
                 ),
               ),

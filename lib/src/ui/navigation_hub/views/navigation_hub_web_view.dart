@@ -36,7 +36,7 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
               actions: [
                 _buildDropdown(context, theme, 'POZNAJ NAS', [NavItem.about, NavItem.team, NavItem.joinUs], width),
                 _buildDropdown(context, theme, 'NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket], width),
-                _buildDropdown(context, theme, 'USŁUGI', [NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad], width),
+                _buildDropdown(context, theme, 'USŁUGI', [NavItem.forDevelopers, NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad], width),
                 _buildDropdown(
                   context, theme, 'ZGŁOŚ', ['Nieruchomość', 'Poszukiwanie'], width,
                   onCustomSelected: (val) => PrestDialog.showContact(context, title: 'Zgłoś $val'),
@@ -102,7 +102,7 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
                 children: [
                   _drawerExpandableSection(context, theme, 'POZNAJ NAS', [NavItem.about, NavItem.team, NavItem.joinUs]),
                   _drawerExpandableSection(context, theme, 'NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket]),
-                  _drawerExpandableSection(context, theme, 'USŁUGI', [NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
+                  _drawerExpandableSection(context, theme, 'USŁUGI', [NavItem.forDevelopers, NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
                   _drawerSimpleItem(context, theme, 'KONTAKT', NavItem.contact),
                 ],
               ),

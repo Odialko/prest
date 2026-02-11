@@ -14,6 +14,7 @@ import 'package:prest/src/ui/our_services/abroad/abroad_screen.dart';
 import 'package:prest/src/ui/our_services/advice/advice_screen.dart';
 import 'package:prest/src/ui/our_services/credit/credit_screen.dart';
 import 'package:prest/src/ui/our_services/designe/design_screen.dart';
+import 'package:prest/src/ui/our_services/for_developers/for_developers_screen.dart';
 import 'package:prest/src/ui/privacy_policy/privacy_policy_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -101,6 +102,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) =>
                 buildPage(const PlaceholderScreen(item: NavItem.advice), state),
             routes: [
+              GoRoute(
+                path: Routes.forDevelopers,
+                name: 'for-developers',
+                pageBuilder: (context, state) =>
+                    buildPage(ForDevelopersScreen(), state),
+              ),
               GoRoute(
                 path: Routes.servicesDesign,
                 pageBuilder: (context, state) =>

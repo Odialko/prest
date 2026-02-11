@@ -70,7 +70,7 @@ class FooterWidget extends StatelessWidget {
                 const SizedBox(width: 60),
                 _buildLinkColumn(context, theme, 'NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket]),
                 const SizedBox(width: 60),
-                _buildLinkColumn(context, theme, 'USŁUGI', [NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
+                _buildLinkColumn(context, theme, 'USŁUGI', [NavItem.forDevelopers, NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
                 const SizedBox(width: 60),
                 _buildContactColumn(theme),
               ],
@@ -88,7 +88,7 @@ class FooterWidget extends StatelessWidget {
       children: [
         _gridItem('POZNAJ NAS', [NavItem.about, NavItem.team, NavItem.joinUs], context, theme, crossAxisCount),
         _gridItem('NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket], context, theme, crossAxisCount),
-        _gridItem('USŁUGI', [NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad], context, theme, crossAxisCount),
+        _gridItem('USŁUGI', [NavItem.forDevelopers, NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad], context, theme, crossAxisCount),
         _gridItem('KONTAKT', [], context, theme, crossAxisCount, isContact: true),
       ],
     );

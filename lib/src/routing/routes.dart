@@ -11,6 +11,7 @@ class Routes {
   static const servicesCredit = 'credit'; // сегмент
   static const servicesAdvice = 'advice'; // сегмент
   static const servicesAbroad = 'abroad'; // сегмент
+  static const forDevelopers = 'for-developers'; // сегмент
 
   // --- OTHER ---
   static const about = 'about';

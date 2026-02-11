@@ -16,6 +16,10 @@ class ImagesConstants {
   static const house4 = 'assets/images/carusele/home4.jpg';
   static const house5 = 'assets/images/carusele/home5.jpg';
 
+  static const developer_1 = 'assets/images/developer/developer_1.jpg';
+  static const developer_2 = 'assets/images/developer/developer_2.jpg';
+  static const developer_3 = 'assets/images/developer/developer_3.jpg';
+
   static const heroImages = [
     house1,
     house2,
