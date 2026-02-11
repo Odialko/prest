@@ -171,7 +171,7 @@ class _PrestPropertyRowState extends ConsumerState<PrestPropertyRow>
           height: isMobile ? null : 520,
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: Colors.black.withOpacity(0.05)),
+            border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
           ),
           child: Flex(
             direction: isMobile ? Axis.vertical : Axis.horizontal,
@@ -245,7 +245,7 @@ class _PrestPropertyRowState extends ConsumerState<PrestPropertyRow>
                         o.description ?? 'Prestiżowa oferta od prEST...',
                         style: theme.blackTextTheme.font7.copyWith(
                           fontSize: 14,
-                          color: theme.colors.chineseBlack.withOpacity(0.6),
+                          color: theme.colors.chineseBlack.withValues(alpha: 0.6),
                           height: 1.6,
                         ),
                         maxLines: 3,
@@ -296,7 +296,7 @@ class _PrestPropertyRowState extends ConsumerState<PrestPropertyRow>
   Widget _buildBadge(String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      color: Colors.black.withOpacity(0.7),
+      color: Colors.black.withValues(alpha: 0.7),
       child: Text(
         label,
         style: const TextStyle(

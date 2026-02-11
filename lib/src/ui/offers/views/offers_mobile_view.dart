@@ -127,7 +127,7 @@ class _EndOfListIndicator extends StatelessWidget {
     final theme = context.prestTheme;
     return Column(
       children: [
-        Container(width: 40, height: 1, color: Colors.black.withOpacity(0.2)),
+        Container(width: 40, height: 1, color: Colors.black.withValues(alpha: 0.2)),
         const SizedBox(height: 20),
         Text(
           'TO JUŻ WSZYSTKIE OFERTY',
