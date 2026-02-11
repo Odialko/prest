@@ -84,6 +84,8 @@ flutter:
     - assets/images/
     - assets/images/carusele/
     - assets/images/developer/
+    - assets/images/join/
+    - assets/images/design/
     - .env
 
 flutter_intl:

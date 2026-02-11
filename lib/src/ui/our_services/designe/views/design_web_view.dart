@@ -1,14 +1,16 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/prest_theme.dart';
+import 'package:prest/src/ui/common_widgets/contact_dialog.dart'; // Для діалогу
 import 'package:prest/src/ui/common_widgets/prest_page.dart';
 import 'package:prest/src/ui/common_widgets/scroll_reveal_box.dart';
 import 'package:prest/src/ui/common_widgets/prest_buttons.dart';
 import 'package:prest/src/ui/our_services/designe/design_screen.dart';
 
-class DesignWebView extends DesignScreen {
+class DesignWebView extends ConsumerWidget implements DesignScreen {
   const DesignWebView({super.key});
 
   @override
@@ -16,13 +18,19 @@ class DesignWebView extends DesignScreen {
     final theme = context.prestTheme;
     final double width = MediaQuery.of(context).size.width;
     final double sidePadding = width < 1200 ? 24 : 40;
+    final bool isMobile = width < 1100;
 
     final List<String> galleryImages = [
-      ImagesConstants.house5,
-      ImagesConstants.aboutImage,
-      ImagesConstants.house5,
-      ImagesConstants.aboutImage,
-      ImagesConstants.house5,
+      ImagesConstants.design_1,
+      ImagesConstants.design_2,
+      ImagesConstants.design_3,
+      ImagesConstants.design_4,
+      ImagesConstants.design_5,
+      ImagesConstants.design_6,
+      ImagesConstants.design_7,
+      ImagesConstants.design_8,
+      ImagesConstants.design_9,
+      ImagesConstants.design_10,
     ];
 
     return PrestPage(
@@ -30,20 +38,21 @@ class DesignWebView extends DesignScreen {
         SliverToBoxAdapter(
           child: Column(
             children: [
+              // 1. HEADER
               _buildSection(
                 color: theme.colors.white,
                 sidePadding: sidePadding,
                 child: Column(
                   children: [
                     const SizedBox(height: 140),
-                    ScrollRevealBox(child: _buildDesignHeader(theme)),
+                    ScrollRevealBox(child: _buildHeader(theme, 'prEST DESIGN', isMobile)),
                     const SizedBox(height: 60),
                     _buildDesignIntro(theme),
                   ],
                 ),
               ),
 
-              // --- АДАПТИВНИЙ КОЛАЖ ---
+              // 2. COLLAGE SECTION
               _buildSection(
                 color: theme.colors.white,
                 sidePadding: sidePadding,
@@ -53,34 +62,11 @@ class DesignWebView extends DesignScreen {
                 ),
               ),
 
+              // 3. CTA SECTION (ТАК САМО ЯК У ДЕВЕЛОПЕРІВ)
               _buildSection(
                 color: theme.colors.milk,
                 sidePadding: sidePadding,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 100),
-                  child: Column(
-                    children: [
-                      ScrollRevealBox(
-                        child: SelectableText(
-                          'PODOBAJĄ CI SIĘ NASZE WNĘTRZA?',
-                          style: theme.blackTextTheme.font3.copyWith(
-                            fontSize: 28,
-                            letterSpacing: 4,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      SelectableText(
-                        'WYPEŁNIJ PONIŻSZY FORMULARZ, A MY SKONTAKTUJEMY SIĘ Z TOBĄ WKRÓTCE.',
-                        textAlign: TextAlign.center,
-                        style: theme.grayTextTheme.font7.copyWith(fontSize: 14, height: 1.6),
-                      ),
-                      const SizedBox(height: 60),
-                      _buildDesignForm(theme),
-                    ],
-                  ),
-                ),
+                child: _buildCTA(context, theme, isMobile),
               ),
               const SizedBox(height: 100),
             ],
@@ -90,18 +76,51 @@ class DesignWebView extends DesignScreen {
     );
   }
 
-  Widget _buildDesignHeader(PrestThemeData theme) {
+  // СТАНДАРТНИЙ CTA ЯК У ДЕВЕЛОПЕРІВ
+  Widget _buildCTA(BuildContext context, PrestThemeData theme, bool isMobile) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 120),
+      child: Column(
+        children: [
+          ScrollRevealBox(
+            child: Text(
+              'PODOBAJĄ CI SIĘ NASZE WNĘTRZA?',
+              textAlign: TextAlign.center,
+              style: theme.blackTextTheme.font3.copyWith(
+                  fontSize: isMobile ? 22 : 28,
+                  letterSpacing: 4,
+                  fontWeight: FontWeight.w600
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'WYPEŁNIJ PONIŻSZY FORMULARZ, A MY SKONTAKTUJEMY SIĘ Z TOBĄ WKRÓTCE.',
+            textAlign: TextAlign.center,
+            style: theme.grayTextTheme.font7.copyWith(fontSize: 14, height: 1.6),
+          ),
+          const SizedBox(height: 60),
+          SelectionContainer.disabled(
+            child: PrestDarkBorderButton(
+              label: 'SKONTAKTUJ SIĘ',
+              onPressed: () => PrestDialog.showContact(context, title: 'ZAPYTANIE O DESIGN'),
+              width: 280,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(PrestThemeData theme, String title, bool isMobile) {
     return Column(
       children: [
-        SelectableText(
-          'prEST DESIGN',
-          textAlign: TextAlign.center,
-          style: theme.blackTextTheme.font1.copyWith(
-            letterSpacing: 25,
-            fontSize: 55,
-            fontWeight: FontWeight.w100,
-          ),
-        ),
+        Text(title, textAlign: TextAlign.center,
+            style: theme.blackTextTheme.font1.copyWith(
+              letterSpacing: isMobile ? 12 : 25,
+              fontWeight: FontWeight.w100,
+              fontSize: isMobile ? 32 : 55,
+            )),
         const SizedBox(height: 30),
         Container(height: 1, width: 80, color: theme.colors.gold),
       ],
@@ -111,20 +130,10 @@ class DesignWebView extends DesignScreen {
   Widget _buildDesignIntro(PrestThemeData theme) {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 900),
-      child: Column(
-        children: [
-          SelectableText(
-            'Kupujesz. My zajmujemy się resztą.',
-            textAlign: TextAlign.center,
-            style: theme.blackTextTheme.font3.copyWith(fontSize: 32, fontWeight: FontWeight.w300),
-          ),
-          const SizedBox(height: 30),
-          SelectableText(
-            'Nie kupujesz nieruchomości, ale podobają Ci się wnętrza wykonane przy współpracy z nami? Projektujemy з pasją, dbając o każdy detal, aby stworzyć przestrzeń, która inspiruje.',
-            textAlign: TextAlign.center,
-            style: theme.blackTextTheme.font7.copyWith(fontSize: 18, height: 1.8),
-          ),
-        ],
+      child: Text(
+        'Kupujesz. My zajmujemy się resztą. Projektujemy z pasją, dbając o każdy detal, aby stworzyć przestrzeń, która inspiruje.',
+        textAlign: TextAlign.center,
+        style: theme.blackTextTheme.font7.copyWith(fontSize: 18, height: 1.8, fontWeight: FontWeight.w200),
       ),
     );
   }
@@ -136,52 +145,35 @@ class DesignWebView extends DesignScreen {
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: sidePadding),
-            child: child,
-          ),
+          child: Padding(padding: EdgeInsets.symmetric(horizontal: sidePadding), child: child),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDesignForm(PrestThemeData theme) {
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 600),
-      padding: const EdgeInsets.all(40),
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.gold.withValues(alpha: 0.3)),
-      ),
-      child: Column(
-        children: [
-          const Text("FORMULARZ DESIGN (Wkrótce)"),
-          const SizedBox(height: 30),
-          PrestDarkBorderButton(
-            label: 'WYŚLIJ ZAPYTANIE',
-            onPressed: () {},
-            width: double.infinity,
-          ),
-        ],
       ),
     );
   }
 }
 
-class _DesignImageCollage extends StatelessWidget {
+class _DesignImageCollage extends StatefulWidget {
   final List<String> images;
   const _DesignImageCollage({required this.images});
+
+  @override
+  State<_DesignImageCollage> createState() => _DesignImageCollageState();
+}
+
+class _DesignImageCollageState extends State<_DesignImageCollage> {
+  bool _isExpanded = false;
 
   void _openGallery(BuildContext context, int initialIndex) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Gallery',
-      barrierColor: Colors.black.withValues(alpha: 0.3),
+      barrierColor: Colors.black.withOpacity(0.9),
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, anim1, anim2) {
         return FadeTransition(
           opacity: anim1,
-          child: _GalleryViewer(images: images, initialIndex: initialIndex),
+          child: _GalleryViewer(images: widget.images, initialIndex: initialIndex),
         );
       },
     );
@@ -192,81 +184,115 @@ class _DesignImageCollage extends StatelessWidget {
     final double width = MediaQuery.of(context).size.width;
     final bool isMobile = width < 900;
 
-    return ScrollRevealBox(
-      child: isMobile
-          ? _buildMobileLayout(context)
-          : _buildWebLayout(context),
+    return Column(
+      children: [
+        // БЛОК 1: ВЕЛИКА ЗЛІВА
+        isMobile ? _buildMobileGrid(0, 5) : _buildWebRow(0, false),
+
+        // АНІМОВАНЕ РОЗГОРТАННЯ
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 800),
+          sizeCurve: Curves.easeInOutCubic,
+          alignment: Alignment.topCenter,
+          crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          firstChild: const SizedBox(width: double.infinity),
+          secondChild: Column(
+            children: [
+              const SizedBox(height: 15),
+              // БЛОК 2: ВЕЛИКА СПРАВА (ДЗЕРКАЛЬНО)
+              isMobile ? _buildMobileGrid(5, 10) : _buildWebRow(5, true),
+            ],
+          ),
+        ),
+
+        // КНОПКА, ЯКА ТЕПЕР НЕ ЗНИКАЄ
+        const SizedBox(height: 60),
+        SelectionContainer.disabled(
+          child: PrestDarkBorderButton(
+            // Міняємо напис залежно від стану
+            label: _isExpanded ? 'ZWIŃ' : 'ZOBACZ WIĘCEJ',
+            onPressed: () {
+              setState(() {
+                _isExpanded = !_isExpanded;
+              });
+            },
+            width: 250,
+          ),
+        ),
+      ],
     );
   }
 
-  // Десктоп версія: пропорції зберігаються через AspectRatio
-  Widget _buildWebLayout(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 16 / 7, // Колаж завжди тримає форму кіноекрану
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+  // Веб-версія (Рядок 16:7)
+  Widget _buildWebRow(int startIdx, bool reverse) {
+    final big = Expanded(
+      flex: 6,
+      child: _HoverImage(
+          image: widget.images[startIdx],
+          onTap: () => _openGallery(context, startIdx)
+      ),
+    );
+
+    final smalls = Expanded(
+      flex: 4,
+      child: Column(
         children: [
           Expanded(
-            flex: 6,
-            child: _HoverImage(image: images[0], onTap: () => _openGallery(context, 0)),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            flex: 4,
-            child: Column(
+            child: Row(
               children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(child: _HoverImage(image: images[1], onTap: () => _openGallery(context, 1))),
-                      const SizedBox(width: 15),
-                      Expanded(child: _HoverImage(image: images[2], onTap: () => _openGallery(context, 2))),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(child: _HoverImage(image: images[3], onTap: () => _openGallery(context, 3))),
-                      const SizedBox(width: 15),
-                      Expanded(child: _HoverImage(image: images[4], onTap: () => _openGallery(context, 4))),
-                    ],
-                  ),
-                ),
+                Expanded(child: _HoverImage(image: widget.images[startIdx + 1], onTap: () => _openGallery(context, startIdx + 1))),
+                const SizedBox(width: 15),
+                Expanded(child: _HoverImage(image: widget.images[startIdx + 2], onTap: () => _openGallery(context, startIdx + 2))),
+              ],
+            ),
+          ),
+          const SizedBox(height: 15),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(child: _HoverImage(image: widget.images[startIdx + 3], onTap: () => _openGallery(context, startIdx + 3))),
+                const SizedBox(width: 15),
+                Expanded(child: _HoverImage(image: widget.images[startIdx + 4], onTap: () => _openGallery(context, startIdx + 4))),
               ],
             ),
           ),
         ],
       ),
     );
+
+    return AspectRatio(
+      aspectRatio: 16 / 7,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: reverse
+            ? [smalls, const SizedBox(width: 15), big]
+            : [big, const SizedBox(width: 15), smalls],
+      ),
+    );
   }
 
-  // Мобільна версія: картинки стають в стовпчик або сітку 2x2
-  Widget _buildMobileLayout(BuildContext context) {
+  // Мобільна версія (Сітка 2х2)
+  Widget _buildMobileGrid(int start, int end) {
     return Column(
       children: [
         AspectRatio(
-          aspectRatio: 1, // Головна картинка — квадрат
-          child: _HoverImage(image: images[0], onTap: () => _openGallery(context, 0)),
+            aspectRatio: 1,
+            child: _HoverImage(image: widget.images[start], onTap: () => _openGallery(context, start))
         ),
         const SizedBox(height: 15),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: images.length - 1,
+          itemCount: 4,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 15,
-            mainAxisSpacing: 15,
-            childAspectRatio: 1,
+              crossAxisCount: 2,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15
           ),
-          itemBuilder: (context, index) {
-            return _HoverImage(
-              image: images[index + 1],
-              onTap: () => _openGallery(context, index + 1),
-            );
-          },
+          itemBuilder: (c, i) => _HoverImage(
+              image: widget.images[start + i + 1],
+              onTap: () => _openGallery(context, start + i + 1)
+          ),
         ),
       ],
     );
@@ -284,25 +310,17 @@ class _HoverImage extends StatefulWidget {
 
 class _HoverImageState extends State<_HoverImage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
+  late Animation<double> _scale;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutQuart),
-    );
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
+    _scale = Tween<double>(begin: 1.0, end: 1.05).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutQuart));
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  void dispose() { _controller.dispose(); super.dispose(); }
 
   @override
   Widget build(BuildContext context) {
@@ -316,17 +334,10 @@ class _HoverImageState extends State<_HoverImage> with SingleTickerProviderState
           child: Stack(
             fit: StackFit.expand,
             children: [
-              ScaleTransition(
-                scale: _scaleAnimation,
-                child: Image.asset(widget.image, fit: BoxFit.cover),
-              ),
+              ScaleTransition(scale: _scale, child: Image.asset(widget.image, fit: BoxFit.cover)),
               AnimatedBuilder(
                 animation: _controller,
-                builder: (context, child) {
-                  return Container(
-                    color: Colors.black.withValues(alpha: _controller.value * 0.1),
-                  );
-                },
+                builder: (c, w) => Container(color: Colors.black.withOpacity(_controller.value * 0.1)),
               ),
             ],
           ),
@@ -347,97 +358,40 @@ class _GalleryViewer extends StatefulWidget {
 
 class _GalleryViewerState extends State<_GalleryViewer> {
   late PageController _controller;
-  static const int _loopFactor = 10000;
-
   @override
   void initState() {
     super.initState();
-    final int middleIndex = (widget.images.length * _loopFactor) ~/ 2;
-    _controller = PageController(initialPage: middleIndex + widget.initialIndex);
+    _controller = PageController(initialPage: (widget.images.length * 1000) + widget.initialIndex);
   }
 
   @override
   Widget build(BuildContext context) {
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
       child: Scaffold(
-        backgroundColor: Colors.black.withValues(alpha: 0.4),
+        backgroundColor: Colors.black.withOpacity(0.6),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.close, color: Colors.white, size: 35),
-              onPressed: () => Navigator.pop(context),
-            ),
-            const SizedBox(width: 20),
-          ],
+          actions: [IconButton(icon: const Icon(Icons.close, color: Colors.white, size: 30), onPressed: () => Navigator.pop(context)), const SizedBox(width: 20)],
         ),
         body: Stack(
           children: [
             PageView.builder(
               controller: _controller,
-              itemBuilder: (context, index) {
-                final int realIndex = index % widget.images.length;
-                return InteractiveViewer(
-                  maxScale: 4.0,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Image.asset(widget.images[realIndex], fit: BoxFit.contain),
-                    ),
-                  ),
-                );
-              },
+              itemBuilder: (c, i) => InteractiveViewer(child: Center(child: Image.asset(widget.images[i % widget.images.length], fit: BoxFit.contain))),
             ),
             if (MediaQuery.of(context).size.width > 800) ...[
-              _buildNavButton(
-                left: 30,
-                icon: Icons.arrow_back_ios_new,
-                onPressed: () => _controller.previousPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutCubic,
-                ),
-              ),
-              _buildNavButton(
-                right: 30,
-                icon: Icons.arrow_forward_ios,
-                onPressed: () => _controller.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutCubic,
-                ),
-              ),
-            ],
+              _nav(true), _nav(false),
+            ]
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNavButton({double? left, double? right, required IconData icon, required VoidCallback onPressed}) {
-    return Positioned(
-      left: left,
-      right: right,
-      top: 0,
-      bottom: 0,
-      child: Center(
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onPressed,
-            borderRadius: BorderRadius.circular(50),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.08),
-              ),
-              child: Icon(icon, color: Colors.white, size: 30),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  Widget _nav(bool left) => Positioned(
+    left: left ? 20 : null, right: left ? null : 20, top: 0, bottom: 0,
+    child: Center(child: IconButton(icon: Icon(left ? Icons.arrow_back_ios : Icons.arrow_forward_ios, color: Colors.white54, size: 40),
+        onPressed: () => left ? _controller.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.ease) : _controller.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.ease))),
+  );
 }
