@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prest/src/ui/common_widgets/prest_buttons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/prest_theme.dart';
@@ -55,7 +56,7 @@ class HomePropertiesSection extends ConsumerWidget {
                     ),
                     loaded: (items) {
                       // Беремо лише перші 9 для головної сторінки
-                      final limitedItems = items.take(9).toList();
+                      final limitedItems = items.take(6).toList();
 
                       return Column(
                         children: [
@@ -78,13 +79,16 @@ class HomePropertiesSection extends ConsumerWidget {
                                 isMobile: isMobile,
                                 child: PropertyCard(
                                   item: limitedItems[index],
-                                  // theme більше не прокидаємо, PropertyCard візьме її з контексту
                                 ),
                               );
                             },
                           ),
                           const SizedBox(height: 80),
-                          const _ViewAllAnimatedButton(),
+                          PrestDarkBorderButton(
+                            label: 'WSZYSTKIE OFERTY',
+                            width: 300,
+                            onPressed: () => context.goNamed(Routes.offers),
+                          ),
                         ],
                       );
                     },
@@ -106,7 +110,7 @@ class HomePropertiesSection extends ConsumerWidget {
         crossAxisCount: isMobile ? 1 : 3,
         crossAxisSpacing: 30,
         mainAxisSpacing: 60,
-        childAspectRatio: 0.7,
+        childAspectRatio: isMobile ? 1.3 : 1.15, // БУЛО 0.7 - це і була "діра"
       ),
       itemCount: 3,
       itemBuilder: (context, index) => Container(
@@ -186,63 +190,6 @@ class _IndividualAnimatedCardState extends State<IndividualAnimatedCard>
       child: FadeTransition(
         opacity: _opacityAnimation,
         child: SlideTransition(position: _offsetAnimation, child: widget.child),
-      ),
-    );
-  }
-}
-
-// --- КНОПКА "SEE ALL" ---
-class _ViewAllAnimatedButton extends StatefulWidget {
-  const _ViewAllAnimatedButton();
-
-  @override
-  State<_ViewAllAnimatedButton> createState() => _ViewAllAnimatedButtonState();
-}
-
-class _ViewAllAnimatedButtonState extends State<_ViewAllAnimatedButton> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.prestTheme;
-    const String buttonText = 'SEE ALL PROPERTIES';
-    const double buttonWidth = 280;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => context.goNamed(Routes.offers),
-        child: Container(
-          width: buttonWidth,
-          height: 60,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 0.8),
-          ),
-          child: Stack(
-            children: [
-              // Фон (чорний, що розширюється)
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeInOutCubic,
-                width: _isHovered ? buttonWidth : 0,
-                color: Colors.black,
-              ),
-              // Текст (змінює колір)
-              Center(
-                child: Text(
-                  buttonText,
-                  style: theme.blackTextTheme.font7.copyWith(
-                    letterSpacing: 2.5,
-                    fontSize: 12,
-                    color: _isHovered ? Colors.white : Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

@@ -1,9 +1,34 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:prest/src/ui/offers/views/offers_mobile_view.dart';
+import 'package:prest/src/ui/offers/views/offers_web_view.dart';
+
+abstract class OffersScreen extends Widget {
+  factory OffersScreen({Key? key}) {
+    if (kIsWeb) {
+      return const OffersWebView();
+    }
+    return OffersMobileView(key: key);
+  }
+
+/// FACTORY
+/// This is the entry point that decides which platform view to return
+}
+
+
+
+
+
+
 // import 'package:flutter/material.dart';
+
+
+
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:prest/src/prest_theme.dart';
 // import 'package:prest/src/ui/common_widgets/property_card.dart';
-// import 'package:prest/src/ui/offer_list/store/offer_list_store.dart';
+// import 'package:prest/src/ui/offer_list/store/offers_store.dart';
 // // Використовуємо нашу нову обгортку для скролу та футера
 // import 'package:prest/src/ui/common_widgets/prest_page.dart';
 //

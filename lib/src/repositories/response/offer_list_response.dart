@@ -13,14 +13,20 @@ abstract class OfferListResponse with _$OfferListResponse {
   }) = _OfferListResponse;
 
   factory OfferListResponse.fromJson(Map<String, dynamic> json) {
-    // Обробка списку даних
-    final list = (json['data'] as List?) ?? [];
+    // БЕЗПЕЧНА ПЕРЕВІРКА:
+    // Перевіряємо, чи є під ключем 'data' саме список.
+    // Якщо там false, null або щось інше — повертаємо порожній масив.
+    final rawData = json['data'];
+    final list = (rawData is List) ? rawData : [];
 
     return OfferListResponse(
-      // EstiCRM іноді використовує 'result' замість 'success',
-      // тут можна додати перевірку обох ключів для безпеки
+      // Перевіряємо успіх: шукаємо в success або result
       success: (json['success'] as bool?) ?? (json['result'] as bool?) ?? false,
+
+      // Кількість: беремо з count або просто довжину отриманого списку
       count: (json['count'] as int?) ?? list.length,
+
+      // Мапимо дані тільки якщо ми впевнені, що це список
       data: list
           .map((e) => OfferResponse.fromJson(e as Map<String, dynamic>))
           .toList(),

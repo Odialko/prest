@@ -10,6 +10,7 @@ import 'package:prest/src/ui/home/home_screen.dart';
 import 'package:prest/src/ui/navigation_hub/models/navigation_items.dart';
 import 'package:prest/src/ui/navigation_hub/navigation_hub_screen.dart';
 import 'package:prest/src/ui/offer_details/offer_details_screen.dart';
+import 'package:prest/src/ui/offers/offers_screen.dart';
 import 'package:prest/src/ui/our_services/abroad/abroad_screen.dart';
 import 'package:prest/src/ui/our_services/advice/advice_screen.dart';
 import 'package:prest/src/ui/our_services/credit/credit_screen.dart';
@@ -56,7 +57,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/${Routes.offers}',
             name: Routes.offers,
             pageBuilder: (context, state) => buildPage(
-              const PlaceholderScreen(item: NavItem.allProperties),
+              OffersScreen(),
               state,
             ),
             routes: [
