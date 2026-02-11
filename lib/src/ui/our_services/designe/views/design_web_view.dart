@@ -168,7 +168,7 @@ class _DesignImageCollageState extends State<_DesignImageCollage> {
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Gallery',
-      barrierColor: Colors.black.withOpacity(0.9),
+      barrierColor: Colors.black.withValues(alpha: 0.9),
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, anim1, anim2) {
         return FadeTransition(
@@ -337,7 +337,7 @@ class _HoverImageState extends State<_HoverImage> with SingleTickerProviderState
               ScaleTransition(scale: _scale, child: Image.asset(widget.image, fit: BoxFit.cover)),
               AnimatedBuilder(
                 animation: _controller,
-                builder: (c, w) => Container(color: Colors.black.withOpacity(_controller.value * 0.1)),
+                builder: (c, w) => Container(color: Colors.black.withValues(alpha: _controller.value * 0.1)),
               ),
             ],
           ),
@@ -369,7 +369,7 @@ class _GalleryViewerState extends State<_GalleryViewer> {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
       child: Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.6),
+        backgroundColor: Colors.black.withValues(alpha: 0.6),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           actions: [IconButton(icon: const Icon(Icons.close, color: Colors.white, size: 30), onPressed: () => Navigator.pop(context)), const SizedBox(width: 20)],
