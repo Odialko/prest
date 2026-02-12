@@ -107,14 +107,14 @@ class _OffersWebViewState extends ConsumerState<OffersWebView> {
                   : ScrollRevealBox(
                 child: Column(
                   children: [
-                    Container(height: 1, width: 40, color: theme.colors.gold.withOpacity(0.3)),
+                    Container(height: 1, width: 40, color: theme.colors.gold.withValues(alpha: 0.3)),
                     const SizedBox(height: 20),
                     Text(
                       'TO SĄ WSZYSTKIE DOSTĘPNE OFERTY NA CHWILĘ OBECNĄ',
                       style: theme.blackTextTheme.font7.copyWith(
                         fontSize: 12,
                         letterSpacing: 2,
-                        color: theme.colors.chineseBlack.withOpacity(0.4),
+                        color: theme.colors.chineseBlack.withValues(alpha: 0.4),
                       ),
                     ),
                   ],

@@ -176,7 +176,7 @@ class OfferWebView extends ConsumerWidget implements OfferScreen {
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () => launchUrl(Uri.parse('mailto:${o.contactEmail}')),
-                  child: Text(o.contactEmail ?? '', style: TextStyle(fontSize: 14, color: Colors.black.withOpacity(0.6))),
+                  child: Text(o.contactEmail ?? '', style: TextStyle(fontSize: 14, color: Colors.black.withValues(alpha: 0.6))),
                 ),
                 const SizedBox(height: 40),
                 PrestDarkBorderButton(
