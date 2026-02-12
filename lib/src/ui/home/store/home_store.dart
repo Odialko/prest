@@ -110,7 +110,8 @@ final heroSlidesProvider = Provider<List<HeroSlide>>((ref) {
         imagePath: imageProcessor.getProcessedUrl(imageUrl),
         title: 'ZOBACZ OFERTĘ',
         description: offer.portalTitle ?? '',
-        route: '${Routes.offers}/${offer.id}',
+        route: Routes.offerDetails(offer.id),
+        // route: '${Routes.offers}/${offer.id}',
         isNetwork: true,
       );
     }).toList(),

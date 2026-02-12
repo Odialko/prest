@@ -14,13 +14,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OfferModel {
 
- int get id; String? get estateOfferUuid; String get number; String? get typeName;// Цінові показники
- String? get price; int? get priceCurrency; String? get pricePermeter;// Площа та стан
- String? get areaTotal; int? get rooms; int? get floor; int? get totalFloors; int? get buildingYear;// Локація
- String? get cityName; String? get streetName; String? get districtName; String? get provinceName; String? get lat; String? get lon;// Опис та контакти
- String? get portalTitle; String? get description; String? get contactEmail; String? get contactPhone; String? get contactName;// Медіа
- String? get mainPicture; List<String>? get pictures;// Додаткові технічні прапорці (можна розширювати за потребою)
- bool? get hasElevator; bool? get hasParking; bool? get isAirConditioned;
+ int get id; String? get estateOfferUuid; String get number; String? get typeName; String? get price; int? get priceCurrency; String? get pricePermeter; String? get areaTotal; String? get areaUsable;// <--- ДОДАНО
+ int? get rooms; int? get floor; int? get totalFloors; int? get bathrooms;// <--- ДОДАНО
+ int? get buildingYear; int? get market;// <--- ДОДАНО (int, бо в API це 11/12)
+ String? get cityName; String? get streetName; String? get districtName; String? get provinceName; String? get lat; String? get lon; String? get portalTitle; String? get description; String? get contactEmail; String? get contactPhone; String? get contactName; String? get mainPicture; List<String>? get pictures;// ДОДАТКОВІ ПОЛЯ
+ String? get deposit; String? get rentExtra; String? get availableDate; String? get buildingMaterial; String? get heating; String? get condition; bool? get hasGarden; bool? get hasTerrace; bool? get hasElevator; bool? get hasParking; bool? get isAirConditioned;
 /// Create a copy of OfferModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -31,16 +29,16 @@ $OfferModelCopyWith<OfferModel> get copyWith => _$OfferModelCopyWithImpl<OfferMo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OfferModel&&(identical(other.id, id) || other.id == id)&&(identical(other.estateOfferUuid, estateOfferUuid) || other.estateOfferUuid == estateOfferUuid)&&(identical(other.number, number) || other.number == number)&&(identical(other.typeName, typeName) || other.typeName == typeName)&&(identical(other.price, price) || other.price == price)&&(identical(other.priceCurrency, priceCurrency) || other.priceCurrency == priceCurrency)&&(identical(other.pricePermeter, pricePermeter) || other.pricePermeter == pricePermeter)&&(identical(other.areaTotal, areaTotal) || other.areaTotal == areaTotal)&&(identical(other.rooms, rooms) || other.rooms == rooms)&&(identical(other.floor, floor) || other.floor == floor)&&(identical(other.totalFloors, totalFloors) || other.totalFloors == totalFloors)&&(identical(other.buildingYear, buildingYear) || other.buildingYear == buildingYear)&&(identical(other.cityName, cityName) || other.cityName == cityName)&&(identical(other.streetName, streetName) || other.streetName == streetName)&&(identical(other.districtName, districtName) || other.districtName == districtName)&&(identical(other.provinceName, provinceName) || other.provinceName == provinceName)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lon, lon) || other.lon == lon)&&(identical(other.portalTitle, portalTitle) || other.portalTitle == portalTitle)&&(identical(other.description, description) || other.description == description)&&(identical(other.contactEmail, contactEmail) || other.contactEmail == contactEmail)&&(identical(other.contactPhone, contactPhone) || other.contactPhone == contactPhone)&&(identical(other.contactName, contactName) || other.contactName == contactName)&&(identical(other.mainPicture, mainPicture) || other.mainPicture == mainPicture)&&const DeepCollectionEquality().equals(other.pictures, pictures)&&(identical(other.hasElevator, hasElevator) || other.hasElevator == hasElevator)&&(identical(other.hasParking, hasParking) || other.hasParking == hasParking)&&(identical(other.isAirConditioned, isAirConditioned) || other.isAirConditioned == isAirConditioned));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OfferModel&&(identical(other.id, id) || other.id == id)&&(identical(other.estateOfferUuid, estateOfferUuid) || other.estateOfferUuid == estateOfferUuid)&&(identical(other.number, number) || other.number == number)&&(identical(other.typeName, typeName) || other.typeName == typeName)&&(identical(other.price, price) || other.price == price)&&(identical(other.priceCurrency, priceCurrency) || other.priceCurrency == priceCurrency)&&(identical(other.pricePermeter, pricePermeter) || other.pricePermeter == pricePermeter)&&(identical(other.areaTotal, areaTotal) || other.areaTotal == areaTotal)&&(identical(other.areaUsable, areaUsable) || other.areaUsable == areaUsable)&&(identical(other.rooms, rooms) || other.rooms == rooms)&&(identical(other.floor, floor) || other.floor == floor)&&(identical(other.totalFloors, totalFloors) || other.totalFloors == totalFloors)&&(identical(other.bathrooms, bathrooms) || other.bathrooms == bathrooms)&&(identical(other.buildingYear, buildingYear) || other.buildingYear == buildingYear)&&(identical(other.market, market) || other.market == market)&&(identical(other.cityName, cityName) || other.cityName == cityName)&&(identical(other.streetName, streetName) || other.streetName == streetName)&&(identical(other.districtName, districtName) || other.districtName == districtName)&&(identical(other.provinceName, provinceName) || other.provinceName == provinceName)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lon, lon) || other.lon == lon)&&(identical(other.portalTitle, portalTitle) || other.portalTitle == portalTitle)&&(identical(other.description, description) || other.description == description)&&(identical(other.contactEmail, contactEmail) || other.contactEmail == contactEmail)&&(identical(other.contactPhone, contactPhone) || other.contactPhone == contactPhone)&&(identical(other.contactName, contactName) || other.contactName == contactName)&&(identical(other.mainPicture, mainPicture) || other.mainPicture == mainPicture)&&const DeepCollectionEquality().equals(other.pictures, pictures)&&(identical(other.deposit, deposit) || other.deposit == deposit)&&(identical(other.rentExtra, rentExtra) || other.rentExtra == rentExtra)&&(identical(other.availableDate, availableDate) || other.availableDate == availableDate)&&(identical(other.buildingMaterial, buildingMaterial) || other.buildingMaterial == buildingMaterial)&&(identical(other.heating, heating) || other.heating == heating)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.hasGarden, hasGarden) || other.hasGarden == hasGarden)&&(identical(other.hasTerrace, hasTerrace) || other.hasTerrace == hasTerrace)&&(identical(other.hasElevator, hasElevator) || other.hasElevator == hasElevator)&&(identical(other.hasParking, hasParking) || other.hasParking == hasParking)&&(identical(other.isAirConditioned, isAirConditioned) || other.isAirConditioned == isAirConditioned));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,id,estateOfferUuid,number,typeName,price,priceCurrency,pricePermeter,areaTotal,rooms,floor,totalFloors,buildingYear,cityName,streetName,districtName,provinceName,lat,lon,portalTitle,description,contactEmail,contactPhone,contactName,mainPicture,const DeepCollectionEquality().hash(pictures),hasElevator,hasParking,isAirConditioned]);
+int get hashCode => Object.hashAll([runtimeType,id,estateOfferUuid,number,typeName,price,priceCurrency,pricePermeter,areaTotal,areaUsable,rooms,floor,totalFloors,bathrooms,buildingYear,market,cityName,streetName,districtName,provinceName,lat,lon,portalTitle,description,contactEmail,contactPhone,contactName,mainPicture,const DeepCollectionEquality().hash(pictures),deposit,rentExtra,availableDate,buildingMaterial,heating,condition,hasGarden,hasTerrace,hasElevator,hasParking,isAirConditioned]);
 
 @override
 String toString() {
-  return 'OfferModel(id: $id, estateOfferUuid: $estateOfferUuid, number: $number, typeName: $typeName, price: $price, priceCurrency: $priceCurrency, pricePermeter: $pricePermeter, areaTotal: $areaTotal, rooms: $rooms, floor: $floor, totalFloors: $totalFloors, buildingYear: $buildingYear, cityName: $cityName, streetName: $streetName, districtName: $districtName, provinceName: $provinceName, lat: $lat, lon: $lon, portalTitle: $portalTitle, description: $description, contactEmail: $contactEmail, contactPhone: $contactPhone, contactName: $contactName, mainPicture: $mainPicture, pictures: $pictures, hasElevator: $hasElevator, hasParking: $hasParking, isAirConditioned: $isAirConditioned)';
+  return 'OfferModel(id: $id, estateOfferUuid: $estateOfferUuid, number: $number, typeName: $typeName, price: $price, priceCurrency: $priceCurrency, pricePermeter: $pricePermeter, areaTotal: $areaTotal, areaUsable: $areaUsable, rooms: $rooms, floor: $floor, totalFloors: $totalFloors, bathrooms: $bathrooms, buildingYear: $buildingYear, market: $market, cityName: $cityName, streetName: $streetName, districtName: $districtName, provinceName: $provinceName, lat: $lat, lon: $lon, portalTitle: $portalTitle, description: $description, contactEmail: $contactEmail, contactPhone: $contactPhone, contactName: $contactName, mainPicture: $mainPicture, pictures: $pictures, deposit: $deposit, rentExtra: $rentExtra, availableDate: $availableDate, buildingMaterial: $buildingMaterial, heating: $heating, condition: $condition, hasGarden: $hasGarden, hasTerrace: $hasTerrace, hasElevator: $hasElevator, hasParking: $hasParking, isAirConditioned: $isAirConditioned)';
 }
 
 
@@ -51,7 +49,7 @@ abstract mixin class $OfferModelCopyWith<$Res>  {
   factory $OfferModelCopyWith(OfferModel value, $Res Function(OfferModel) _then) = _$OfferModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String? estateOfferUuid, String number, String? typeName, String? price, int? priceCurrency, String? pricePermeter, String? areaTotal, int? rooms, int? floor, int? totalFloors, int? buildingYear, String? cityName, String? streetName, String? districtName, String? provinceName, String? lat, String? lon, String? portalTitle, String? description, String? contactEmail, String? contactPhone, String? contactName, String? mainPicture, List<String>? pictures, bool? hasElevator, bool? hasParking, bool? isAirConditioned
+ int id, String? estateOfferUuid, String number, String? typeName, String? price, int? priceCurrency, String? pricePermeter, String? areaTotal, String? areaUsable, int? rooms, int? floor, int? totalFloors, int? bathrooms, int? buildingYear, int? market, String? cityName, String? streetName, String? districtName, String? provinceName, String? lat, String? lon, String? portalTitle, String? description, String? contactEmail, String? contactPhone, String? contactName, String? mainPicture, List<String>? pictures, String? deposit, String? rentExtra, String? availableDate, String? buildingMaterial, String? heating, String? condition, bool? hasGarden, bool? hasTerrace, bool? hasElevator, bool? hasParking, bool? isAirConditioned
 });
 
 
@@ -68,7 +66,7 @@ class _$OfferModelCopyWithImpl<$Res>
 
 /// Create a copy of OfferModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? estateOfferUuid = freezed,Object? number = null,Object? typeName = freezed,Object? price = freezed,Object? priceCurrency = freezed,Object? pricePermeter = freezed,Object? areaTotal = freezed,Object? rooms = freezed,Object? floor = freezed,Object? totalFloors = freezed,Object? buildingYear = freezed,Object? cityName = freezed,Object? streetName = freezed,Object? districtName = freezed,Object? provinceName = freezed,Object? lat = freezed,Object? lon = freezed,Object? portalTitle = freezed,Object? description = freezed,Object? contactEmail = freezed,Object? contactPhone = freezed,Object? contactName = freezed,Object? mainPicture = freezed,Object? pictures = freezed,Object? hasElevator = freezed,Object? hasParking = freezed,Object? isAirConditioned = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? estateOfferUuid = freezed,Object? number = null,Object? typeName = freezed,Object? price = freezed,Object? priceCurrency = freezed,Object? pricePermeter = freezed,Object? areaTotal = freezed,Object? areaUsable = freezed,Object? rooms = freezed,Object? floor = freezed,Object? totalFloors = freezed,Object? bathrooms = freezed,Object? buildingYear = freezed,Object? market = freezed,Object? cityName = freezed,Object? streetName = freezed,Object? districtName = freezed,Object? provinceName = freezed,Object? lat = freezed,Object? lon = freezed,Object? portalTitle = freezed,Object? description = freezed,Object? contactEmail = freezed,Object? contactPhone = freezed,Object? contactName = freezed,Object? mainPicture = freezed,Object? pictures = freezed,Object? deposit = freezed,Object? rentExtra = freezed,Object? availableDate = freezed,Object? buildingMaterial = freezed,Object? heating = freezed,Object? condition = freezed,Object? hasGarden = freezed,Object? hasTerrace = freezed,Object? hasElevator = freezed,Object? hasParking = freezed,Object? isAirConditioned = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,estateOfferUuid: freezed == estateOfferUuid ? _self.estateOfferUuid : estateOfferUuid // ignore: cast_nullable_to_non_nullable
@@ -78,10 +76,13 @@ as String?,price: freezed == price ? _self.price : price // ignore: cast_nullabl
 as String?,priceCurrency: freezed == priceCurrency ? _self.priceCurrency : priceCurrency // ignore: cast_nullable_to_non_nullable
 as int?,pricePermeter: freezed == pricePermeter ? _self.pricePermeter : pricePermeter // ignore: cast_nullable_to_non_nullable
 as String?,areaTotal: freezed == areaTotal ? _self.areaTotal : areaTotal // ignore: cast_nullable_to_non_nullable
+as String?,areaUsable: freezed == areaUsable ? _self.areaUsable : areaUsable // ignore: cast_nullable_to_non_nullable
 as String?,rooms: freezed == rooms ? _self.rooms : rooms // ignore: cast_nullable_to_non_nullable
 as int?,floor: freezed == floor ? _self.floor : floor // ignore: cast_nullable_to_non_nullable
 as int?,totalFloors: freezed == totalFloors ? _self.totalFloors : totalFloors // ignore: cast_nullable_to_non_nullable
+as int?,bathrooms: freezed == bathrooms ? _self.bathrooms : bathrooms // ignore: cast_nullable_to_non_nullable
 as int?,buildingYear: freezed == buildingYear ? _self.buildingYear : buildingYear // ignore: cast_nullable_to_non_nullable
+as int?,market: freezed == market ? _self.market : market // ignore: cast_nullable_to_non_nullable
 as int?,cityName: freezed == cityName ? _self.cityName : cityName // ignore: cast_nullable_to_non_nullable
 as String?,streetName: freezed == streetName ? _self.streetName : streetName // ignore: cast_nullable_to_non_nullable
 as String?,districtName: freezed == districtName ? _self.districtName : districtName // ignore: cast_nullable_to_non_nullable
@@ -95,7 +96,15 @@ as String?,contactPhone: freezed == contactPhone ? _self.contactPhone : contactP
 as String?,contactName: freezed == contactName ? _self.contactName : contactName // ignore: cast_nullable_to_non_nullable
 as String?,mainPicture: freezed == mainPicture ? _self.mainPicture : mainPicture // ignore: cast_nullable_to_non_nullable
 as String?,pictures: freezed == pictures ? _self.pictures : pictures // ignore: cast_nullable_to_non_nullable
-as List<String>?,hasElevator: freezed == hasElevator ? _self.hasElevator : hasElevator // ignore: cast_nullable_to_non_nullable
+as List<String>?,deposit: freezed == deposit ? _self.deposit : deposit // ignore: cast_nullable_to_non_nullable
+as String?,rentExtra: freezed == rentExtra ? _self.rentExtra : rentExtra // ignore: cast_nullable_to_non_nullable
+as String?,availableDate: freezed == availableDate ? _self.availableDate : availableDate // ignore: cast_nullable_to_non_nullable
+as String?,buildingMaterial: freezed == buildingMaterial ? _self.buildingMaterial : buildingMaterial // ignore: cast_nullable_to_non_nullable
+as String?,heating: freezed == heating ? _self.heating : heating // ignore: cast_nullable_to_non_nullable
+as String?,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
+as String?,hasGarden: freezed == hasGarden ? _self.hasGarden : hasGarden // ignore: cast_nullable_to_non_nullable
+as bool?,hasTerrace: freezed == hasTerrace ? _self.hasTerrace : hasTerrace // ignore: cast_nullable_to_non_nullable
+as bool?,hasElevator: freezed == hasElevator ? _self.hasElevator : hasElevator // ignore: cast_nullable_to_non_nullable
 as bool?,hasParking: freezed == hasParking ? _self.hasParking : hasParking // ignore: cast_nullable_to_non_nullable
 as bool?,isAirConditioned: freezed == isAirConditioned ? _self.isAirConditioned : isAirConditioned // ignore: cast_nullable_to_non_nullable
 as bool?,
@@ -183,10 +192,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? estateOfferUuid,  String number,  String? typeName,  String? price,  int? priceCurrency,  String? pricePermeter,  String? areaTotal,  int? rooms,  int? floor,  int? totalFloors,  int? buildingYear,  String? cityName,  String? streetName,  String? districtName,  String? provinceName,  String? lat,  String? lon,  String? portalTitle,  String? description,  String? contactEmail,  String? contactPhone,  String? contactName,  String? mainPicture,  List<String>? pictures,  bool? hasElevator,  bool? hasParking,  bool? isAirConditioned)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? estateOfferUuid,  String number,  String? typeName,  String? price,  int? priceCurrency,  String? pricePermeter,  String? areaTotal,  String? areaUsable,  int? rooms,  int? floor,  int? totalFloors,  int? bathrooms,  int? buildingYear,  int? market,  String? cityName,  String? streetName,  String? districtName,  String? provinceName,  String? lat,  String? lon,  String? portalTitle,  String? description,  String? contactEmail,  String? contactPhone,  String? contactName,  String? mainPicture,  List<String>? pictures,  String? deposit,  String? rentExtra,  String? availableDate,  String? buildingMaterial,  String? heating,  String? condition,  bool? hasGarden,  bool? hasTerrace,  bool? hasElevator,  bool? hasParking,  bool? isAirConditioned)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OfferModel() when $default != null:
-return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that.price,_that.priceCurrency,_that.pricePermeter,_that.areaTotal,_that.rooms,_that.floor,_that.totalFloors,_that.buildingYear,_that.cityName,_that.streetName,_that.districtName,_that.provinceName,_that.lat,_that.lon,_that.portalTitle,_that.description,_that.contactEmail,_that.contactPhone,_that.contactName,_that.mainPicture,_that.pictures,_that.hasElevator,_that.hasParking,_that.isAirConditioned);case _:
+return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that.price,_that.priceCurrency,_that.pricePermeter,_that.areaTotal,_that.areaUsable,_that.rooms,_that.floor,_that.totalFloors,_that.bathrooms,_that.buildingYear,_that.market,_that.cityName,_that.streetName,_that.districtName,_that.provinceName,_that.lat,_that.lon,_that.portalTitle,_that.description,_that.contactEmail,_that.contactPhone,_that.contactName,_that.mainPicture,_that.pictures,_that.deposit,_that.rentExtra,_that.availableDate,_that.buildingMaterial,_that.heating,_that.condition,_that.hasGarden,_that.hasTerrace,_that.hasElevator,_that.hasParking,_that.isAirConditioned);case _:
   return orElse();
 
 }
@@ -204,10 +213,10 @@ return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? estateOfferUuid,  String number,  String? typeName,  String? price,  int? priceCurrency,  String? pricePermeter,  String? areaTotal,  int? rooms,  int? floor,  int? totalFloors,  int? buildingYear,  String? cityName,  String? streetName,  String? districtName,  String? provinceName,  String? lat,  String? lon,  String? portalTitle,  String? description,  String? contactEmail,  String? contactPhone,  String? contactName,  String? mainPicture,  List<String>? pictures,  bool? hasElevator,  bool? hasParking,  bool? isAirConditioned)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? estateOfferUuid,  String number,  String? typeName,  String? price,  int? priceCurrency,  String? pricePermeter,  String? areaTotal,  String? areaUsable,  int? rooms,  int? floor,  int? totalFloors,  int? bathrooms,  int? buildingYear,  int? market,  String? cityName,  String? streetName,  String? districtName,  String? provinceName,  String? lat,  String? lon,  String? portalTitle,  String? description,  String? contactEmail,  String? contactPhone,  String? contactName,  String? mainPicture,  List<String>? pictures,  String? deposit,  String? rentExtra,  String? availableDate,  String? buildingMaterial,  String? heating,  String? condition,  bool? hasGarden,  bool? hasTerrace,  bool? hasElevator,  bool? hasParking,  bool? isAirConditioned)  $default,) {final _that = this;
 switch (_that) {
 case _OfferModel():
-return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that.price,_that.priceCurrency,_that.pricePermeter,_that.areaTotal,_that.rooms,_that.floor,_that.totalFloors,_that.buildingYear,_that.cityName,_that.streetName,_that.districtName,_that.provinceName,_that.lat,_that.lon,_that.portalTitle,_that.description,_that.contactEmail,_that.contactPhone,_that.contactName,_that.mainPicture,_that.pictures,_that.hasElevator,_that.hasParking,_that.isAirConditioned);case _:
+return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that.price,_that.priceCurrency,_that.pricePermeter,_that.areaTotal,_that.areaUsable,_that.rooms,_that.floor,_that.totalFloors,_that.bathrooms,_that.buildingYear,_that.market,_that.cityName,_that.streetName,_that.districtName,_that.provinceName,_that.lat,_that.lon,_that.portalTitle,_that.description,_that.contactEmail,_that.contactPhone,_that.contactName,_that.mainPicture,_that.pictures,_that.deposit,_that.rentExtra,_that.availableDate,_that.buildingMaterial,_that.heating,_that.condition,_that.hasGarden,_that.hasTerrace,_that.hasElevator,_that.hasParking,_that.isAirConditioned);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -224,10 +233,10 @@ return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? estateOfferUuid,  String number,  String? typeName,  String? price,  int? priceCurrency,  String? pricePermeter,  String? areaTotal,  int? rooms,  int? floor,  int? totalFloors,  int? buildingYear,  String? cityName,  String? streetName,  String? districtName,  String? provinceName,  String? lat,  String? lon,  String? portalTitle,  String? description,  String? contactEmail,  String? contactPhone,  String? contactName,  String? mainPicture,  List<String>? pictures,  bool? hasElevator,  bool? hasParking,  bool? isAirConditioned)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? estateOfferUuid,  String number,  String? typeName,  String? price,  int? priceCurrency,  String? pricePermeter,  String? areaTotal,  String? areaUsable,  int? rooms,  int? floor,  int? totalFloors,  int? bathrooms,  int? buildingYear,  int? market,  String? cityName,  String? streetName,  String? districtName,  String? provinceName,  String? lat,  String? lon,  String? portalTitle,  String? description,  String? contactEmail,  String? contactPhone,  String? contactName,  String? mainPicture,  List<String>? pictures,  String? deposit,  String? rentExtra,  String? availableDate,  String? buildingMaterial,  String? heating,  String? condition,  bool? hasGarden,  bool? hasTerrace,  bool? hasElevator,  bool? hasParking,  bool? isAirConditioned)?  $default,) {final _that = this;
 switch (_that) {
 case _OfferModel() when $default != null:
-return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that.price,_that.priceCurrency,_that.pricePermeter,_that.areaTotal,_that.rooms,_that.floor,_that.totalFloors,_that.buildingYear,_that.cityName,_that.streetName,_that.districtName,_that.provinceName,_that.lat,_that.lon,_that.portalTitle,_that.description,_that.contactEmail,_that.contactPhone,_that.contactName,_that.mainPicture,_that.pictures,_that.hasElevator,_that.hasParking,_that.isAirConditioned);case _:
+return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that.price,_that.priceCurrency,_that.pricePermeter,_that.areaTotal,_that.areaUsable,_that.rooms,_that.floor,_that.totalFloors,_that.bathrooms,_that.buildingYear,_that.market,_that.cityName,_that.streetName,_that.districtName,_that.provinceName,_that.lat,_that.lon,_that.portalTitle,_that.description,_that.contactEmail,_that.contactPhone,_that.contactName,_that.mainPicture,_that.pictures,_that.deposit,_that.rentExtra,_that.availableDate,_that.buildingMaterial,_that.heating,_that.condition,_that.hasGarden,_that.hasTerrace,_that.hasElevator,_that.hasParking,_that.isAirConditioned);case _:
   return null;
 
 }
@@ -239,37 +248,38 @@ return $default(_that.id,_that.estateOfferUuid,_that.number,_that.typeName,_that
 
 
 class _OfferModel implements OfferModel {
-  const _OfferModel({required this.id, this.estateOfferUuid, required this.number, this.typeName, this.price, this.priceCurrency, this.pricePermeter, this.areaTotal, this.rooms, this.floor, this.totalFloors, this.buildingYear, this.cityName, this.streetName, this.districtName, this.provinceName, this.lat, this.lon, this.portalTitle, this.description, this.contactEmail, this.contactPhone, this.contactName, this.mainPicture, final  List<String>? pictures, this.hasElevator, this.hasParking, this.isAirConditioned}): _pictures = pictures;
+  const _OfferModel({required this.id, this.estateOfferUuid, required this.number, this.typeName, this.price, this.priceCurrency, this.pricePermeter, this.areaTotal, this.areaUsable, this.rooms, this.floor, this.totalFloors, this.bathrooms, this.buildingYear, this.market, this.cityName, this.streetName, this.districtName, this.provinceName, this.lat, this.lon, this.portalTitle, this.description, this.contactEmail, this.contactPhone, this.contactName, this.mainPicture, final  List<String>? pictures, this.deposit, this.rentExtra, this.availableDate, this.buildingMaterial, this.heating, this.condition, this.hasGarden, this.hasTerrace, this.hasElevator, this.hasParking, this.isAirConditioned}): _pictures = pictures;
   
 
 @override final  int id;
 @override final  String? estateOfferUuid;
 @override final  String number;
 @override final  String? typeName;
-// Цінові показники
 @override final  String? price;
 @override final  int? priceCurrency;
 @override final  String? pricePermeter;
-// Площа та стан
 @override final  String? areaTotal;
+@override final  String? areaUsable;
+// <--- ДОДАНО
 @override final  int? rooms;
 @override final  int? floor;
 @override final  int? totalFloors;
+@override final  int? bathrooms;
+// <--- ДОДАНО
 @override final  int? buildingYear;
-// Локація
+@override final  int? market;
+// <--- ДОДАНО (int, бо в API це 11/12)
 @override final  String? cityName;
 @override final  String? streetName;
 @override final  String? districtName;
 @override final  String? provinceName;
 @override final  String? lat;
 @override final  String? lon;
-// Опис та контакти
 @override final  String? portalTitle;
 @override final  String? description;
 @override final  String? contactEmail;
 @override final  String? contactPhone;
 @override final  String? contactName;
-// Медіа
 @override final  String? mainPicture;
  final  List<String>? _pictures;
 @override List<String>? get pictures {
@@ -280,7 +290,15 @@ class _OfferModel implements OfferModel {
   return EqualUnmodifiableListView(value);
 }
 
-// Додаткові технічні прапорці (можна розширювати за потребою)
+// ДОДАТКОВІ ПОЛЯ
+@override final  String? deposit;
+@override final  String? rentExtra;
+@override final  String? availableDate;
+@override final  String? buildingMaterial;
+@override final  String? heating;
+@override final  String? condition;
+@override final  bool? hasGarden;
+@override final  bool? hasTerrace;
 @override final  bool? hasElevator;
 @override final  bool? hasParking;
 @override final  bool? isAirConditioned;
@@ -295,16 +313,16 @@ _$OfferModelCopyWith<_OfferModel> get copyWith => __$OfferModelCopyWithImpl<_Off
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OfferModel&&(identical(other.id, id) || other.id == id)&&(identical(other.estateOfferUuid, estateOfferUuid) || other.estateOfferUuid == estateOfferUuid)&&(identical(other.number, number) || other.number == number)&&(identical(other.typeName, typeName) || other.typeName == typeName)&&(identical(other.price, price) || other.price == price)&&(identical(other.priceCurrency, priceCurrency) || other.priceCurrency == priceCurrency)&&(identical(other.pricePermeter, pricePermeter) || other.pricePermeter == pricePermeter)&&(identical(other.areaTotal, areaTotal) || other.areaTotal == areaTotal)&&(identical(other.rooms, rooms) || other.rooms == rooms)&&(identical(other.floor, floor) || other.floor == floor)&&(identical(other.totalFloors, totalFloors) || other.totalFloors == totalFloors)&&(identical(other.buildingYear, buildingYear) || other.buildingYear == buildingYear)&&(identical(other.cityName, cityName) || other.cityName == cityName)&&(identical(other.streetName, streetName) || other.streetName == streetName)&&(identical(other.districtName, districtName) || other.districtName == districtName)&&(identical(other.provinceName, provinceName) || other.provinceName == provinceName)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lon, lon) || other.lon == lon)&&(identical(other.portalTitle, portalTitle) || other.portalTitle == portalTitle)&&(identical(other.description, description) || other.description == description)&&(identical(other.contactEmail, contactEmail) || other.contactEmail == contactEmail)&&(identical(other.contactPhone, contactPhone) || other.contactPhone == contactPhone)&&(identical(other.contactName, contactName) || other.contactName == contactName)&&(identical(other.mainPicture, mainPicture) || other.mainPicture == mainPicture)&&const DeepCollectionEquality().equals(other._pictures, _pictures)&&(identical(other.hasElevator, hasElevator) || other.hasElevator == hasElevator)&&(identical(other.hasParking, hasParking) || other.hasParking == hasParking)&&(identical(other.isAirConditioned, isAirConditioned) || other.isAirConditioned == isAirConditioned));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OfferModel&&(identical(other.id, id) || other.id == id)&&(identical(other.estateOfferUuid, estateOfferUuid) || other.estateOfferUuid == estateOfferUuid)&&(identical(other.number, number) || other.number == number)&&(identical(other.typeName, typeName) || other.typeName == typeName)&&(identical(other.price, price) || other.price == price)&&(identical(other.priceCurrency, priceCurrency) || other.priceCurrency == priceCurrency)&&(identical(other.pricePermeter, pricePermeter) || other.pricePermeter == pricePermeter)&&(identical(other.areaTotal, areaTotal) || other.areaTotal == areaTotal)&&(identical(other.areaUsable, areaUsable) || other.areaUsable == areaUsable)&&(identical(other.rooms, rooms) || other.rooms == rooms)&&(identical(other.floor, floor) || other.floor == floor)&&(identical(other.totalFloors, totalFloors) || other.totalFloors == totalFloors)&&(identical(other.bathrooms, bathrooms) || other.bathrooms == bathrooms)&&(identical(other.buildingYear, buildingYear) || other.buildingYear == buildingYear)&&(identical(other.market, market) || other.market == market)&&(identical(other.cityName, cityName) || other.cityName == cityName)&&(identical(other.streetName, streetName) || other.streetName == streetName)&&(identical(other.districtName, districtName) || other.districtName == districtName)&&(identical(other.provinceName, provinceName) || other.provinceName == provinceName)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lon, lon) || other.lon == lon)&&(identical(other.portalTitle, portalTitle) || other.portalTitle == portalTitle)&&(identical(other.description, description) || other.description == description)&&(identical(other.contactEmail, contactEmail) || other.contactEmail == contactEmail)&&(identical(other.contactPhone, contactPhone) || other.contactPhone == contactPhone)&&(identical(other.contactName, contactName) || other.contactName == contactName)&&(identical(other.mainPicture, mainPicture) || other.mainPicture == mainPicture)&&const DeepCollectionEquality().equals(other._pictures, _pictures)&&(identical(other.deposit, deposit) || other.deposit == deposit)&&(identical(other.rentExtra, rentExtra) || other.rentExtra == rentExtra)&&(identical(other.availableDate, availableDate) || other.availableDate == availableDate)&&(identical(other.buildingMaterial, buildingMaterial) || other.buildingMaterial == buildingMaterial)&&(identical(other.heating, heating) || other.heating == heating)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.hasGarden, hasGarden) || other.hasGarden == hasGarden)&&(identical(other.hasTerrace, hasTerrace) || other.hasTerrace == hasTerrace)&&(identical(other.hasElevator, hasElevator) || other.hasElevator == hasElevator)&&(identical(other.hasParking, hasParking) || other.hasParking == hasParking)&&(identical(other.isAirConditioned, isAirConditioned) || other.isAirConditioned == isAirConditioned));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,id,estateOfferUuid,number,typeName,price,priceCurrency,pricePermeter,areaTotal,rooms,floor,totalFloors,buildingYear,cityName,streetName,districtName,provinceName,lat,lon,portalTitle,description,contactEmail,contactPhone,contactName,mainPicture,const DeepCollectionEquality().hash(_pictures),hasElevator,hasParking,isAirConditioned]);
+int get hashCode => Object.hashAll([runtimeType,id,estateOfferUuid,number,typeName,price,priceCurrency,pricePermeter,areaTotal,areaUsable,rooms,floor,totalFloors,bathrooms,buildingYear,market,cityName,streetName,districtName,provinceName,lat,lon,portalTitle,description,contactEmail,contactPhone,contactName,mainPicture,const DeepCollectionEquality().hash(_pictures),deposit,rentExtra,availableDate,buildingMaterial,heating,condition,hasGarden,hasTerrace,hasElevator,hasParking,isAirConditioned]);
 
 @override
 String toString() {
-  return 'OfferModel(id: $id, estateOfferUuid: $estateOfferUuid, number: $number, typeName: $typeName, price: $price, priceCurrency: $priceCurrency, pricePermeter: $pricePermeter, areaTotal: $areaTotal, rooms: $rooms, floor: $floor, totalFloors: $totalFloors, buildingYear: $buildingYear, cityName: $cityName, streetName: $streetName, districtName: $districtName, provinceName: $provinceName, lat: $lat, lon: $lon, portalTitle: $portalTitle, description: $description, contactEmail: $contactEmail, contactPhone: $contactPhone, contactName: $contactName, mainPicture: $mainPicture, pictures: $pictures, hasElevator: $hasElevator, hasParking: $hasParking, isAirConditioned: $isAirConditioned)';
+  return 'OfferModel(id: $id, estateOfferUuid: $estateOfferUuid, number: $number, typeName: $typeName, price: $price, priceCurrency: $priceCurrency, pricePermeter: $pricePermeter, areaTotal: $areaTotal, areaUsable: $areaUsable, rooms: $rooms, floor: $floor, totalFloors: $totalFloors, bathrooms: $bathrooms, buildingYear: $buildingYear, market: $market, cityName: $cityName, streetName: $streetName, districtName: $districtName, provinceName: $provinceName, lat: $lat, lon: $lon, portalTitle: $portalTitle, description: $description, contactEmail: $contactEmail, contactPhone: $contactPhone, contactName: $contactName, mainPicture: $mainPicture, pictures: $pictures, deposit: $deposit, rentExtra: $rentExtra, availableDate: $availableDate, buildingMaterial: $buildingMaterial, heating: $heating, condition: $condition, hasGarden: $hasGarden, hasTerrace: $hasTerrace, hasElevator: $hasElevator, hasParking: $hasParking, isAirConditioned: $isAirConditioned)';
 }
 
 
@@ -315,7 +333,7 @@ abstract mixin class _$OfferModelCopyWith<$Res> implements $OfferModelCopyWith<$
   factory _$OfferModelCopyWith(_OfferModel value, $Res Function(_OfferModel) _then) = __$OfferModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String? estateOfferUuid, String number, String? typeName, String? price, int? priceCurrency, String? pricePermeter, String? areaTotal, int? rooms, int? floor, int? totalFloors, int? buildingYear, String? cityName, String? streetName, String? districtName, String? provinceName, String? lat, String? lon, String? portalTitle, String? description, String? contactEmail, String? contactPhone, String? contactName, String? mainPicture, List<String>? pictures, bool? hasElevator, bool? hasParking, bool? isAirConditioned
+ int id, String? estateOfferUuid, String number, String? typeName, String? price, int? priceCurrency, String? pricePermeter, String? areaTotal, String? areaUsable, int? rooms, int? floor, int? totalFloors, int? bathrooms, int? buildingYear, int? market, String? cityName, String? streetName, String? districtName, String? provinceName, String? lat, String? lon, String? portalTitle, String? description, String? contactEmail, String? contactPhone, String? contactName, String? mainPicture, List<String>? pictures, String? deposit, String? rentExtra, String? availableDate, String? buildingMaterial, String? heating, String? condition, bool? hasGarden, bool? hasTerrace, bool? hasElevator, bool? hasParking, bool? isAirConditioned
 });
 
 
@@ -332,7 +350,7 @@ class __$OfferModelCopyWithImpl<$Res>
 
 /// Create a copy of OfferModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? estateOfferUuid = freezed,Object? number = null,Object? typeName = freezed,Object? price = freezed,Object? priceCurrency = freezed,Object? pricePermeter = freezed,Object? areaTotal = freezed,Object? rooms = freezed,Object? floor = freezed,Object? totalFloors = freezed,Object? buildingYear = freezed,Object? cityName = freezed,Object? streetName = freezed,Object? districtName = freezed,Object? provinceName = freezed,Object? lat = freezed,Object? lon = freezed,Object? portalTitle = freezed,Object? description = freezed,Object? contactEmail = freezed,Object? contactPhone = freezed,Object? contactName = freezed,Object? mainPicture = freezed,Object? pictures = freezed,Object? hasElevator = freezed,Object? hasParking = freezed,Object? isAirConditioned = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? estateOfferUuid = freezed,Object? number = null,Object? typeName = freezed,Object? price = freezed,Object? priceCurrency = freezed,Object? pricePermeter = freezed,Object? areaTotal = freezed,Object? areaUsable = freezed,Object? rooms = freezed,Object? floor = freezed,Object? totalFloors = freezed,Object? bathrooms = freezed,Object? buildingYear = freezed,Object? market = freezed,Object? cityName = freezed,Object? streetName = freezed,Object? districtName = freezed,Object? provinceName = freezed,Object? lat = freezed,Object? lon = freezed,Object? portalTitle = freezed,Object? description = freezed,Object? contactEmail = freezed,Object? contactPhone = freezed,Object? contactName = freezed,Object? mainPicture = freezed,Object? pictures = freezed,Object? deposit = freezed,Object? rentExtra = freezed,Object? availableDate = freezed,Object? buildingMaterial = freezed,Object? heating = freezed,Object? condition = freezed,Object? hasGarden = freezed,Object? hasTerrace = freezed,Object? hasElevator = freezed,Object? hasParking = freezed,Object? isAirConditioned = freezed,}) {
   return _then(_OfferModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,estateOfferUuid: freezed == estateOfferUuid ? _self.estateOfferUuid : estateOfferUuid // ignore: cast_nullable_to_non_nullable
@@ -342,10 +360,13 @@ as String?,price: freezed == price ? _self.price : price // ignore: cast_nullabl
 as String?,priceCurrency: freezed == priceCurrency ? _self.priceCurrency : priceCurrency // ignore: cast_nullable_to_non_nullable
 as int?,pricePermeter: freezed == pricePermeter ? _self.pricePermeter : pricePermeter // ignore: cast_nullable_to_non_nullable
 as String?,areaTotal: freezed == areaTotal ? _self.areaTotal : areaTotal // ignore: cast_nullable_to_non_nullable
+as String?,areaUsable: freezed == areaUsable ? _self.areaUsable : areaUsable // ignore: cast_nullable_to_non_nullable
 as String?,rooms: freezed == rooms ? _self.rooms : rooms // ignore: cast_nullable_to_non_nullable
 as int?,floor: freezed == floor ? _self.floor : floor // ignore: cast_nullable_to_non_nullable
 as int?,totalFloors: freezed == totalFloors ? _self.totalFloors : totalFloors // ignore: cast_nullable_to_non_nullable
+as int?,bathrooms: freezed == bathrooms ? _self.bathrooms : bathrooms // ignore: cast_nullable_to_non_nullable
 as int?,buildingYear: freezed == buildingYear ? _self.buildingYear : buildingYear // ignore: cast_nullable_to_non_nullable
+as int?,market: freezed == market ? _self.market : market // ignore: cast_nullable_to_non_nullable
 as int?,cityName: freezed == cityName ? _self.cityName : cityName // ignore: cast_nullable_to_non_nullable
 as String?,streetName: freezed == streetName ? _self.streetName : streetName // ignore: cast_nullable_to_non_nullable
 as String?,districtName: freezed == districtName ? _self.districtName : districtName // ignore: cast_nullable_to_non_nullable
@@ -359,7 +380,15 @@ as String?,contactPhone: freezed == contactPhone ? _self.contactPhone : contactP
 as String?,contactName: freezed == contactName ? _self.contactName : contactName // ignore: cast_nullable_to_non_nullable
 as String?,mainPicture: freezed == mainPicture ? _self.mainPicture : mainPicture // ignore: cast_nullable_to_non_nullable
 as String?,pictures: freezed == pictures ? _self._pictures : pictures // ignore: cast_nullable_to_non_nullable
-as List<String>?,hasElevator: freezed == hasElevator ? _self.hasElevator : hasElevator // ignore: cast_nullable_to_non_nullable
+as List<String>?,deposit: freezed == deposit ? _self.deposit : deposit // ignore: cast_nullable_to_non_nullable
+as String?,rentExtra: freezed == rentExtra ? _self.rentExtra : rentExtra // ignore: cast_nullable_to_non_nullable
+as String?,availableDate: freezed == availableDate ? _self.availableDate : availableDate // ignore: cast_nullable_to_non_nullable
+as String?,buildingMaterial: freezed == buildingMaterial ? _self.buildingMaterial : buildingMaterial // ignore: cast_nullable_to_non_nullable
+as String?,heating: freezed == heating ? _self.heating : heating // ignore: cast_nullable_to_non_nullable
+as String?,condition: freezed == condition ? _self.condition : condition // ignore: cast_nullable_to_non_nullable
+as String?,hasGarden: freezed == hasGarden ? _self.hasGarden : hasGarden // ignore: cast_nullable_to_non_nullable
+as bool?,hasTerrace: freezed == hasTerrace ? _self.hasTerrace : hasTerrace // ignore: cast_nullable_to_non_nullable
+as bool?,hasElevator: freezed == hasElevator ? _self.hasElevator : hasElevator // ignore: cast_nullable_to_non_nullable
 as bool?,hasParking: freezed == hasParking ? _self.hasParking : hasParking // ignore: cast_nullable_to_non_nullable
 as bool?,isAirConditioned: freezed == isAirConditioned ? _self.isAirConditioned : isAirConditioned // ignore: cast_nullable_to_non_nullable
 as bool?,

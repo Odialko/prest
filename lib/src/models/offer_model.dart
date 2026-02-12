@@ -9,39 +9,40 @@ abstract class OfferModel with _$OfferModel {
     String? estateOfferUuid,
     required String number,
     String? typeName,
-
-    // Цінові показники
     String? price,
     int? priceCurrency,
     String? pricePermeter,
-
-    // Площа та стан
     String? areaTotal,
+    String? areaUsable,    // <--- ДОДАНО
     int? rooms,
     int? floor,
     int? totalFloors,
+    int? bathrooms,      // <--- ДОДАНО
     int? buildingYear,
-
-    // Локація
+    int? market,         // <--- ДОДАНО (int, бо в API це 11/12)
     String? cityName,
     String? streetName,
     String? districtName,
     String? provinceName,
     String? lat,
     String? lon,
-
-    // Опис та контакти
     String? portalTitle,
     String? description,
     String? contactEmail,
     String? contactPhone,
     String? contactName,
-
-    // Медіа
     String? mainPicture,
     List<String>? pictures,
 
-    // Додаткові технічні прапорці (можна розширювати за потребою)
+    // ДОДАТКОВІ ПОЛЯ
+    String? deposit,
+    String? rentExtra,
+    String? availableDate,
+    String? buildingMaterial,
+    String? heating,
+    String? condition,
+    bool? hasGarden,
+    bool? hasTerrace,
     bool? hasElevator,
     bool? hasParking,
     bool? isAirConditioned,
