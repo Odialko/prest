@@ -16,7 +16,6 @@ class JoinUsWebView extends JoinUsScreen {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = context.prestTheme;
-    final s = S.of(context); // Локалізація
 
     return PrestPage(
       slivers: [

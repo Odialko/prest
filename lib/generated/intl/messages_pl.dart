@@ -46,7 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Luksus zdefiniowany na nowo",
     ),
     "aboutTeamPowerP1": MessageLookupByLibrary.simpleMessage(
-      "Dlatego każdą sprzedażą zajmuje się u nas nie jedna osoba, lecz kilkuosobowy zespół specjalistów, którzy wspólnie dbają o każdy detal procesu. ",
+      "Dlatego każdą sprzedażą zajmuje się u nas nie jedna osoba, lecz kilkuosobowy zespół specjalistów, którzy wspólnie dbają o każdy detal procesu.",
     ),
     "aboutTeamPowerP2Bold": MessageLookupByLibrary.simpleMessage(
       "Łączymy wiedzę rynkową, doświadczenie inwestycyjne, skuteczny marketing i mądre, spokojne negocjacje.",
@@ -55,7 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pracujemy uważnie i z zaangażowaniem, słuchamy, analizujemy, doradzamy. Prowadzimy klientów przez cały proces krok po kroku, tak aby czuli się pewnie, bezpiecznie i po prostu dobrze zaopiekowani.",
     ),
     "aboutTeamPowerP4": MessageLookupByLibrary.simpleMessage(
-      "Bo dla nas nieruchomości to nie tylko transakcje. ",
+      "Bo dla nas nieruchomości to nie tylko transakcje.",
     ),
     "aboutTeamPowerP5Bold": MessageLookupByLibrary.simpleMessage(
       "To ważne decyzje i realne historie ludzi, którym towarzyszymy od pierwszej rozmowy aż do finalnego podpisu.",
@@ -68,17 +68,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Poznaj historię prEST – już wkrótce!",
     ),
     "descInBuild": MessageLookupByLibrary.simpleMessage(
-      "Strona w budowie – już вkrótce!",
+      "Strona w budowie – już wkrótce!",
     ),
     "descJoinUs": MessageLookupByLibrary.simpleMessage(
-      "Stań się częścią naszej wizji – już вkrótce!",
+      "Stań się częścią naszej wizji – już wkrótce!",
     ),
     "descOffMarket": MessageLookupByLibrary.simpleMessage(
-      "Dostęp do ofert poza rynkiem – już вkrótce!",
+      "Dostęp do ofert poza rynkiem – już wkrótce!",
     ),
     "descSoon": MessageLookupByLibrary.simpleMessage("Już wkrótce..."),
     "descTeam": MessageLookupByLibrary.simpleMessage(
-      "Nasz zespół specjalistów – już вkrótce!",
+      "Nasz zespół specjalistów – już wkrótce!",
     ),
     "dialogZglosTitle": m0,
     "errorLoading": MessageLookupByLibrary.simpleMessage(
@@ -103,7 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Dołączając do zespołu prEST, stajesz się częścią dynamicznego, ambitnego środowiska, które ceni kreatywność, zaangażowanie i rozwój. Budujemy wiedzę, szlifujemy warsztat i wspieramy w tworzeniu silnej marki osobistej.\n\n",
     ),
     "joinGoalsDescP2": MessageLookupByLibrary.simpleMessage(
-      "W prEST pomagamy Agentom nie tylko efektywnie sprzedawać. ",
+      "W prEST pomagamy Agentom nie tylko efektywnie sprzedawać.",
     ),
     "joinGoalsDescP2Bold": MessageLookupByLibrary.simpleMessage(
       "Pomagamy im rosnąć, rozwijać skrzydła i błyszczeć własnymi sukcesami.",
@@ -137,13 +137,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "navJoinUs": MessageLookupByLibrary.simpleMessage("Dołącz do nas"),
     "navKontakt": MessageLookupByLibrary.simpleMessage("KONTAKT"),
     "navNieruchomosci": MessageLookupByLibrary.simpleMessage("NIERUCHOMOŚCI"),
-    "navOffMarket": MessageLookupByLibrary.simpleMessage("OFFmarket"),
+    "navOffMarket": MessageLookupByLibrary.simpleMessage("OFF-market"),
     "navPoznajNas": MessageLookupByLibrary.simpleMessage("POZNAJ NAS"),
     "navRent": MessageLookupByLibrary.simpleMessage("Wynajem"),
     "navSale": MessageLookupByLibrary.simpleMessage("Sprzedaż"),
     "navTeam": MessageLookupByLibrary.simpleMessage("Zespół"),
     "navUslugi": MessageLookupByLibrary.simpleMessage("USŁUGI"),
-    "navZglos": MessageLookupByLibrary.simpleMessage("ZGŁОŚ"),
+    "navZglos": MessageLookupByLibrary.simpleMessage("ZGŁOŚ"),
     "navZglosNieruchomosc": MessageLookupByLibrary.simpleMessage(
       "Nieruchomość",
     ),
@@ -154,7 +154,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Dbamy o Twoją prywatność oraz bezpieczeństwo danych osobowych. Niniejsza Polityka Prywatności określa zasady przetwarzania danych osobowych przez PREST spółka z ograniczoną odpowiedzialnością, w związku z prowadzeniem działalności w zakresie pośrednictwa w obrocie nieruchomościami, zgodnie z obowiązującymi przepisami prawa.",
     ),
     "privacySec1P2": MessageLookupByLibrary.simpleMessage(
-      "Polityka została sporządzona w szczególności na podstawie: RODO, ustawy o ochronie danych osobowych, ustawy o gospodarce nieruchomościami, ustawy o świadczeniu usług drogą elektroniczną та ustawy o przeciwdziałaniu praniu pieniędzy (AML).",
+      "Polityka została sporządzona w szczególności na podstawie: RODO, ustawy o ochronie danych osobowych, ustawy o gospodarce nieruchomościami, ustawy o świadczeniu usług drogą elektroniczną oraz ustawy o przeciwdziałaniu praniu pieniędzy (AML).",
     ),
     "privacySec1Title": MessageLookupByLibrary.simpleMessage(
       "1. Informacje ogólne",
@@ -169,7 +169,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "2. Administrator danych osobowych",
     ),
     "privacySec3P1": MessageLookupByLibrary.simpleMessage(
-      "W zależności od relacji, Administrator może przetwarzać w szczególności: imię i nazwisko, adres e-mail, numer telefonu, adres zamieszkania, dane dotyczące nieruchomości (księga wieczysta, powierzchnia), dane transakcyjne та dane wymagane przepisami AML.",
+      "W zależności od relacji, Administrator może przetwarzać w szczególności: imię i nazwisko, adres e-mail, numer telefonu, adres zamieszkania, dane dotyczące nieruchomości (księga wieczysta, powierzchnia), dane transakcyjne oraz dane wymagane przepisami AML.",
     ),
     "privacySec3Title": MessageLookupByLibrary.simpleMessage(
       "3. Zakres przetwarzanych danych",
@@ -190,13 +190,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "4. Cele, podstawy prawne i okres przetwarzania",
     ),
     "privacySec5P1": MessageLookupByLibrary.simpleMessage(
-      "Dane mogą być przekazywane: notariuszom, kancelariom prawnym, biurom rachunkowym, dostawcom usług IT oraz organom publicznym на podstawie przepisów prawa.",
+      "Dane mogą być przekazywane: notariuszom, kancelariom prawnym, biurom rachunkowym, dostawcom usług IT oraz organom publicznym na podstawie przepisów prawa.",
     ),
     "privacySec5Title": MessageLookupByLibrary.simpleMessage(
       "5. Odbiorcy danych",
     ),
     "privacySec6P1": MessageLookupByLibrary.simpleMessage(
-      "Każdej osobie przysługuje prawo do: dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, wniesienia sprzeciwu, przenoszenia danych та cofnięcia zgody.",
+      "Każdej osobie przysługuje prawo do: dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, wniesienia sprzeciwu, przenoszenia danych oraz cofnięcia zgody.",
     ),
     "privacySec6P2": MessageLookupByLibrary.simpleMessage(
       "Przysługuje również prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.",

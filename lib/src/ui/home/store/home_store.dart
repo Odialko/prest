@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/models/offer_model.dart';
-import 'package:prest/src/providers/locale_provider.dart';
 import 'package:prest/src/providers/offer_service_provider.dart';
 import 'package:prest/src/providers/service_providers.dart';
 import 'package:prest/src/repositories/offer_repository.dart';

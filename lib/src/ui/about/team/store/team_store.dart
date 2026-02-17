@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:prest/generated/l10n.dart';
 import 'package:prest/src/constants/constants.dart';

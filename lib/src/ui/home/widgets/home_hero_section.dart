@@ -123,9 +123,9 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
               end: Alignment.bottomCenter,
               stops: const [0.0, 0.45, 1.0],
               colors: [
-                Colors.black.withOpacity(0.3),
+                Colors.black.withValues(alpha: 0.3),
                 Colors.transparent,
-                Colors.black.withOpacity(0.6),
+                Colors.black.withValues(alpha: 0.6),
               ],
             ),
           ),
@@ -145,7 +145,7 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
           width: isActive ? 24 : 6,
           height: 2,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(isActive ? 0.9 : 0.3),
+            color: Colors.white.withValues(alpha: isActive ? 0.9 : 0.3),
             borderRadius: BorderRadius.circular(2),
           ),
         );

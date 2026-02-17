@@ -74,9 +74,9 @@ class S {
     return Intl.message('USŁUGI', name: 'navUslugi', desc: '', args: []);
   }
 
-  /// `ZGŁОŚ`
+  /// `ZGŁOŚ`
   String get navZglos {
-    return Intl.message('ZGŁОŚ', name: 'navZglos', desc: '', args: []);
+    return Intl.message('ZGŁOŚ', name: 'navZglos', desc: '', args: []);
   }
 
   /// `Nieruchomość`
@@ -189,9 +189,9 @@ class S {
     return Intl.message('Wynajem', name: 'navRent', desc: '', args: []);
   }
 
-  /// `OFFmarket`
+  /// `OFF-market`
   String get navOffMarket {
-    return Intl.message('OFFmarket', name: 'navOffMarket', desc: '', args: []);
+    return Intl.message('OFF-market', name: 'navOffMarket', desc: '', args: []);
   }
 
   /// `Dla deweloperów`
@@ -249,40 +249,40 @@ class S {
     );
   }
 
-  /// `Nasz zespół specjalistów – już вkrótce!`
+  /// `Nasz zespół specjalistów – już wkrótce!`
   String get descTeam {
     return Intl.message(
-      'Nasz zespół specjalistów – już вkrótce!',
+      'Nasz zespół specjalistów – już wkrótce!',
       name: 'descTeam',
       desc: '',
       args: [],
     );
   }
 
-  /// `Dostęp do ofert poza rynkiem – już вkrótce!`
+  /// `Dostęp do ofert poza rynkiem – już wkrótce!`
   String get descOffMarket {
     return Intl.message(
-      'Dostęp do ofert poza rynkiem – już вkrótce!',
+      'Dostęp do ofert poza rynkiem – już wkrótce!',
       name: 'descOffMarket',
       desc: '',
       args: [],
     );
   }
 
-  /// `Stań się częścią naszej wizji – już вkrótce!`
+  /// `Stań się częścią naszej wizji – już wkrótce!`
   String get descJoinUs {
     return Intl.message(
-      'Stań się częścią naszej wizji – już вkrótce!',
+      'Stań się częścią naszej wizji – już wkrótce!',
       name: 'descJoinUs',
       desc: '',
       args: [],
     );
   }
 
-  /// `Strona w budowie – już вkrótce!`
+  /// `Strona w budowie – już wkrótce!`
   String get descInBuild {
     return Intl.message(
-      'Strona w budowie – już вkrótce!',
+      'Strona w budowie – już wkrótce!',
       name: 'descInBuild',
       desc: '',
       args: [],
@@ -419,10 +419,10 @@ class S {
     );
   }
 
-  /// `Dlatego każdą sprzedażą zajmuje się u nas nie jedna osoba, lecz kilkuosobowy zespół specjalistów, którzy wspólnie dbają o każdy detal procesu. `
+  /// `Dlatego każdą sprzedażą zajmuje się u nas nie jedna osoba, lecz kilkuosobowy zespół specjalistów, którzy wspólnie dbają o każdy detal procesu.`
   String get aboutTeamPowerP1 {
     return Intl.message(
-      'Dlatego każdą sprzedażą zajmuje się u nas nie jedna osoba, lecz kilkuosobowy zespół specjalistów, którzy wspólnie dbają o każdy detal procesu. ',
+      'Dlatego każdą sprzedażą zajmuje się u nas nie jedna osoba, lecz kilkuosobowy zespół specjalistów, którzy wspólnie dbają o każdy detal procesu.',
       name: 'aboutTeamPowerP1',
       desc: '',
       args: [],
@@ -449,10 +449,10 @@ class S {
     );
   }
 
-  /// `Bo dla nas nieruchomości to nie tylko transakcje. `
+  /// `Bo dla nas nieruchomości to nie tylko transakcje.`
   String get aboutTeamPowerP4 {
     return Intl.message(
-      'Bo dla nas nieruchomości to nie tylko transakcje. ',
+      'Bo dla nas nieruchomości to nie tylko transakcje.',
       name: 'aboutTeamPowerP4',
       desc: '',
       args: [],
@@ -549,10 +549,10 @@ class S {
     );
   }
 
-  /// `W prEST pomagamy Agentom nie tylko efektywnie sprzedawać. `
+  /// `W prEST pomagamy Agentom nie tylko efektywnie sprzedawać.`
   String get joinGoalsDescP2 {
     return Intl.message(
-      'W prEST pomagamy Agentom nie tylko efektywnie sprzedawać. ',
+      'W prEST pomagamy Agentom nie tylko efektywnie sprzedawać.',
       name: 'joinGoalsDescP2',
       desc: '',
       args: [],
@@ -624,10 +624,10 @@ class S {
     );
   }
 
-  /// `Polityka została sporządzona w szczególności na podstawie: RODO, ustawy o ochronie danych osobowych, ustawy o gospodarce nieruchomościami, ustawy o świadczeniu usług drogą elektroniczną та ustawy o przeciwdziałaniu praniu pieniędzy (AML).`
+  /// `Polityka została sporządzona w szczególności na podstawie: RODO, ustawy o ochronie danych osobowych, ustawy o gospodarce nieruchomościami, ustawy o świadczeniu usług drogą elektroniczną oraz ustawy o przeciwdziałaniu praniu pieniędzy (AML).`
   String get privacySec1P2 {
     return Intl.message(
-      'Polityka została sporządzona w szczególności na podstawie: RODO, ustawy o ochronie danych osobowych, ustawy o gospodarce nieruchomościami, ustawy o świadczeniu usług drogą elektroniczną та ustawy o przeciwdziałaniu praniu pieniędzy (AML).',
+      'Polityka została sporządzona w szczególności na podstawie: RODO, ustawy o ochronie danych osobowych, ustawy o gospodarce nieruchomościami, ustawy o świadczeniu usług drogą elektroniczną oraz ustawy o przeciwdziałaniu praniu pieniędzy (AML).',
       name: 'privacySec1P2',
       desc: '',
       args: [],
@@ -674,10 +674,10 @@ class S {
     );
   }
 
-  /// `W zależności od relacji, Administrator może przetwarzać w szczególności: imię i nazwisko, adres e-mail, numer telefonu, adres zamieszkania, dane dotyczące nieruchomości (księga wieczysta, powierzchnia), dane transakcyjne та dane wymagane przepisami AML.`
+  /// `W zależności od relacji, Administrator może przetwarzać w szczególności: imię i nazwisko, adres e-mail, numer telefonu, adres zamieszkania, dane dotyczące nieruchomości (księga wieczysta, powierzchnia), dane transakcyjne oraz dane wymagane przepisami AML.`
   String get privacySec3P1 {
     return Intl.message(
-      'W zależności od relacji, Administrator może przetwarzać w szczególności: imię i nazwisko, adres e-mail, numer telefonu, adres zamieszkania, dane dotyczące nieruchomości (księga wieczysta, powierzchnia), dane transakcyjne та dane wymagane przepisami AML.',
+      'W zależności od relacji, Administrator może przetwarzać w szczególności: imię i nazwisko, adres e-mail, numer telefonu, adres zamieszkania, dane dotyczące nieruchomości (księga wieczysta, powierzchnia), dane transakcyjne oraz dane wymagane przepisami AML.',
       name: 'privacySec3P1',
       desc: '',
       args: [],
@@ -744,10 +744,10 @@ class S {
     );
   }
 
-  /// `Dane mogą być przekazywane: notariuszom, kancelariom prawnym, biurom rachunkowym, dostawcom usług IT oraz organom publicznym на podstawie przepisów prawa.`
+  /// `Dane mogą być przekazywane: notariuszom, kancelariom prawnym, biurom rachunkowym, dostawcom usług IT oraz organom publicznym na podstawie przepisów prawa.`
   String get privacySec5P1 {
     return Intl.message(
-      'Dane mogą być przekazywane: notariuszom, kancelariom prawnym, biurom rachunkowym, dostawcom usług IT oraz organom publicznym на podstawie przepisów prawa.',
+      'Dane mogą być przekazywane: notariuszom, kancelariom prawnym, biurom rachunkowym, dostawcom usług IT oraz organom publicznym na podstawie przepisów prawa.',
       name: 'privacySec5P1',
       desc: '',
       args: [],
@@ -764,10 +764,10 @@ class S {
     );
   }
 
-  /// `Każdej osobie przysługuje prawo do: dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, wniesienia sprzeciwu, przenoszenia danych та cofnięcia zgody.`
+  /// `Każdej osobie przysługuje prawo do: dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, wniesienia sprzeciwu, przenoszenia danych oraz cofnięcia zgody.`
   String get privacySec6P1 {
     return Intl.message(
-      'Każdej osobie przysługuje prawo do: dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, wniesienia sprzeciwu, przenoszenia danych та cofnięcia zgody.',
+      'Każdej osobie przysługuje prawo do: dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, wniesienia sprzeciwu, przenoszenia danych oraz cofnięcia zgody.',
       name: 'privacySec6P1',
       desc: '',
       args: [],

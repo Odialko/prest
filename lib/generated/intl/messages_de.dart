@@ -46,7 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Luxus neu definiert",
     ),
     "aboutTeamPowerP1": MessageLookupByLibrary.simpleMessage(
-      "Deshalb wird bei uns jeder Verkauf nicht von einer Person, sondern von einem Team aus mehreren Spezialisten betreut, die sich gemeinsam um jedes Detail des Prozesses kümmern. ",
+      "Deshalb wird bei uns jeder Verkauf nicht von einer Person, sondern von einem Team aus mehreren Spezialisten betreut, die sich gemeinsam um jedes Detail des Prozesses kümmern.",
     ),
     "aboutTeamPowerP2Bold": MessageLookupByLibrary.simpleMessage(
       "Wir kombinieren Marktwissen, Investmenterfahrung, effektives Marketing und kluge, ruhige Verhandlungen.",
@@ -55,7 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Wir arbeiten aufmerksam und engagiert, hören zu, analysieren, beraten. Wir begleiten unsere Kunden Schritt für Schritt durch den gesamten Prozess, damit sie sich sicher, geborgen und einfach gut betreut fühlen.",
     ),
     "aboutTeamPowerP4": MessageLookupByLibrary.simpleMessage(
-      "Denn für uns sind Immobilien nicht nur Transaktionen. ",
+      "Denn für uns sind Immobilien nicht nur Transaktionen.",
     ),
     "aboutTeamPowerP5Bold": MessageLookupByLibrary.simpleMessage(
       "Dies sind wichtige Entscheidungen und reale Geschichten von Menschen, die wir vom ersten Gespräch bis zur finalen Unterschrift begleiten.",
@@ -105,7 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Indem Sie Teil des prEST-Teams werden, werden Sie Teil eines dynamischen, ehrgeizigen Umfelds, das Kreativität, Engagement und Entwicklung schätzt. Wir bauen Wissen auf, verfeinern das Handwerk und unterstützen den Aufbau einer starken persönlichen Marke.\n\n",
     ),
     "joinGoalsDescP2": MessageLookupByLibrary.simpleMessage(
-      "Bei prEST helfen wir Agenten nicht nur, effektiv zu verkaufen. ",
+      "Bei prEST helfen wir Agenten nicht nur, effektiv zu verkaufen.",
     ),
     "joinGoalsDescP2Bold": MessageLookupByLibrary.simpleMessage(
       "Wir helfen ihnen zu wachsen, ihre Flügel auszubreiten und mit ihren eigenen Erfolgen zu glänzen.",
