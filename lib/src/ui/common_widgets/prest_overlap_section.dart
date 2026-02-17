@@ -113,7 +113,7 @@ class PrestOverlapSection extends StatelessWidget {
     return ScrollRevealBox(
       child: Container(
         decoration: BoxDecoration(boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 40, offset: const Offset(0, 20))
+          BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 40, offset: const Offset(0, 20))
         ]),
         child: Image.asset(imagePath!, fit: BoxFit.cover, height: 480, width: double.infinity),
       ),

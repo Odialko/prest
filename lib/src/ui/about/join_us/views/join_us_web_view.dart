@@ -119,7 +119,7 @@ class JoinUsWebView extends JoinUsScreen {
         Text(
           'Jako zaufani doradcy najbardziej wymagających klientów prywatnych i instytucjonalnych, nasi agenci każdego dnia potwierdzają, że ich profesjonalizm, zaangażowanie i skuteczność realnie przekładają się na sukcesy naszych klientów.',
           style: theme.blackTextTheme.font4.copyWith(
-            color: theme.colors.chineseBlack.withOpacity(0.7),
+            color: theme.colors.chineseBlack.withValues(alpha: 0.7),
           ),
         ),
         const SizedBox(height: 30),
@@ -148,7 +148,7 @@ class JoinUsWebView extends JoinUsScreen {
         RichText(
           text: TextSpan(
             style: theme.blackTextTheme.font4.copyWith(
-              color: theme.colors.chineseBlack.withOpacity(0.7),
+              color: theme.colors.chineseBlack.withValues(alpha: 0.7),
             ),
             children: [
               const TextSpan(

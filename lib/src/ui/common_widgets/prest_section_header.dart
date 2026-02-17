@@ -52,7 +52,7 @@ class _PrestSectionHeaderState extends State<PrestSectionHeader> {
       curve: Curves.easeOut,
       width: _isHovered ? widget.hoverLineWidth : widget.lineWidth,
       height: 1,
-      color: effectiveLineColor.withOpacity(0.3),
+      color: effectiveLineColor.withValues(alpha: 0.3),
     );
 
     // Якщо лінія знизу — використовуємо Column, інакше Row
