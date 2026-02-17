@@ -7,7 +7,8 @@ import 'package:prest/src/ui/about/team/store/team_store.dart';
 import 'package:prest/src/ui/about/team/team_screen.dart';
 import 'package:prest/src/ui/common_widgets/prest_page.dart';
 import 'package:prest/src/ui/common_widgets/scroll_reveal_box.dart';
-import 'package:prest/src/services/url_launcher.dart'; // Імпортуємо сервіс
+import 'package:prest/src/ui/common_widgets/prest_section_header.dart'; // Імпортуємо заголовок
+import 'package:prest/src/services/url_launcher.dart';
 
 class TeamScreenWebView extends TeamScreen {
   const TeamScreenWebView({super.key});
@@ -20,50 +21,67 @@ class TeamScreenWebView extends TeamScreen {
     return PrestPage(
       slivers: [
         SliverToBoxAdapter(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: LayoutsConstants.maxContentWidth,
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 140),
-                  ScrollRevealBox(
-                    child: _buildHeader(theme, 'ZESPÓŁ'),
-                  ),
-                  const SizedBox(height: 25),
-                  teamState.when(
-                    loading: () => const Padding(
-                      padding: EdgeInsets.all(100.0),
-                      child: Center(child: CircularProgressIndicator(strokeWidth: 1)),
+          child: Container(
+            color: theme.colors.white,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final double width = constraints.maxWidth;
+                // СИНХРОНІЗАЦІЯ: 1150px як у NavigationAppBar
+                final bool isMobile = width < 1150;
+                final double sidePadding = isMobile ? 24 : 40;
+
+                return SelectionArea(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: LayoutsConstants.maxContentWidth,
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: isMobile ? 80 : 140),
+
+                          // НОВИЙ ЗАГОЛОВОК (Центрований для цієї сторінки)
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: sidePadding),
+                            child: Center(
+                              child: ScrollRevealBox(
+                                child: PrestSectionHeader(
+                                  linePosition: HeaderLinePosition.bottom,
+                                  title: Text(
+                                    'ZESPÓŁ',
+                                    style: theme.blackTextTheme.font2.copyWith(
+                                      letterSpacing: 4,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 60),
+
+                          teamState.when(
+                            loading: () => const Padding(
+                              padding: EdgeInsets.all(100.0),
+                              child: Center(child: CircularProgressIndicator(strokeWidth: 1)),
+                            ),
+                            error: (message) => Center(child: SelectableText(message ?? 'Error')),
+                            loaded: (members) => _TeamGrid(
+                              members: members,
+                              sidePadding: sidePadding,
+                            ),
+                          ),
+                          const SizedBox(height: 150),
+                        ],
+                      ),
                     ),
-                    error: (message) => Center(child: SelectableText(message ?? 'Error')),
-                    loaded: (members) => _TeamGrid(members: members),
                   ),
-                  const SizedBox(height: 150),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildHeader(PrestThemeData theme, String title) {
-    return Column(
-      children: [
-        SelectableText(
-          title,
-          textAlign: TextAlign.center,
-          style: theme.blackTextTheme.font1.copyWith(
-            letterSpacing: 25,
-            fontWeight: FontWeight.w100,
-            fontSize: 55,
-          ),
-        ),
-        const SizedBox(height: 30),
-        Container(height: 1, width: 80, color: theme.colors.gold),
       ],
     );
   }
@@ -71,7 +89,12 @@ class TeamScreenWebView extends TeamScreen {
 
 class _TeamGrid extends StatelessWidget {
   final List<TeamMember> members;
-  const _TeamGrid({required this.members});
+  final double sidePadding;
+
+  const _TeamGrid({
+    required this.members,
+    required this.sidePadding,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -80,14 +103,10 @@ class _TeamGrid extends StatelessWidget {
         final double width = constraints.maxWidth;
 
         int crossAxisCount = 3;
-        double sidePadding = 40;
-
         if (width < 850) {
           crossAxisCount = 1;
-          sidePadding = 24;
         } else if (width < 1200) {
           crossAxisCount = 2;
-          sidePadding = 40;
         }
 
         return Padding(
@@ -98,9 +117,8 @@ class _TeamGrid extends StatelessWidget {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: 40,
-              mainAxisSpacing: 60,
-              // Змінюємо AspectRatio з 0.62 на 0.8 чи більше, щоб фото стали меншими по висоті
-              childAspectRatio: 0.85,
+              mainAxisSpacing: 80,
+              childAspectRatio: 0.82, // Оптимально для фото + контакти
             ),
             itemCount: members.length,
             itemBuilder: (context, index) {
@@ -135,7 +153,7 @@ class _TeamMemberCardState extends State<_TeamMemberCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ЗОБРАЖЕННЯ (Тепер займає менше місця через AspectRatio сітки)
+        // ЗОБРАЖЕННЯ З ЕФЕКТОМ МАСШТАБУВАННЯ
         Expanded(
           child: MouseRegion(
             onEnter: (_) => setState(() => _isHovered = true),
@@ -160,35 +178,35 @@ class _TeamMemberCardState extends State<_TeamMemberCard> {
             ),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 24),
 
         SelectableText(
-          m.name,
+          m.name.toUpperCase(),
           style: theme.blackTextTheme.font3.copyWith(
             letterSpacing: 1.5,
-            fontSize: 17,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
         SelectableText(
           m.role,
           style: theme.blackTextTheme.font6.copyWith(
             color: theme.colors.gold,
-            fontSize: 13,
+            fontSize: 12,
+            letterSpacing: 1,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
 
-        // КЛІКАБЕЛЬНІ КОНТАКТИ
-        _buildClickableLink(m.phone, theme, isEmail: false),
-        const SizedBox(height: 6),
-        _buildClickableLink(m.email, theme, isEmail: true),
+        _buildContactLink(m.phone, theme, isEmail: false),
+        const SizedBox(height: 8),
+        _buildContactLink(m.email, theme, isEmail: true),
       ],
     );
   }
 
-  Widget _buildClickableLink(String text, PrestThemeData theme, {required bool isEmail}) {
+  Widget _buildContactLink(String text, PrestThemeData theme, {required bool isEmail}) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -199,14 +217,16 @@ class _TeamMemberCardState extends State<_TeamMemberCard> {
             UrlLauncherService.makeCall(text);
           }
         },
-        child: Text(
-          text,
-          style: theme.blackTextTheme.font7.copyWith(
-            fontSize: 13,
-            letterSpacing: 0.5,
-            // Для імейла можна залишити золото, для телефону — чорний
-            color: isEmail ? theme.colors.gold : theme.colors.chineseBlack.withValues(alpha: 0.7),
-            decoration: TextDecoration.none,
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 200),
+          opacity: 0.8,
+          child: Text(
+            text,
+            style: theme.blackTextTheme.font7.copyWith(
+              fontSize: 13,
+              letterSpacing: 0.5,
+              color: isEmail ? theme.colors.gold : theme.colors.chineseBlack,
+            ),
           ),
         ),
       ),

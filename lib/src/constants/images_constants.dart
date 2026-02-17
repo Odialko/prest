@@ -4,21 +4,23 @@ class ImagesConstants {
   static const mainLogoWhite = 'assets/images/logos/logo-prest-white.svg';
   static const mainLogoDark = 'assets/images/logos/logo-prest.svg';
 
-  // static const house1 = 'assets/images/carusele/home1.jpeg';
-  // static const house2 = 'assets/images/carusele/home2.jpeg';
-  // static const house3 = 'assets/images/carusele/home3.jpeg';
-  // static const house4 = 'assets/images/carusele/home4.jpeg';
-  // static const house5 = 'assets/images/carusele/home5.jpeg';
+  /// TEAM
+  static const annaTeam = 'assets/images/team/anna_team.jpg';
+  static const iwonaTeam = 'assets/images/team/iwona_team.jpg';
+  static const marcinTeam = 'assets/images/team/marcin_team.jpg';
+  static const team_1 = 'assets/images/team/team_1.jpg';
+  static const team_2 = 'assets/images/team/team_2.jpg';
+  static const team_3 = 'assets/images/team/team_3.jpg';
+  static const team_4 = 'assets/images/team/team_4.jpg';
+  static const team_5 = 'assets/images/team/team_5.jpg';
+  static const team_6 = 'assets/images/team/team_6.jpg';
 
-  static const house1 = 'assets/images/carusele/home1.jpg';
-  static const house2 = 'assets/images/carusele/home2.jpg';
-  static const house3 = 'assets/images/carusele/home3.jpg';
-  static const house4 = 'assets/images/carusele/home4.jpg';
   static const house5 = 'assets/images/carusele/home5.jpg';
 
   static const developer_1 = 'assets/images/developer/developer_1.jpg';
   static const developer_2 = 'assets/images/developer/developer_2.jpg';
   static const developer_3 = 'assets/images/developer/developer_3.jpg';
+  static const developer_4 = 'assets/images/developer/developer_4.jpg';
 
   static const join_1 = 'assets/images/join/join_1.jpg';
   static const join_2 = 'assets/images/join/join_2.jpg';
@@ -34,14 +36,6 @@ class ImagesConstants {
   static const design_8 = 'assets/images/design/design_8.jpg';
   static const design_9 = 'assets/images/design/design_9.jpg';
   static const design_10 = 'assets/images/design/design_10.jpg';
-
-  static const heroImages = [
-    house1,
-    house2,
-    house3,
-    house4,
-    house5,
-  ];
 
   static const aboutImage = 'assets/images/about_building.jpeg';
 }

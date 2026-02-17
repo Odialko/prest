@@ -89,7 +89,7 @@ final heroSlidesProvider = Provider<List<HeroSlide>>((ref) {
 
   final staticSlides = [
     HeroSlide(
-      imagePath: ImagesConstants.heroImages.last,
+      imagePath: ImagesConstants.house5,
       title: 'POZNAJ NAS',
       description: '',
       route: '/${Routes.about}',

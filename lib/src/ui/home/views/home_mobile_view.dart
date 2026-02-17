@@ -39,15 +39,13 @@ class HomeMobileView extends ConsumerWidget implements HomeScreen {
             viewportFraction: 1.0,
             autoPlay: true,
           ),
-          items: ImagesConstants.heroImages
-              .map(
-                (path) => Image.asset(
-              path,
+          items: [
+            Image.asset(
+              ImagesConstants.house5,
               fit: BoxFit.cover,
               width: double.infinity,
             ),
-          )
-              .toList(),
+          ],
         ),
         // Overlay Title
         Center(
@@ -95,10 +93,10 @@ class HomeMobileView extends ConsumerWidget implements HomeScreen {
   }
 
   Widget _buildPropertiesMobile(
-      BuildContext context,
-      WidgetRef ref,
-      PrestThemeData theme,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    PrestThemeData theme,
+  ) {
     // This section will be populated with the properties list/grid
     return const Center(child: Text('Properties Mobile'));
   }

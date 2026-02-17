@@ -87,6 +87,7 @@ flutter:
     - assets/images/developer/
     - assets/images/join/
     - assets/images/design/
+    - assets/images/team/
     - .env
 
 flutter_intl:
