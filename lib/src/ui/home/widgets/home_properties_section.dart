@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prest/generated/l10n.dart';
 import 'package:prest/src/ui/common_widgets/prest_buttons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:prest/src/constants/constants.dart';
@@ -16,8 +17,8 @@ class HomePropertiesSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Використовуємо розширення контексту
     final theme = context.prestTheme;
+    final s = S.of(context);
     final offersState = ref.watch(homeProvider.select((s) => s.offersState));
 
     return SliverToBoxAdapter(
@@ -35,14 +36,17 @@ class HomePropertiesSection extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'SPECIAL OFFERS',
+                    s.homeOffersLabel.toUpperCase(),
                     style: theme.goldTextTheme.font7.copyWith(
                       letterSpacing: 4,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 30),
-                  Text('PROPERTIES', style: theme.blackTextTheme.font1),
+                  Text(
+                    s.homeOffersTitle.toUpperCase(),
+                    style: theme.blackTextTheme.font1,
+                  ),
                   const SizedBox(height: 80),
 
                   offersState.when(
@@ -50,28 +54,26 @@ class HomePropertiesSection extends ConsumerWidget {
                     loading: () => _buildCustomLoadingGrid(),
                     error: (msg) => Center(
                       child: Text(
-                        'Error: $msg',
+                        '${s.errorLoading}: $msg',
                         style: theme.blackTextTheme.font5,
                       ),
                     ),
                     loaded: (items) {
-                      // Беремо лише перші 9 для головної сторінки
                       final limitedItems = items.take(6).toList();
 
                       return Column(
                         children: [
                           GridView.builder(
                             shrinkWrap: true,
-                            // Важливо для Web/Desktop продуктивності
                             cacheExtent: 1000,
                             physics: const NeverScrollableScrollPhysics(),
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: isMobile ? 1 : 3,
-                                  crossAxisSpacing: 30,
-                                  mainAxisSpacing: 60,
-                                  childAspectRatio: 0.7,
-                                ),
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: isMobile ? 1 : 3,
+                              crossAxisSpacing: 30,
+                              mainAxisSpacing: 60,
+                              childAspectRatio: 0.7,
+                            ),
                             itemCount: limitedItems.length,
                             itemBuilder: (context, index) {
                               return IndividualAnimatedCard(
@@ -85,7 +87,7 @@ class HomePropertiesSection extends ConsumerWidget {
                           ),
                           const SizedBox(height: 80),
                           PrestDarkBorderButton(
-                            label: 'WSZYSTKIE OFERTY',
+                            label: s.navAllProperties.toUpperCase(),
                             width: 300,
                             onPressed: () => context.goNamed(Routes.offers),
                           ),
@@ -110,12 +112,12 @@ class HomePropertiesSection extends ConsumerWidget {
         crossAxisCount: isMobile ? 1 : 3,
         crossAxisSpacing: 30,
         mainAxisSpacing: 60,
-        childAspectRatio: isMobile ? 1.3 : 1.15, // БУЛО 0.7 - це і була "діра"
+        childAspectRatio: 0.7,
       ),
       itemCount: 3,
       itemBuilder: (context, index) => Container(
         decoration: BoxDecoration(
-          color: Colors.grey.withValues(alpha: 0.1),
+          color: Colors.grey.withOpacity(0.1),
           borderRadius: BorderRadius.circular(4),
         ),
       ),

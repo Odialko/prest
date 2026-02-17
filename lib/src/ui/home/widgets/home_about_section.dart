@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/prest_theme.dart';
+import 'package:prest/generated/l10n.dart'; // Додано імпорт локалізації
 
 class HomeAboutSection extends StatefulWidget {
   final bool isMobile;
@@ -26,7 +27,6 @@ class _HomeAboutSectionState extends State<HomeAboutSection> with SingleTickerPr
       duration: const Duration(milliseconds: 1200),
     );
 
-    // Зменшуємо зміщення (begin), щоб текст не "стрибав" при завантаженні
     _leftAnimation = Tween<Offset>(begin: const Offset(-0.02, 0), end: Offset.zero).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutQuart),
     );
@@ -64,10 +64,8 @@ class _HomeAboutSectionState extends State<HomeAboutSection> with SingleTickerPr
         width: double.infinity,
         child: Center(
           child: ConstrainedBox(
-            // Це ключове: maxWidth має бути ідентичнимmaxWidth у Header
             constraints: const BoxConstraints(maxWidth: LayoutsConstants.maxContentWidth),
             child: Padding(
-              // Падінг 40, як у Header. Ніяких Center всередині!
               padding: EdgeInsets.symmetric(horizontal: widget.isMobile ? 24 : 40),
               child: _buildContent(context),
             ),
@@ -79,22 +77,23 @@ class _HomeAboutSectionState extends State<HomeAboutSection> with SingleTickerPr
 
   Widget _buildContent(BuildContext context) {
     final theme = context.prestTheme;
+    final s = S.of(context); // Ініціалізація локалізації
 
     final textContent = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'O NAS',
+          s.aboutSectionLabel.toUpperCase(), // "O NAS"
           style: theme.goldTextTheme.font7.copyWith(letterSpacing: 4, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 30),
         Text(
-          'Luksus zdefiniowany na nowo',
+          s.aboutSectionTitle, // "Luksus zdefiniowany na nowo"
           style: theme.blackTextTheme.font1.copyWith(height: 1.2),
         ),
         const SizedBox(height: 30),
         Text(
-          'PrEST to butikowa agencja nieruchomości premium, gdzie pasja do architektury łączy się z najwyższym standardem obsługi klienta.',
+          s.aboutSectionDesc, // Довгий опис про бутікову агенцію
           style: theme.blackTextTheme.font6.copyWith(color: Colors.black54, height: 1.8),
         ),
       ],
@@ -113,12 +112,11 @@ class _HomeAboutSectionState extends State<HomeAboutSection> with SingleTickerPr
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Текст притиснутий вліво (crossAxisAlignment.start)
         Expanded(
           flex: 5,
           child: _wrap(textContent, _leftAnimation),
         ),
-        const SizedBox(width: 100), // Відступ між колонками
+        const SizedBox(width: 100),
         Expanded(
           flex: 4,
           child: _wrap(_buildImage(), _rightAnimation),

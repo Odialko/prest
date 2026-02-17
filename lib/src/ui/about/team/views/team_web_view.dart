@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prest/generated/l10n.dart';
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/ui/about/team/models/team_member.dart';
@@ -16,6 +17,7 @@ class TeamScreenWebView extends TeamScreen {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = context.prestTheme;
+    final s = S.of(context); // Ініціалізація локалізації
     final teamState = ref.watch(teamProvider);
 
     return PrestPage(
@@ -26,7 +28,6 @@ class TeamScreenWebView extends TeamScreen {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final double width = constraints.maxWidth;
-                // СИНХРОНІЗАЦІЯ: 1150px як у NavigationAppBar
                 final bool isMobile = width < 1150;
                 final double sidePadding = isMobile ? 24 : 40;
 
@@ -40,7 +41,7 @@ class TeamScreenWebView extends TeamScreen {
                         children: [
                           SizedBox(height: isMobile ? 80 : 140),
 
-                          // НОВИЙ ЗАГОЛОВОК (Центрований для цієї сторінки)
+                          // ЗАГОЛОВОК (Тепер локалізований)
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: sidePadding),
                             child: Center(
@@ -48,7 +49,7 @@ class TeamScreenWebView extends TeamScreen {
                                 child: PrestSectionHeader(
                                   linePosition: HeaderLinePosition.bottom,
                                   title: Text(
-                                    'ZESPÓŁ',
+                                    s.navTeam.toUpperCase(), // "ZESPÓŁ"
                                     style: theme.blackTextTheme.font2.copyWith(
                                       letterSpacing: 4,
                                       fontWeight: FontWeight.w500,
@@ -66,7 +67,10 @@ class TeamScreenWebView extends TeamScreen {
                               padding: EdgeInsets.all(100.0),
                               child: Center(child: CircularProgressIndicator(strokeWidth: 1)),
                             ),
-                            error: (message) => Center(child: SelectableText(message ?? 'Error')),
+                            // Перекладена помилка
+                            error: (message) => Center(
+                              child: SelectableText(message ?? s.errorLoading),
+                            ),
                             loaded: (members) => _TeamGrid(
                               members: members,
                               sidePadding: sidePadding,

@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prest/generated/l10n.dart';
 import 'package:prest/src/ui/common_widgets/prest_buttons.dart';
 import 'package:prest/src/ui/home/store/home_store.dart';
 import 'package:prest/src/ui/home/widgets/hero_arrow.dart';
@@ -21,12 +22,22 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Слухаємо слайди та поточну сторінку
     final slides = ref.watch(heroSlidesProvider);
     final currentPage = ref.watch(homeProvider.select((s) => s.currentPage));
 
+    // 2. Слухаємо локалізацію безпосередньо в build
+    final s = S.of(context);
+
     if (slides.isEmpty) return SizedBox(height: widget.height);
 
+    // Отримуємо поточний слайд
     final currentSlide = slides[currentPage];
+
+    // Визначаємо текст кнопки залежно від типу слайда "на льоту"
+    final String buttonLabel = currentSlide.title == 'view_offer'
+        ? s.btnZobaczOferte
+        : s.navPoznajNas;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -37,10 +48,19 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
           width: double.infinity,
           child: Stack(
             children: [
-              // 1. ФОНОВА КАРУСЕЛЬ
+              // КАРУСЕЛЬ (Зображення)
               Positioned.fill(
-                child: CarouselSlider(
+                child: CarouselSlider.builder(
                   carouselController: _carouselController,
+                  itemCount: slides.length,
+                  itemBuilder: (context, index, realIndex) {
+                    return ZoomingImage(
+                      // Використовуємо ключ, щоб картинка не перевантажувалася при зміні мови
+                      key: ValueKey(slides[index].imagePath),
+                      path: slides[index].imagePath,
+                      isNetwork: slides[index].isNetwork,
+                    );
+                  },
                   options: CarouselOptions(
                     height: widget.height,
                     viewportFraction: 1.0,
@@ -53,48 +73,25 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                       ref.read(homeProvider.notifier).setCurrentPage(index);
                     },
                   ),
-                  items: slides.map((slide) {
-                    return ZoomingImage(
-                      path: slide.imagePath,
-                      isNetwork: slide.isNetwork,
-                    );
-                  }).toList(),
                 ),
               ),
 
-              // 2. ГРАДІЄНТ
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: const [0.0, 0.45, 1.0],
-                        colors: [
-                          Colors.black.withValues(alpha: 0.3),
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.6),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // ГРАДІЄНТ
+              _buildOverlayGradient(),
 
-              // 3. АДАПТИВНІ СТРІЛКИ
+              // СТРІЛКИ
               _buildArrow(isLeft: true, isMobile: isMobile),
               _buildArrow(isLeft: false, isMobile: isMobile),
 
-              // 4. ТЕНДІТНІ КРАПКИ (DOTS INDICATOR)
+              // DOTS
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: isMobile ? 25 : 40, // Піднімаємо трохи вище нижньої межі
+                bottom: isMobile ? 25 : 40,
                 child: _buildDotsIndicator(slides.length, currentPage),
               ),
 
-              // 5. КНОПКА ДІЇ
+              // КНОПКА (Оновлюється миттєво)
               Positioned(
                 right: isMobile ? null : 80,
                 left: isMobile ? 20 : null,
@@ -103,7 +100,8 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
                   width: isMobile ? constraints.maxWidth - 40 : null,
                   alignment: isMobile ? Alignment.center : Alignment.centerRight,
                   child: PrestTransparentButton(
-                    label: currentSlide.title,
+                    // Використовуємо buttonLabel, який ми вирахували вище через S.of(context)
+                    label: buttonLabel.toUpperCase(),
                     onPressed: () => context.go(currentSlide.route),
                   ),
                 ),
@@ -115,6 +113,27 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
     );
   }
 
+  Widget _buildOverlayGradient() {
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: const [0.0, 0.45, 1.0],
+              colors: [
+                Colors.black.withOpacity(0.3),
+                Colors.transparent,
+                Colors.black.withOpacity(0.6),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildDotsIndicator(int count, int currentIndex) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -123,10 +142,10 @@ class _HomeHeroSectionState extends ConsumerState<HomeHeroSection> {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 400),
           margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: isActive ? 24 : 6, // Активна крапка трохи подовжена для преміального вигляду
-          height: 2, // Дуже тонкі лінії замість грубих кругів
+          width: isActive ? 24 : 6,
+          height: 2,
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: isActive ? 0.9 : 0.3),
+            color: Colors.white.withOpacity(isActive ? 0.9 : 0.3),
             borderRadius: BorderRadius.circular(2),
           ),
         );

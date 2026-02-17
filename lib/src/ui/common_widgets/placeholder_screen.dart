@@ -46,12 +46,12 @@ class PlaceholderScreen extends StatelessWidget {
 
                         // MAIN TITLE (Uppercase with wide tracking)
                         Text(
-                          item.title.toUpperCase(),
+                          item.getTitle(context).toUpperCase(), // Додано (context)
                           textAlign: TextAlign.center,
                           style: theme.blackTextTheme.font1.copyWith(
                             letterSpacing: 16,
                             fontWeight: FontWeight.w300,
-                            fontSize: 56, // Bold premium scale
+                            fontSize: 56,
                             height: 1.2,
                           ),
                         ),
@@ -60,7 +60,7 @@ class PlaceholderScreen extends StatelessWidget {
 
                         // STATUS MESSAGE
                         Text(
-                          item.description, // "Strona w budowie – już wkrótce!"
+                          item.getDescription(context), // Додано (context) і змінено на getDescription
                           textAlign: TextAlign.center,
                           style: theme.blackTextTheme.font7.copyWith(
                             color: theme.colors.chineseBlack.withValues(

@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prest/generated/l10n.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/providers/scroll_provider.dart';
 import 'package:prest/src/services/url_launcher.dart';
@@ -20,12 +21,12 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = context.prestTheme;
+    final s = S.of(context); // Локалізація
     final scrollOffset = ref.watch(scrollPositionProvider);
     final double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      // Drawer (Мобільне меню)
-      endDrawer: _buildPremiumDrawer(context, theme),
+      endDrawer: _buildPremiumDrawer(context, theme, s),
       body: Stack(
         children: [
           child,
@@ -34,15 +35,15 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
             child: NavigationAppBar(
               scrollOffset: scrollOffset,
               actions: [
-                _buildDropdown(context, theme, 'POZNAJ NAS', [NavItem.about, NavItem.team, NavItem.joinUs], width),
-                _buildDropdown(context, theme, 'NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket], width),
-                _buildDropdown(context, theme, 'USŁUGI', [NavItem.forDevelopers, NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad], width),
+                _buildDropdown(context, theme, s.navPoznajNas, [NavItem.about, NavItem.team, NavItem.joinUs], width),
+                _buildDropdown(context, theme, s.navNieruchomosci, [NavItem.sale, NavItem.rent, NavItem.offMarket], width),
+                _buildDropdown(context, theme, s.navUslugi, [NavItem.forDevelopers, NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad], width),
                 _buildDropdown(
-                  context, theme, 'ZGŁOŚ', ['Nieruchomość', 'Poszukiwanie'], width,
-                  onCustomSelected: (val) => PrestDialog.showContact(context, title: 'Zgłoś $val'),
+                  context, theme, s.navZglos, [s.navZglosNieruchomosc, s.navZglosPoszukiwanie], width,
+                  onCustomSelected: (val) => PrestDialog.showContact(context, title: s.dialogZglosTitle(val)),
                 ),
                 SizedBox(width: width < 1300 ? 10 : 20),
-                _buildCtaButton(context, theme, scrollOffset, width),
+                _buildCtaButton(context, theme, scrollOffset, width, s),
               ],
             ),
           ),
@@ -57,12 +58,13 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
       child: HoverMenu(
         title: label,
         theme: theme,
-        items: items.map((e) => e is NavItem ? e.title : e.toString()).toList(),
+        // Переконайся, що NavItem повертає перекладений title
+        items: items.map((e) => e is NavItem ? e.getTitle(context) : e.toString()).toList(),
         onSelected: (title) {
           if (onCustomSelected != null) {
             onCustomSelected(title);
           } else {
-            final item = items.firstWhere((e) => e is NavItem && e.title == title) as NavItem;
+            final item = items.firstWhere((e) => e is NavItem && e.getTitle(context) == title) as NavItem;
             context.go(item.route);
           }
         },
@@ -70,25 +72,24 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
     );
   }
 
-  Widget _buildCtaButton(BuildContext context, PrestThemeData theme, double scrollOffset, double screenWidth) {
+  Widget _buildCtaButton(BuildContext context, PrestThemeData theme, double scrollOffset, double screenWidth, S s) {
     final bool isShrunk = scrollOffset > 40;
     return PrestPrimaryButton(
-      label: 'UMÓW ROZMOWĘ',
+      label: s.btnUmowRozmowe,
       onPressed: () => PrestDialog.showContact(
         context,
-        title: 'Umów rozmowę',
-        showWiadomosc: false, // Це прибере поле "Wiadomość"
+        title: s.btnUmowRozmowe,
+        showWiadomosc: false,
       ),
       height: isShrunk ? 38.0 : 44.0,
       width: screenWidth < 1300 ? 160.0 : 190.0,
     );
   }
 
-  // МОБІЛЬНЕ МЕНЮ (DRAWER)
-  Widget _buildPremiumDrawer(BuildContext context, PrestThemeData theme) {
+  Widget _buildPremiumDrawer(BuildContext context, PrestThemeData theme, S s) {
     return Drawer(
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero), // ПРЯМІ КУТИ
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: SafeArea(
         child: Column(
           children: [
@@ -100,14 +101,13 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  _drawerExpandableSection(context, theme, 'POZNAJ NAS', [NavItem.about, NavItem.team, NavItem.joinUs]),
-                  _drawerExpandableSection(context, theme, 'NIERUCHOMOŚCI', [NavItem.sale, NavItem.rent, NavItem.offMarket]),
-                  _drawerExpandableSection(context, theme, 'USŁUGI', [NavItem.forDevelopers, NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
-                  _drawerSimpleItem(context, theme, 'KONTAKT', NavItem.contact),
+                  _drawerExpandableSection(context, theme, s.navPoznajNas, [NavItem.about, NavItem.team, NavItem.joinUs]),
+                  _drawerExpandableSection(context, theme, s.navNieruchomosci, [NavItem.sale, NavItem.rent, NavItem.offMarket]),
+                  _drawerExpandableSection(context, theme, s.navUslugi, [NavItem.forDevelopers, NavItem.design, NavItem.credit, NavItem.advice, NavItem.abroad]),
+                  _drawerSimpleItem(context, theme, s.navKontakt, NavItem.contact),
                 ],
               ),
             ),
-            // КОНТАКТИ ВНИЗУ МЕНЮ
             Container(
               padding: const EdgeInsets.all(24),
               color: theme.colors.milk,
@@ -133,7 +133,7 @@ class NavigationHubWebView extends ConsumerWidget implements NavigationHubScreen
       title: Text(title, style: theme.blackTextTheme.font6.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
       children: items.map((item) => ListTile(
         contentPadding: const EdgeInsets.only(left: 40),
-        title: Text(item.title, style: theme.blackTextTheme.font7),
+        title: Text(item.getTitle(context), style: theme.blackTextTheme.font7),
         onTap: () {
           Navigator.pop(context);
           context.go(item.route);

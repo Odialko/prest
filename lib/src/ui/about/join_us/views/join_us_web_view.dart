@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prest/generated/l10n.dart'; // Додано
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/prest_theme.dart';
 import 'package:prest/src/ui/about/join_us/join_us_screen.dart';
@@ -15,6 +16,7 @@ class JoinUsWebView extends JoinUsScreen {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = context.prestTheme;
+    final s = S.of(context); // Локалізація
 
     return PrestPage(
       slivers: [
@@ -30,28 +32,24 @@ class JoinUsWebView extends JoinUsScreen {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // 1. HERO HEADER (WHITE)
-                    _buildHeroHeader(theme, isMobile, width, effectivePadding),
+                    _buildHeroHeader(context, theme, isMobile, width, effectivePadding),
 
-                    // 2. TEAM SECTION (IMAGE RIGHT)
                     PrestOverlapSection(
                       variant: PrestSectionVariant.imageRight,
                       imagePath: ImagesConstants.join_1,
                       backgroundColor: theme.colors.white,
-                      textContent: _buildTeamDescription(theme),
+                      textContent: _buildTeamDescription(context, theme),
                     ),
 
-                    // 3. GOALS SECTION (IMAGE LEFT)
                     PrestOverlapSection(
                       variant: PrestSectionVariant.imageLeft,
                       imagePath: ImagesConstants.join_2,
                       backgroundColor: theme.colors.milk,
                       height: isMobile ? 650 : 850,
-                      textContent: _buildGoalsDescription(theme),
+                      textContent: _buildGoalsDescription(context, theme),
                     ),
 
-                    // 4. FORM SECTION
-                    _buildFormSection(theme, width, effectivePadding, isMobile),
+                    _buildFormSection(context, theme, width, effectivePadding, isMobile),
                   ],
                 ),
               );
@@ -62,8 +60,8 @@ class JoinUsWebView extends JoinUsScreen {
     );
   }
 
-  // --- 1. HERO HEADER ---
-  Widget _buildHeroHeader(PrestThemeData theme, bool isMobile, double width, double sidePadding) {
+  Widget _buildHeroHeader(BuildContext context, PrestThemeData theme, bool isMobile, double width, double sidePadding) {
+    final s = S.of(context);
     return Container(
       color: theme.colors.white,
       child: Center(
@@ -83,7 +81,7 @@ class JoinUsWebView extends JoinUsScreen {
                       lineWidth: 80,
                       hoverLineWidth: 120,
                       title: Text(
-                        'DOŁĄCZ DO NAS',
+                        s.navJoinUs.toUpperCase(), // "DOŁĄCZ DO NAS"
                         style: theme.arsenicTextTheme.font2.copyWith(
                           letterSpacing: 4,
                           fontWeight: FontWeight.w500,
@@ -95,7 +93,7 @@ class JoinUsWebView extends JoinUsScreen {
                 const SizedBox(height: 60),
                 ScrollRevealBox(
                   delay: const Duration(milliseconds: 200),
-                  child: _buildMainIntro(theme),
+                  child: _buildMainIntro(context, theme),
                 ),
               ],
             ),
@@ -105,26 +103,26 @@ class JoinUsWebView extends JoinUsScreen {
     );
   }
 
-  // --- 2. TEAM DESCRIPTION ---
-  Widget _buildTeamDescription(PrestThemeData theme) {
+  Widget _buildTeamDescription(BuildContext context, PrestThemeData theme) {
+    final s = S.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Nasz zespół to nasz największy kapitał.',
+          s.joinTeamTitle,
           style: theme.blackTextTheme.font2,
         ),
         const SizedBox(height: 40),
         Text(
-          'Jako zaufani doradcy najbardziej wymagających klientów prywatnych i instytucjonalnych, nasi agenci każdego dnia potwierdzają, że ich profesjonalizm, zaangażowanie i skuteczność realnie przekładają się na sukcesy naszych klientów.',
+          s.joinTeamDesc,
           style: theme.blackTextTheme.font4.copyWith(
             color: theme.colors.chineseBlack.withValues(alpha: 0.7),
           ),
         ),
         const SizedBox(height: 30),
         Text(
-          'Szukamy talentów. Pasjonatów sprzedaży. Ludzi, którzy chcą grać w pierwszej lidze.',
+          s.joinTeamQuote,
           style: theme.blackTextTheme.font7.copyWith(
             color: theme.colors.gold,
             fontStyle: FontStyle.italic,
@@ -134,14 +132,14 @@ class JoinUsWebView extends JoinUsScreen {
     );
   }
 
-  // --- 3. GOALS DESCRIPTION ---
-  Widget _buildGoalsDescription(PrestThemeData theme) {
+  Widget _buildGoalsDescription(BuildContext context, PrestThemeData theme) {
+    final s = S.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Pomagamy realnie osiągać cele sprzedażowe.',
+          s.joinGoalsTitle,
           style: theme.blackTextTheme.font2,
         ),
         const SizedBox(height: 40),
@@ -151,12 +149,10 @@ class JoinUsWebView extends JoinUsScreen {
               color: theme.colors.chineseBlack.withValues(alpha: 0.7),
             ),
             children: [
-              const TextSpan(
-                text: 'Dołączając do zespołu prEST, stajesz się częścią dynamicznego, ambitnego środowiska, które ceni kreatywność, zaangażowanie i rozwój. Budujemy wiedzę, szlifujemy warsztat i wspieramy w tworzeniu silnej marki osobistej.\n\n',
-              ),
-              const TextSpan(text: 'W prEST pomagamy Agentom не тільки ефективно продавати. '),
+              TextSpan(text: s.joinGoalsDescP1),
+              TextSpan(text: s.joinGoalsDescP2),
               TextSpan(
-                text: 'Pomagamy im rosnąć, rozwijać skrzydła i błyszczeć własnymi sukcesami.',
+                text: s.joinGoalsDescP2Bold,
                 style: TextStyle(color: theme.colors.chineseBlack, fontWeight: FontWeight.w600),
               ),
             ],
@@ -166,8 +162,8 @@ class JoinUsWebView extends JoinUsScreen {
     );
   }
 
-  // --- 4. FORM SECTION ---
-  Widget _buildFormSection(PrestThemeData theme, double width, double sidePadding, bool isMobile) {
+  Widget _buildFormSection(BuildContext context, PrestThemeData theme, double width, double sidePadding, bool isMobile) {
+    final s = S.of(context);
     return Container(
       color: theme.colors.white,
       padding: EdgeInsets.symmetric(horizontal: sidePadding, vertical: 120),
@@ -180,7 +176,7 @@ class JoinUsWebView extends JoinUsScreen {
                 lineWidth: 60,
                 hoverLineWidth: 90,
                 title: Text(
-                  'WYPEŁNIJ FORMULARZ',
+                  s.joinFormTitle.toUpperCase(), // "WYPEŁNIJ FORMULARZ"
                   style: theme.blackTextTheme.font7.copyWith(
                     letterSpacing: 4,
                     fontWeight: FontWeight.w600,
@@ -189,14 +185,15 @@ class JoinUsWebView extends JoinUsScreen {
               ),
             ),
             const SizedBox(height: 60),
-            _buildMockForm(theme, width),
+            _buildMockForm(context, theme, width),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildMainIntro(PrestThemeData theme) {
+  Widget _buildMainIntro(BuildContext context, PrestThemeData theme) {
+    final s = S.of(context);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 850),
       child: RichText(
@@ -206,16 +203,17 @@ class JoinUsWebView extends JoinUsScreen {
             fontWeight: FontWeight.w200,
             color: theme.colors.chineseBlack,
           ),
-          children: const [
-            TextSpan(text: 'DOSKONAŁA obsługa rodzi skuteczne transakcje dzięki nieprzeciętnym '),
-            TextSpan(text: 'LUDZIOM.', style: TextStyle(fontWeight: FontWeight.w700)),
+          children: [
+            TextSpan(text: s.joinMainIntro1),
+            TextSpan(text: s.joinMainIntro2Bold, style: const TextStyle(fontWeight: FontWeight.w700)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildMockForm(PrestThemeData theme, double width) {
+  Widget _buildMockForm(BuildContext context, PrestThemeData theme, double width) {
+    final s = S.of(context);
     final bool isSmall = width < 800;
     return Container(
       width: isSmall ? double.infinity : 700,
@@ -224,14 +222,18 @@ class JoinUsWebView extends JoinUsScreen {
       child: Column(
         children: [
           Text(
-            'WYŚLIJ NAM SWOJE CV, A MY SKONTAKTUJEMY SIĘ Z TOBĄ WKRÓTCE.',
+            s.joinFormSubtitle.toUpperCase(),
             textAlign: TextAlign.center,
             style: theme.blackTextTheme.font7.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 50),
-          PrestDarkBorderButton(label: 'WGRAJ CV', onPressed: () {}, width: 220),
+          PrestDarkBorderButton(
+            label: s.btnUploadCv.toUpperCase(),
+            onPressed: () {},
+            width: 220,
+          ),
         ],
       ),
     );

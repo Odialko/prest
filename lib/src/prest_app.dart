@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prest/generated/l10n.dart';
 import 'package:prest/src/prest_theme.dart';
+import 'package:prest/src/providers/locale_provider.dart';
 import 'package:prest/src/routing/app_router.dart';
 
 class PrestApp extends ConsumerWidget {
@@ -9,7 +12,7 @@ class PrestApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = ref.watch(routerProvider);
-
+    final currentLocale = ref.watch(localeProvider);
     // Forced to light for now, as the Navy+Beige palette is tuned for light mode aesthetics
     const themeMode = ThemeMode.light;
 
@@ -28,6 +31,14 @@ class PrestApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         title: 'prEST',
         routerConfig: appRouter,
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        locale: currentLocale,
 
         // Material themes wrappers with our new palette
         theme: _buildMaterialTheme(Brightness.light),

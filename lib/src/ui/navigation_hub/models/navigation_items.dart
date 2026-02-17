@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:prest/generated/l10n.dart';
 import 'package:prest/src/routing/routes.dart';
 
 enum NavItem {
@@ -23,39 +25,37 @@ enum NavItem {
 }
 
 extension NavItemExtension on NavItem {
-  String get title {
+  // Головний метод для отримання назви залежно від мови
+  String getTitle(BuildContext context) {
+    final s = S.of(context);
     switch (this) {
-      case NavItem.about: return 'O prEST';
-      case NavItem.team: return 'Zespół';
-      case NavItem.joinUs: return 'Dołącz do nas';
-      case NavItem.allProperties: return 'Wszystkie oferty';
-      case NavItem.sale: return 'Sprzedaż';
-      case NavItem.rent: return 'Wynajem';
-      case NavItem.offMarket: return 'OFFmarket';
-      case NavItem.forDevelopers: return 'Dla deweloperów';
-      case NavItem.design: return 'prEST design';
-      case NavItem.credit: return 'Doradztwo kredytowe';
-      case NavItem.advice: return 'Doradztwo inwestycyjne';
-      case NavItem.abroad: return 'Zakupy za granicą';
-      case NavItem.contact: return 'KONTAKT';
-      case NavItem.submitProperty: return 'ZGŁOŚ NIERUCHOMOŚĆ';
-      case NavItem.bookCall: return 'UMÓW ROZMOWĘ';
+      case NavItem.about: return s.navAbout;
+      case NavItem.team: return s.navTeam;
+      case NavItem.joinUs: return s.navJoinUs;
+      case NavItem.allProperties: return s.navAllProperties;
+      case NavItem.sale: return s.navSale;
+      case NavItem.rent: return s.navRent;
+      case NavItem.offMarket: return s.navOffMarket;
+      case NavItem.forDevelopers: return s.navForDevelopers;
+      case NavItem.design: return s.navDesign;
+      case NavItem.credit: return s.navCredit;
+      case NavItem.advice: return s.navAdvice;
+      case NavItem.abroad: return s.navAbroad;
+      case NavItem.contact: return s.navKontakt;
+      case NavItem.submitProperty: return s.navZglosNieruchomosc;
+      case NavItem.bookCall: return s.btnUmowRozmowe;
     }
   }
 
-  // ОСЬ ЦЕЙ ГЕТТЕР МАЄ БУТИ ТУТ
-  String get description {
+  // Опис (Description) теж виносимо в локалізацію
+  String getDescription(BuildContext context) {
+    final s = S.of(context);
     switch (this) {
-      case NavItem.about:
-        return 'Poznaj historię prEST – już wkrótce!';
-      case NavItem.team:
-        return 'Nasz zespół specjalistów – już wkrótce!';
-      case NavItem.offMarket:
-        return 'Dostęp do ofert poza rynkiem – już wkrótce!';
-      case NavItem.joinUs:
-        return 'Stań się częścią naszej wizji – już wkrótce!';
-      default:
-        return 'Strona w budowie – już wkrótce!';
+      case NavItem.about: return s.descAbout;
+      case NavItem.team: return s.descTeam;
+      case NavItem.offMarket: return s.descOffMarket;
+      case NavItem.joinUs: return s.descJoinUs;
+      default: return s.descInBuild; // Загальний опис "в розробці"
     }
   }
 

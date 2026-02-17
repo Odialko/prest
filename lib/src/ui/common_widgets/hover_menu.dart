@@ -96,7 +96,9 @@ class _HoverMenuState extends State<HoverMenu> with SingleTickerProviderStateMix
                         ),
                         child: Column(
                           children: widget.items!.map((item) {
-                            final String label = item is NavItem ? item.title : item.toString();
+                            // ТУТ ЗМІНА: викликаємо getTitle з передачею context
+                            final String label = item is NavItem ? item.getTitle(context) : item.toString();
+
                             return _MenuItem(
                               label: label,
                               theme: widget.theme,

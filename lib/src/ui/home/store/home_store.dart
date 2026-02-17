@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:prest/src/constants/constants.dart';
 import 'package:prest/src/models/offer_model.dart';
+import 'package:prest/src/providers/locale_provider.dart';
 import 'package:prest/src/providers/offer_service_provider.dart';
 import 'package:prest/src/providers/service_providers.dart';
 import 'package:prest/src/repositories/offer_repository.dart';
@@ -87,10 +88,13 @@ final heroSlidesProvider = Provider<List<HeroSlide>>((ref) {
   final homeState = ref.watch(homeProvider);
   final imageProcessor = ref.watch(imageProcessorProvider);
 
+  // Нам БІЛЬШЕ НЕ ПОТРІБНО watch(l10nProvider) тут для тексту кнопок,
+  // бо ми перенесемо це у UI віджет для швидкості.
+
   final staticSlides = [
     HeroSlide(
       imagePath: ImagesConstants.house5,
-      title: 'POZNAJ NAS',
+      title: 'about_us', // Використовуємо ключ або ідентифікатор
       description: '',
       route: '/${Routes.about}',
       isNetwork: false,
@@ -99,19 +103,15 @@ final heroSlidesProvider = Provider<List<HeroSlide>>((ref) {
 
   final dynamicSlides = homeState.offersState.maybeWhen(
     loaded: (items) => items.take(3).map((offer) {
-      // Тут ми беремо першу картинку.
-      // Якщо pictures містить ["123.jpg", "456.jpg"], imageUrl буде "123.jpg"
       final imageUrl = (offer.pictures != null && offer.pictures!.isNotEmpty)
           ? offer.pictures!.first
           : null;
 
       return HeroSlide(
-        // Сервіс тепер сам доклеїть домен, якщо його немає
         imagePath: imageProcessor.getProcessedUrl(imageUrl),
-        title: 'ZOBACZ OFERTĘ',
+        title: 'view_offer', // Використовуємо ключ
         description: offer.portalTitle ?? '',
         route: Routes.offerDetails(offer.id),
-        // route: '${Routes.offers}/${offer.id}',
         isNetwork: true,
       );
     }).toList(),
